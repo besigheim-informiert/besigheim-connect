@@ -8,33 +8,34 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 30 20% 99%;
-    --foreground: 20 10% 15%;
+    /* Palette: 780000, c1121f, fdf0d5, 003049, 669bbc */
+    --background: 44 84% 91%;           /* fdf0d5 cream */
+    --foreground: 205 100% 15%;         /* 003049 dark blue */
 
-    --card: 0 0% 100%;
-    --card-foreground: 20 10% 15%;
+    --card: 44 90% 96%;
+    --card-foreground: 205 100% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 10% 15%;
+    --popover: 44 90% 96%;
+    --popover-foreground: 205 100% 15%;
 
-    --primary: 24 85% 48%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 355 72% 42%;             /* c1121f red */
+    --primary-foreground: 44 84% 96%;
 
-    --secondary: 30 15% 95%;
-    --secondary-foreground: 20 10% 20%;
+    --secondary: 205 33% 57%;           /* 669bbc light blue */
+    --secondary-foreground: 205 100% 15%;
 
-    --muted: 30 10% 96%;
-    --muted-foreground: 20 5% 45%;
+    --muted: 44 60% 86%;
+    --muted-foreground: 205 40% 30%;
 
-    --accent: 24 85% 48%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 205 33% 57%;              /* 669bbc light blue */
+    --accent-foreground: 205 100% 15%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 100% 24%;          /* 780000 dark red */
+    --destructive-foreground: 44 84% 96%;
 
-    --border: 30 10% 90%;
-    --input: 30 10% 90%;
-    --ring: 24 85% 48%;
+    --border: 205 25% 75%;
+    --input: 205 25% 75%;
+    --ring: 355 72% 42%;
 
     --radius: 0.5rem;
 
