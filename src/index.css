@@ -10,35 +10,36 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Palette: 780000, c1121f, fdf0d5, 003049, 669bbc */
-    --background: 44 84% 91%;           /* fdf0d5 cream */
-    --foreground: 205 100% 15%;         /* 003049 dark blue */
+    /* Editorial civic system: cream canvas, navy anchor, red as sparing accent */
+    --background: 40 45% 97%;
+    --foreground: 205 100% 15%;
 
-    --card: 44 90% 96%;
+    --card: 0 0% 100%;
     --card-foreground: 205 100% 15%;
 
-    --popover: 44 90% 96%;
+    --popover: 0 0% 100%;
     --popover-foreground: 205 100% 15%;
 
-    --primary: 355 72% 42%;             /* c1121f red */
-    --primary-foreground: 44 84% 96%;
+    --primary: 355 82% 42%;
+    --primary-foreground: 40 45% 97%;
 
-    --secondary: 205 33% 57%;           /* 669bbc light blue */
-    --secondary-foreground: 205 100% 15%;
+    --secondary: 205 100% 15%;
+    --secondary-foreground: 40 45% 97%;
 
-    --muted: 44 60% 86%;
-    --muted-foreground: 205 40% 30%;
+    --muted: 40 30% 92%;
+    --muted-foreground: 205 25% 35%;
 
-    --accent: 205 33% 57%;              /* 669bbc light blue */
+    --accent: 44 84% 91%;
     --accent-foreground: 205 100% 15%;
 
-    --destructive: 0 100% 24%;          /* 780000 dark red */
-    --destructive-foreground: 44 84% 96%;
+    --destructive: 0 100% 24%;
+    --destructive-foreground: 40 45% 97%;
 
-    --border: 205 25% 75%;
-    --input: 205 25% 75%;
-    --ring: 355 72% 42%;
+    --border: 205 30% 88%;
+    --input: 205 30% 88%;
+    --ring: 355 82% 42%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
 
     --sidebar-background: 0 0% 98%;
 
