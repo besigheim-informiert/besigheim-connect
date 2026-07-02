@@ -17,25 +17,36 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-primary">
-            Besigheim informiert
+      <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="container flex h-20 items-center justify-between">
+          <Link to="/" className="flex items-baseline gap-2 group">
+            <span className="font-serif-display text-2xl md:text-[26px] font-bold tracking-tight leading-none">
+              Besigheim
+            </span>
+            <span className="font-serif-display italic text-2xl md:text-[26px] leading-none text-primary">
+              informiert
+            </span>
           </Link>
-          <nav className="hidden md:flex gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground ${
-                  location.pathname === item.path
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => {
+              const active = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`relative px-3 py-2 text-sm font-medium transition-colors ${
+                    active
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {item.label}
+                  {active && (
+                    <span className="absolute left-3 right-3 -bottom-[1px] h-[2px] bg-primary" />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
           <Button
             variant="ghost"
@@ -48,16 +59,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Button>
         </div>
         {menuOpen && (
-          <nav className="md:hidden border-t border-border bg-background pb-4">
+          <nav className="md:hidden border-t border-foreground/10 bg-background pb-4">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 onClick={() => setMenuOpen(false)}
-                className={`block px-6 py-3 text-sm font-medium transition-colors hover:bg-accent ${
+                className={`block px-6 py-3 text-sm font-medium border-b border-foreground/5 transition-colors ${
                   location.pathname === item.path
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground"
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {item.label}
@@ -69,20 +80,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="border-t border-border bg-muted/50 py-10">
-        <div className="container grid gap-8 md:grid-cols-3">
+      <footer className="border-t border-foreground/10 bg-secondary text-secondary-foreground mt-20">
+        <div className="container py-14 grid gap-10 md:grid-cols-3">
           <div>
-            <h3 className="font-bold text-foreground mb-2">Besigheim informiert</h3>
-            <p className="text-sm text-muted-foreground">
+            <h3 className="font-serif-display text-2xl mb-3">
+              Besigheim <span className="italic text-primary">informiert</span>
+            </h3>
+            <p className="text-sm text-secondary-foreground/70 leading-relaxed max-w-sm">
               Die zentrale Informationsplattform für Vereine, Veranstaltungen und Engagement in Besigheim.
             </p>
           </div>
           <div>
-            <h4 className="font-semibold text-foreground mb-2">Seiten</h4>
-            <ul className="space-y-1 text-sm">
+            <h4 className="eyebrow text-primary mb-4">Seiten</h4>
+            <ul className="space-y-2 text-sm">
               {navItems.map((item) => (
                 <li key={item.path}>
-                  <Link to={item.path} className="text-muted-foreground hover:text-primary transition-colors">
+                  <Link to={item.path} className="text-secondary-foreground/80 hover:text-primary transition-colors">
                     {item.label}
                   </Link>
                 </li>
@@ -90,16 +103,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold text-foreground mb-2">Rechtliches</h4>
-            <ul className="space-y-1 text-sm">
-              <li><Link to="/impressum" className="text-muted-foreground hover:text-primary transition-colors">Impressum</Link></li>
-              <li><Link to="/datenschutz" className="text-muted-foreground hover:text-primary transition-colors">Datenschutz</Link></li>
-              <li><Link to="/kontakt" className="text-muted-foreground hover:text-primary transition-colors">Kontakt</Link></li>
+            <h4 className="eyebrow text-primary mb-4">Rechtliches</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/impressum" className="text-secondary-foreground/80 hover:text-primary transition-colors">Impressum</Link></li>
+              <li><Link to="/datenschutz" className="text-secondary-foreground/80 hover:text-primary transition-colors">Datenschutz</Link></li>
+              <li><Link to="/kontakt" className="text-secondary-foreground/80 hover:text-primary transition-colors">Kontakt</Link></li>
             </ul>
           </div>
         </div>
-        <div className="container mt-8 pt-4 border-t border-border text-center text-xs text-muted-foreground">
-          © 2026 Besigheim informiert. Alle Rechte vorbehalten.
+        <div className="border-t border-secondary-foreground/10">
+          <div className="container py-5 text-center text-xs text-secondary-foreground/60">
+            © 2026 Besigheim informiert. Alle Rechte vorbehalten.
+          </div>
         </div>
       </footer>
     </div>
