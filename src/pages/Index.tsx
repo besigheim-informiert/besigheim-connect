@@ -23,15 +23,25 @@ export default function Index() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="border-b border-foreground/10">
+      <section className="relative border-b border-foreground/10 overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0 -z-10">
+          <img
+            src={heroBg}
+            alt="Panorama von Besigheim mit Fachwerkhäusern und Weinbergen"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-background/85 backdrop-blur-[1px]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/70" />
+        </div>
         <div className="container pt-8 pb-10 md:pt-12 md:pb-14">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-8">
               <span className="eyebrow text-primary">Offizielles Bürgerportal · Stadt Besigheim</span>
               <h1 className="font-serif-display text-4xl md:text-5xl lg:text-6xl font-bold leading-[1] tracking-tight mt-3">
-                Besigheim <span className="italic text-primary">informiert.</span>
+                Willkommen in <span className="italic text-primary">Besigheim.</span>
               </h1>
-              <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed">
+              <p className="mt-4 text-base md:text-lg text-foreground/80 max-w-xl leading-relaxed">
                 Vereine, Veranstaltungen und ehrenamtliches Engagement — die zentrale
                 Anlaufstelle für alle, die in unserer Stadt Bescheid wissen wollen.
               </p>
@@ -39,13 +49,13 @@ export default function Index() {
                 <Button asChild className="rounded-none h-11 px-6 bg-secondary text-secondary-foreground hover:bg-secondary/90">
                   <Link to="/vereine">Vereine entdecken</Link>
                 </Button>
-                <Button asChild variant="outline" className="rounded-none h-11 px-6 border-foreground/20 hover:bg-accent">
+                <Button asChild variant="outline" className="rounded-none h-11 px-6 border-foreground/30 bg-background/60 hover:bg-accent">
                   <Link to="/mitmachen">Jetzt mitmachen</Link>
                 </Button>
               </div>
             </div>
             <aside className="lg:col-span-4 lg:border-l lg:border-foreground/10 lg:pl-8">
-              <div className="border-t-2 border-foreground pt-3">
+              <div className="border-t-2 border-foreground pt-3 bg-background/70 backdrop-blur-sm p-4 md:p-5 md:border-t-2">
                 <span className="eyebrow">Heute in Besigheim</span>
                 <p className="font-serif-display text-lg mt-2 leading-snug">
                   {vereine.length} Vereine · {veranstaltungen.length} Termine ·
@@ -66,15 +76,6 @@ export default function Index() {
               </div>
             </aside>
           </div>
-        </div>
-        {/* Panorama strip */}
-        <div className="relative h-24 md:h-32 overflow-hidden border-t border-foreground/10">
-          <img
-            src={heroBg}
-            alt="Panorama von Besigheim mit Fachwerkhäusern und Weinbergen"
-            className="w-full h-full object-cover grayscale-[40%]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-background/20" />
         </div>
       </section>
 
