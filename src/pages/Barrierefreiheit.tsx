@@ -16,6 +16,7 @@ const statusFilterOptions: { value: Status | "alle"; label: string }[] = [
   { value: "ja", label: "Barrierefrei" },
   { value: "teilweise", label: "Teilweise" },
   { value: "nein", label: "Nicht barrierefrei" },
+  { value: "unbekannt", label: "Keine Info" },
 ];
 
 const kriterien: {
@@ -182,11 +183,12 @@ export default function Barrierefreiheit() {
 
       {/* Stats bar */}
       <section className="border-b border-foreground/10">
-        <div className="container py-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="Einrichtungen erfasst" value={stats.total} />
-          <StatCard label="Barrierefrei zugänglich" value={stats.ja} tone="good" />
-          <StatCard label="Teilweise zugänglich" value={stats.teilweise} tone="warn" />
-          <StatCard label="Nicht zugänglich" value={stats.nein} tone="bad" />
+        <div className="container py-6 grid grid-cols-2 md:grid-cols-5 gap-4">
+          <StatCard label="Einrichtungen gesamt" value={stats.total} />
+          <StatCard label="Barrierefrei" value={stats.ja} tone="good" />
+          <StatCard label="Teilweise" value={stats.teilweise} tone="warn" />
+          <StatCard label="Nicht barrierefrei" value={stats.nein} tone="bad" />
+          <StatCard label="Keine Info" value={stats.unbekannt} />
         </div>
       </section>
 
