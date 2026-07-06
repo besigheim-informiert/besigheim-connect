@@ -57,23 +57,39 @@ export default function Barrierefreiheit() {
   const [kat, setKat] = useState<Kategorie | "alle">("alle");
   const [zugangFilter, setZugangFilter] = useState<Status | "alle">("alle");
 
-  const gefiltert = useMemo(() => {
+  const overallStatus = (e: Einrichtung): "ja" | "teilweise" | "nein" | "unbekannt" => {
+    const vals = [e.zugang, e.sehbehinderung, e.wc, e.parkplatz].filter((v) => v !== "na");
+    if (vals.some((v) => v === "nein")) return "nein";
+    if (vals.some((v) => v === "teilweise")) return "teilweise";
+    if (vals.length > 0 && vals.every((v) => v === "ja")) return "ja";
+    return "unbekannt";
+  };
+
+  const nachSucheUndKat = useMemo(() => {
     const q = query.trim().toLowerCase();
     return einrichtungen.filter((e) => {
       if (kat !== "alle" && e.kategorie !== kat) return false;
-      if (zugangFilter !== "alle" && e.zugang !== zugangFilter) return false;
       if (q && !`${e.name} ${e.facharzt ?? ""} ${e.strasse} ${e.kategorie}`.toLowerCase().includes(q)) return false;
       return true;
     });
-  }, [query, kat, zugangFilter]);
+  }, [query, kat]);
+
+  const gefiltert = useMemo(() => {
+    if (zugangFilter === "alle") return nachSucheUndKat;
+    return nachSucheUndKat.filter((e) => overallStatus(e) === zugangFilter);
+  }, [nachSucheUndKat, zugangFilter]);
 
   const stats = useMemo(() => {
-    const total = einrichtungen.length;
-    const ja = einrichtungen.filter((e) => e.zugang === "ja").length;
-    const teilweise = einrichtungen.filter((e) => e.zugang === "teilweise").length;
-    const nein = einrichtungen.filter((e) => e.zugang === "nein").length;
+    const total = nachSucheUndKat.length;
+    let ja = 0, teilweise = 0, nein = 0;
+    for (const e of nachSucheUndKat) {
+      const s = overallStatus(e);
+      if (s === "ja") ja++;
+      else if (s === "teilweise") teilweise++;
+      else if (s === "nein") nein++;
+    }
     return { total, ja, teilweise, nein };
-  }, []);
+  }, [nachSucheUndKat]);
 
   return (
     <Layout>
