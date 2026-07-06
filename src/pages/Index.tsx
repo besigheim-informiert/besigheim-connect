@@ -31,8 +31,7 @@ export default function Index() {
             alt="Panorama von Besigheim mit Fachwerkhäusern und Weinbergen"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-background/85 backdrop-blur-[1px]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/75 to-background/40" />
         </div>
         <div className="container pt-8 pb-10 md:pt-12 md:pb-14">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
