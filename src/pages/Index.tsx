@@ -25,15 +25,15 @@ export default function Index() {
       {/* Hero */}
       <section className="relative border-b border-foreground/10 overflow-hidden">
         {/* Background image */}
-        <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 z-0">
           <img
             src={heroBg}
             alt="Panorama von Besigheim mit Fachwerkhäusern und Weinbergen"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/75 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-background/30" />
         </div>
-        <div className="container pt-8 pb-10 md:pt-12 md:pb-14">
+        <div className="container relative z-10 pt-8 pb-10 md:pt-12 md:pb-14">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-8">
               <span className="eyebrow text-primary">Offizielles Bürgerportal · Stadt Besigheim</span>
