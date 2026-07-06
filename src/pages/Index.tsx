@@ -24,42 +24,41 @@ export default function Index() {
     <Layout>
       {/* Hero */}
       <section className="border-b border-foreground/10">
-        <div className="container pt-16 pb-20 md:pt-24 md:pb-28">
-          <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+        <div className="container pt-8 pb-10 md:pt-12 md:pb-14">
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-8">
               <span className="eyebrow text-primary">Offizielles Bürgerportal · Stadt Besigheim</span>
-              <h1 className="font-serif-display text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mt-6">
-                Besigheim<br />
-                <span className="italic text-primary">informiert.</span>
+              <h1 className="font-serif-display text-4xl md:text-5xl lg:text-6xl font-bold leading-[1] tracking-tight mt-3">
+                Besigheim <span className="italic text-primary">informiert.</span>
               </h1>
-              <p className="mt-8 text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
+              <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed">
                 Vereine, Veranstaltungen und ehrenamtliches Engagement — die zentrale
                 Anlaufstelle für alle, die in unserer Stadt Bescheid wissen wollen.
               </p>
-              <div className="mt-10 flex flex-wrap gap-3">
-                <Button asChild size="lg" className="rounded-none h-12 px-8 bg-secondary text-secondary-foreground hover:bg-secondary/90">
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Button asChild className="rounded-none h-11 px-6 bg-secondary text-secondary-foreground hover:bg-secondary/90">
                   <Link to="/vereine">Vereine entdecken</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="rounded-none h-12 px-8 border-foreground/20 hover:bg-accent">
+                <Button asChild variant="outline" className="rounded-none h-11 px-6 border-foreground/20 hover:bg-accent">
                   <Link to="/mitmachen">Jetzt mitmachen</Link>
                 </Button>
               </div>
             </div>
-            <aside className="lg:col-span-4 lg:border-l lg:border-foreground/10 lg:pl-10">
-              <div className="border-t-2 border-foreground pt-4">
+            <aside className="lg:col-span-4 lg:border-l lg:border-foreground/10 lg:pl-8">
+              <div className="border-t-2 border-foreground pt-3">
                 <span className="eyebrow">Heute in Besigheim</span>
-                <p className="font-serif-display text-2xl mt-3 leading-snug">
+                <p className="font-serif-display text-lg mt-2 leading-snug">
                   {vereine.length} Vereine · {veranstaltungen.length} Termine ·
                   <span className="text-primary italic"> ein Ort.</span>
                 </p>
-                <div className="mt-6 space-y-3 text-sm text-muted-foreground">
-                  <div className="flex justify-between border-b border-foreground/10 pb-2">
+                <div className="mt-3 space-y-2 text-sm text-muted-foreground">
+                  <div className="flex justify-between border-b border-foreground/10 pb-1.5">
                     <span>Nächste Veranstaltung</span>
                     <span className="text-foreground font-medium">
                       {lead ? formatDate(lead.datum) : "—"}
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-foreground/10 pb-2">
+                  <div className="flex justify-between border-b border-foreground/10 pb-1.5">
                     <span>Ausgabe</span>
                     <span className="text-foreground font-medium">2026 · Nr. 1</span>
                   </div>
@@ -69,7 +68,7 @@ export default function Index() {
           </div>
         </div>
         {/* Panorama strip */}
-        <div className="relative h-40 md:h-56 overflow-hidden border-t border-foreground/10">
+        <div className="relative h-24 md:h-32 overflow-hidden border-t border-foreground/10">
           <img
             src={heroBg}
             alt="Panorama von Besigheim mit Fachwerkhäusern und Weinbergen"
