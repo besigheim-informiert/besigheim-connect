@@ -16,6 +16,7 @@ const statusFilterOptions: { value: Status | "alle"; label: string }[] = [
   { value: "ja", label: "Barrierefrei" },
   { value: "teilweise", label: "Teilweise" },
   { value: "nein", label: "Nicht barrierefrei" },
+  { value: "unbekannt", label: "Keine Info" },
 ];
 
 const kriterien: {
@@ -81,14 +82,15 @@ export default function Barrierefreiheit() {
 
   const stats = useMemo(() => {
     const total = nachSucheUndKat.length;
-    let ja = 0, teilweise = 0, nein = 0;
+    let ja = 0, teilweise = 0, nein = 0, unbekannt = 0;
     for (const e of nachSucheUndKat) {
       const s = overallStatus(e);
       if (s === "ja") ja++;
       else if (s === "teilweise") teilweise++;
       else if (s === "nein") nein++;
+      else unbekannt++;
     }
-    return { total, ja, teilweise, nein };
+    return { total, ja, teilweise, nein, unbekannt };
   }, [nachSucheUndKat]);
 
   return (
@@ -148,7 +150,8 @@ export default function Barrierefreiheit() {
                     <span className={`inline-block h-2.5 w-2.5 rounded-full mr-2 ${
                       o.value === "ja" ? "bg-emerald-600" :
                       o.value === "teilweise" ? "bg-amber-400" :
-                      "bg-primary"
+                      o.value === "nein" ? "bg-primary" :
+                      "bg-muted-foreground/40"
                     }`} aria-hidden="true" />
                   )}
                   {o.label}
@@ -181,11 +184,12 @@ export default function Barrierefreiheit() {
 
       {/* Stats bar */}
       <section className="border-b border-foreground/10">
-        <div className="container py-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="Einrichtungen erfasst" value={stats.total} />
-          <StatCard label="Barrierefrei zugänglich" value={stats.ja} tone="good" />
-          <StatCard label="Teilweise zugänglich" value={stats.teilweise} tone="warn" />
-          <StatCard label="Nicht zugänglich" value={stats.nein} tone="bad" />
+        <div className="container py-6 grid grid-cols-2 md:grid-cols-5 gap-4">
+          <StatCard label="Einrichtungen gesamt" value={stats.total} />
+          <StatCard label="Barrierefrei" value={stats.ja} tone="good" />
+          <StatCard label="Teilweise" value={stats.teilweise} tone="warn" />
+          <StatCard label="Nicht barrierefrei" value={stats.nein} tone="bad" />
+          <StatCard label="Keine Info" value={stats.unbekannt} />
         </div>
       </section>
 
