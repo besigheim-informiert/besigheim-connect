@@ -81,14 +81,15 @@ export default function Barrierefreiheit() {
 
   const stats = useMemo(() => {
     const total = nachSucheUndKat.length;
-    let ja = 0, teilweise = 0, nein = 0;
+    let ja = 0, teilweise = 0, nein = 0, unbekannt = 0;
     for (const e of nachSucheUndKat) {
       const s = overallStatus(e);
       if (s === "ja") ja++;
       else if (s === "teilweise") teilweise++;
       else if (s === "nein") nein++;
+      else unbekannt++;
     }
-    return { total, ja, teilweise, nein };
+    return { total, ja, teilweise, nein, unbekannt };
   }, [nachSucheUndKat]);
 
   return (
