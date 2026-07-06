@@ -8,6 +8,7 @@ const navItems = [
   { label: "Vereine", path: "/vereine" },
   { label: "Veranstaltungen", path: "/veranstaltungen" },
   { label: "Mitmachen", path: "/mitmachen" },
+  { label: "Barrierefrei", path: "/barrierefrei" },
   { label: "Über uns", path: "/ueber-uns" },
 ];
 
