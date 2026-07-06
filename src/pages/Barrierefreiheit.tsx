@@ -150,7 +150,8 @@ export default function Barrierefreiheit() {
                     <span className={`inline-block h-2.5 w-2.5 rounded-full mr-2 ${
                       o.value === "ja" ? "bg-emerald-600" :
                       o.value === "teilweise" ? "bg-amber-400" :
-                      "bg-primary"
+                      o.value === "nein" ? "bg-primary" :
+                      "bg-muted-foreground/40"
                     }`} aria-hidden="true" />
                   )}
                   {o.label}
