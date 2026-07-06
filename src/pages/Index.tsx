@@ -153,8 +153,8 @@ export default function Index() {
                 const d = new Date(e.datum);
                 return (
                   <li key={e.id} className="group flex gap-5">
-                    <div className="flex-shrink-0 w-14 text-center border-t-2 border-primary pt-2">
-                      <div className="font-serif-display text-3xl leading-none">{d.getDate()}</div>
+                    <div className="flex-shrink-0 w-14 text-center border-t-2 border-highlight pt-2">
+                      <div className="font-serif-display text-3xl leading-none text-highlight">{d.getDate()}</div>
                       <div className="eyebrow text-muted-foreground mt-1">
                         {d.toLocaleDateString("de-DE", { month: "short" }).replace(".", "")}
                       </div>
