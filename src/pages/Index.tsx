@@ -180,7 +180,7 @@ export default function Index() {
       <section className="bg-secondary text-secondary-foreground">
         <div className="container py-16 md:py-20 grid gap-8 md:grid-cols-3 md:items-end">
           <div className="md:col-span-2">
-            <span className="eyebrow text-primary-foreground/80" style={{ color: "hsl(var(--primary))" }}>
+            <span className="eyebrow text-highlight">
               Ehrenamt
             </span>
             <h2 className="font-serif-display text-3xl md:text-5xl leading-tight mt-4">
