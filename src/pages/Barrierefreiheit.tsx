@@ -107,20 +107,6 @@ export default function Barrierefreiheit() {
             basieren auf einer Erhebung der <em>Alltagshilfe des Netzwerk Quartier Besigheim</em>.
           </p>
 
-          {/* Ampel-Legende */}
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl">
-            {[
-              { s: "ja" as Status, label: "Barrierefrei" },
-              { s: "teilweise" as Status, label: "Teilweise" },
-              { s: "nein" as Status, label: "Nicht barrierefrei" },
-              { s: "unbekannt" as Status, label: "Keine Info" },
-            ].map((l) => (
-              <div key={l.s} className="flex items-center gap-2.5 text-sm">
-                <StatusDot status={l.s} label={l.label} />
-                <span className="text-foreground/80">{l.label}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
