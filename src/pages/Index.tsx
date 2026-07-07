@@ -83,7 +83,7 @@ export default function Index() {
       {/* Quick Links — bordered grid */}
       <section className="border-b border-foreground/10">
         <div className="container py-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-foreground/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-foreground/10">
             {quickLinks.map((item) => (
               <Link
                 key={item.path}
