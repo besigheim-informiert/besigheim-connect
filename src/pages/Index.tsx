@@ -187,23 +187,23 @@ export default function Index() {
       </section>
 
       {/* Engagement CTA band */}
-      <section className="bg-secondary text-secondary-foreground">
+      <section className="bg-background border-t border-foreground/10">
         <div className="container py-16 md:py-20 grid gap-8 md:grid-cols-3 md:items-end">
           <div className="md:col-span-2">
-            <span className="eyebrow text-highlight">
-              Ehrenamt
+            <span className="eyebrow text-primary">
+              Ehrenamt & Quartier
             </span>
-            <h2 className="font-serif-display text-3xl md:text-5xl leading-tight mt-4">
+            <h2 className="font-serif-display text-3xl md:text-5xl leading-tight mt-4 text-foreground">
               Besigheim lebt vom <span className="italic text-primary">Mitmachen.</span>
             </h2>
-            <p className="mt-4 text-secondary-foreground/75 max-w-xl leading-relaxed">
+            <p className="mt-4 text-foreground/75 max-w-xl leading-relaxed">
               Ob Fußballtraining für Kinder, Musikproben oder Nachbarschaftshilfe — hier findest du
               konkrete Möglichkeiten, dich einzubringen.
             </p>
           </div>
           <div className="md:justify-self-end">
             <Button asChild size="lg" className="rounded-none h-12 px-8 bg-primary text-primary-foreground hover:bg-primary/90">
-              <Link to="/mitmachen">Angebote ansehen</Link>
+              <Link to="/netzwerk-quartier">Netzwerk Quartier</Link>
             </Button>
           </div>
         </div>
