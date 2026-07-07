@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
-import { Users, Calendar, Heart, ArrowRight, ArrowUpRight } from "lucide-react";
+import { Users, Calendar, Heart, Accessibility, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { vereine } from "@/data/vereine";
 import { veranstaltungen } from "@/data/veranstaltungen";
+import { einrichtungen } from "@/data/barrierefreiheit";
 import heroBg from "@/assets/hero-besigheim.jpg";
 
 const quickLinks = [
+  { icon: Accessibility, label: "Barrierefreiheit", desc: "Zugänglichkeit von Einrichtungen in Besigheim.", path: "/barrierefreiheit" },
   { icon: Users, label: "Vereine", desc: "Alle Vereine der Stadt auf einen Blick.", path: "/vereine" },
   { icon: Calendar, label: "Veranstaltungen", desc: "Was in Besigheim in den nächsten Wochen passiert.", path: "/veranstaltungen" },
   { icon: Heart, label: "Mitmachen", desc: "Ehrenamt und Engagement-Möglichkeiten vor Ort.", path: "/mitmachen" },
