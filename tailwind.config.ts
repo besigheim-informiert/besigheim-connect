@@ -51,6 +51,10 @@ export default {
   				DEFAULT: 'hsl(var(--highlight))',
   				foreground: 'hsl(var(--highlight-foreground))'
   			},
+  			signal: {
+  				DEFAULT: 'hsl(var(--signal))',
+  				foreground: 'hsl(var(--signal-foreground))'
+  			},
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',
