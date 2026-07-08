@@ -85,11 +85,12 @@ export default function Index() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 md:gap-12">
           {/* Featured Clubs */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-baseline justify-between border-b-2 border-foreground pb-3">
+            <div className="flex items-baseline justify-between border-b-2 border-foreground pb-3 relative">
+              <span aria-hidden className="absolute -top-[2px] left-0 w-16 h-[3px] bg-signal" />
               <h2 className="font-serif-display text-2xl md:text-3xl text-foreground">Vereine im Fokus</h2>
               <Link
                 to="/vereine"
-                className="eyebrow text-primary hover:underline underline-offset-4 flex items-center gap-1"
+                className="eyebrow text-signal hover:underline underline-offset-4 flex items-center gap-1"
               >
                 Alle Vereine <ArrowRight className="h-3 w-3" />
               </Link>
@@ -105,7 +106,7 @@ export default function Index() {
                     <Users className="h-5 w-5 text-muted-foreground" strokeWidth={1.5} />
                   </div>
                   <div className="min-w-0">
-                    <span className="eyebrow text-primary">{v.kategorie}</span>
+                    <span className="eyebrow text-signal">{v.kategorie}</span>
                     <h4 className="font-semibold text-foreground leading-tight mt-1 group-hover:text-primary transition-colors truncate">
                       {v.name}
                     </h4>
@@ -130,7 +131,7 @@ export default function Index() {
                 return (
                   <li key={e.id} className="group flex gap-4">
                     <div className="text-center min-w-[50px]">
-                      <span className="block text-xs uppercase tracking-wider text-primary font-bold">
+                      <span className="block text-xs uppercase tracking-wider text-signal font-bold">
                         {d.toLocaleDateString("de-DE", { month: "short" }).replace(".", "")}
                       </span>
                       <span className="block text-2xl font-serif-display text-foreground">{d.getDate()}</span>
