@@ -106,7 +106,7 @@ export default function Index() {
                     <Users className="h-5 w-5 text-muted-foreground" strokeWidth={1.5} />
                   </div>
                   <div className="min-w-0">
-                    <span className="eyebrow text-primary">{v.kategorie}</span>
+                    <span className="eyebrow text-signal">{v.kategorie}</span>
                     <h4 className="font-semibold text-foreground leading-tight mt-1 group-hover:text-primary transition-colors truncate">
                       {v.name}
                     </h4>
