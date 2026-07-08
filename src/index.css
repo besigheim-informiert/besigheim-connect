@@ -111,6 +111,9 @@ Typography: Libre Baskerville (headings) + IBM Plex Sans (body)
     --input: 213 33% 93% / 15%;
     --ring: 207 45% 43%;
 
+    --signal: 356 85% 68%;
+    --signal-foreground: 222 58% 15%;
+
     --sidebar-background: 222 58% 15%;
     --sidebar-foreground: 213 33% 93%;
     --sidebar-primary: 207 45% 43%;
