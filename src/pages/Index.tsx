@@ -131,7 +131,7 @@ export default function Index() {
                 return (
                   <li key={e.id} className="group flex gap-4">
                     <div className="text-center min-w-[50px]">
-                      <span className="block text-xs uppercase tracking-wider text-primary font-bold">
+                      <span className="block text-xs uppercase tracking-wider text-signal font-bold">
                         {d.toLocaleDateString("de-DE", { month: "short" }).replace(".", "")}
                       </span>
                       <span className="block text-2xl font-serif-display text-foreground">{d.getDate()}</span>
