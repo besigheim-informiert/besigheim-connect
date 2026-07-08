@@ -41,6 +41,9 @@ Typography: Libre Baskerville (headings) + IBM Plex Sans (body)
     --highlight: 207 45% 43%;
     --highlight-foreground: 222 58% 15%;
 
+    --signal: 356 72% 38%;
+    --signal-foreground: 0 0% 100%;
+
     --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
