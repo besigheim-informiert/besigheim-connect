@@ -91,6 +91,7 @@ export default {
   		},
   		fontFamily: {
   			sans: [
+  				'IBM Plex Sans',
   				'ui-sans-serif',
   				'system-ui',
   				'sans-serif',
@@ -100,6 +101,7 @@ export default {
   				'Noto Color Emoji'
   			],
   			serif: [
+  				'Libre Baskerville',
   				'ui-serif',
   				'Georgia',
   				'Cambria',
