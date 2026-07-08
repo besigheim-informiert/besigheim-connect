@@ -82,13 +82,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="border-t border-foreground/10 bg-secondary text-secondary-foreground mt-20">
+      <footer className="border-t border-foreground/10 bg-background text-foreground mt-20">
         <div className="container py-14 grid gap-10 md:grid-cols-3">
           <div>
             <h3 className="font-serif-display text-2xl mb-3">
               Besigheim <span className="italic text-primary">informiert</span>
             </h3>
-            <p className="text-sm text-secondary-foreground/70 leading-relaxed max-w-sm">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
               Die zentrale Informationsplattform für Vereine, Veranstaltungen und Engagement in Besigheim.
             </p>
           </div>
@@ -97,7 +97,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <ul className="space-y-2 text-sm">
               {navItems.map((item) => (
                 <li key={item.path}>
-                  <Link to={item.path} className="text-secondary-foreground/80 hover:text-primary transition-colors">
+                  <Link to={item.path} className="text-muted-foreground hover:text-primary transition-colors">
                     {item.label}
                   </Link>
                 </li>
@@ -107,14 +107,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div>
             <h4 className="eyebrow text-primary mb-4">Rechtliches</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/impressum" className="text-secondary-foreground/80 hover:text-primary transition-colors">Impressum</Link></li>
-              <li><Link to="/datenschutz" className="text-secondary-foreground/80 hover:text-primary transition-colors">Datenschutz</Link></li>
-              <li><Link to="/kontakt" className="text-secondary-foreground/80 hover:text-primary transition-colors">Kontakt</Link></li>
+              <li><Link to="/impressum" className="text-muted-foreground hover:text-primary transition-colors">Impressum</Link></li>
+              <li><Link to="/datenschutz" className="text-muted-foreground hover:text-primary transition-colors">Datenschutz</Link></li>
+              <li><Link to="/kontakt" className="text-muted-foreground hover:text-primary transition-colors">Kontakt</Link></li>
             </ul>
           </div>
         </div>
-        <div className="border-t border-secondary-foreground/10">
-          <div className="container py-5 text-center text-xs text-secondary-foreground/60">
+        <div className="border-t border-foreground/10">
+          <div className="container py-5 text-center text-xs text-muted-foreground">
             © 2026 Besigheim informiert. Alle Rechte vorbehalten.
           </div>
         </div>
