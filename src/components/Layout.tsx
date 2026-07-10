@@ -115,7 +115,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
         <div className="border-t border-foreground/10">
           <div className="container py-5 text-center text-xs text-muted-foreground">
-            © 2026 Besigheim informiert. Alle Rechte vorbehalten.
+            © 2026 Unser Besigheim. Alle Rechte vorbehalten.
           </div>
         </div>
       </footer>

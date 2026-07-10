@@ -7,7 +7,7 @@ export default function UeberUns() {
         <h1 className="text-3xl font-bold text-foreground mb-4">Über das Projekt</h1>
         <div className="prose prose-neutral max-w-none space-y-4 text-muted-foreground">
           <p>
-            <strong className="text-foreground">Besigheim informiert</strong> ist eine zentrale digitale Bürgerplattform für die Stadt Besigheim. 
+            <strong className="text-foreground">Unser Besigheim</strong> ist eine zentrale digitale Bürgerplattform für die Stadt Besigheim. 
             Unser Ziel ist es, Vereine, Initiativen und ehrenamtliches Engagement sichtbar zu machen und allen 
             Bürgerinnen und Bürgern eine strukturierte Anlaufstelle für Informationen zu bieten.
           </p>
