@@ -98,23 +98,6 @@ export default function Index() {
               </Link>
             </Button>
           </div>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="border border-foreground/10 bg-background p-5">
-              <div className="h-3 w-3 rounded-full bg-signal mb-4" />
-              <p className="font-serif-display text-xl">Zugang</p>
-              <p className="text-xs text-muted-foreground mt-2 leading-relaxed uppercase tracking-wider">Ebenerdig · Rampe · Stufen</p>
-            </div>
-            <div className="border border-foreground/10 bg-background p-5">
-              <div className="h-3 w-3 rounded-full bg-primary mb-4" />
-              <p className="font-serif-display text-xl">WC</p>
-              <p className="text-xs text-muted-foreground mt-2 leading-relaxed uppercase tracking-wider">Barrierefrei · Nicht vorhanden</p>
-            </div>
-            <div className="border border-foreground/10 bg-background p-5">
-              <div className="h-3 w-3 rounded-full bg-highlight mb-4" />
-              <p className="font-serif-display text-xl">Parken</p>
-              <p className="text-xs text-muted-foreground mt-2 leading-relaxed uppercase tracking-wider">Behindertenparkplatz</p>
-            </div>
-          </div>
         </div>
       </section>
 

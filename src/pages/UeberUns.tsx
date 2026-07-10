@@ -12,7 +12,7 @@ export default function UeberUns() {
             Bürgerinnen und Bürgern eine strukturierte Anlaufstelle für Informationen zu bieten.
           </p>
           <p>
-            Die Plattform ist kein soziales Netzwerk und kein Messenger-Ersatz – sondern eine nachhaltige, 
+            Die Plattform ist kein soziales Netzwerk und kein Messenger-Ersatz - sondern eine nachhaltige, 
             übersichtliche Informationsbasis für unsere Gemeinschaft.
           </p>
           <h2 className="text-xl font-semibold text-foreground mt-8">Unsere Ziele</h2>
@@ -25,7 +25,7 @@ export default function UeberUns() {
           </ul>
           <h2 className="text-xl font-semibold text-foreground mt-8">Für wen ist die Plattform?</h2>
           <p>
-            Für alle – egal ob alteingesessene Besigheimer, Neuzugezogene, Jugendliche oder Senioren. 
+            Für alle - egal ob alteingesessene Besigheimer, Neuzugezogene, Jugendliche oder Senioren. 
             Vereine und Initiativen finden hier eine Bühne, Bürgerinnen und Bürger eine verlässliche Informationsquelle.
           </p>
         </div>

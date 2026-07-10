@@ -18,7 +18,7 @@ export default function Mitmachen() {
         <div className="max-w-2xl mb-10">
           <h1 className="text-3xl font-bold text-foreground mb-2">Mitmachen & Engagement</h1>
           <p className="text-muted-foreground">
-            Besigheim lebt vom Ehrenamt. Hier finden Sie aktuelle Möglichkeiten, sich einzubringen – ob regelmäßig, projektbezogen oder einmalig.
+            Besigheim lebt vom Ehrenamt. Hier finden Sie aktuelle Möglichkeiten, sich einzubringen - ob regelmäßig, projektbezogen oder einmalig.
           </p>
         </div>
 

@@ -12,7 +12,8 @@ export const engagementAngebote: EngagementAngebot[] = [
   {
     id: "1",
     titel: "Übungsleiter/in für Kinderturnen",
-    beschreibung: "Wir suchen engagierte Menschen, die Freude an der Arbeit mit Kindern haben und unser Kinderturnen mitgestalten möchten.",
+    beschreibung:
+      "Wir suchen engagierte Menschen, die Freude an der Arbeit mit Kindern haben und unser Kinderturnen mitgestalten möchten.",
     vereinId: "tv-besigheim",
     vereinName: "Turnverein Besigheim 1848 e.V.",
     art: "regelmäßig",
@@ -21,7 +22,8 @@ export const engagementAngebote: EngagementAngebot[] = [
   {
     id: "2",
     titel: "Helfer/innen für Frühjahrskonzert",
-    beschreibung: "Für unser Konzert im März suchen wir Unterstützung beim Auf- und Abbau sowie an der Kasse.",
+    beschreibung:
+      "Für unser Konzert im März suchen wir Unterstützung beim Auf- und Abbau sowie an der Kasse.",
     vereinId: "musikverein",
     vereinName: "Musikverein Besigheim e.V.",
     art: "einmalig",
@@ -30,7 +32,8 @@ export const engagementAngebote: EngagementAngebot[] = [
   {
     id: "3",
     titel: "Biotoppflege-Team",
-    beschreibung: "Regelmäßige Pflegeeinsätze in den Naturschutzgebieten rund um Besigheim. Keine Vorkenntnisse nötig.",
+    beschreibung:
+      "Regelmäßige Pflegeeinsätze in den Naturschutzgebieten rund um Besigheim. Keine Vorkenntnisse nötig.",
     vereinId: "nabu-besigheim",
     vereinName: "NABU Ortsgruppe Besigheim",
     art: "regelmäßig",
@@ -39,7 +42,8 @@ export const engagementAngebote: EngagementAngebot[] = [
   {
     id: "4",
     titel: "Einkaufspaten gesucht",
-    beschreibung: "Helfen Sie älteren Mitbürgern beim wöchentlichen Einkauf. Zeitaufwand ca. 2 Stunden pro Woche.",
+    beschreibung:
+      "Helfen Sie älteren Mitbürgern beim wöchentlichen Einkauf. Zeitaufwand ca. 2 Stunden pro Woche.",
     vereinId: "sozialverein",
     vereinName: "Bürgerhilfe Besigheim e.V.",
     art: "regelmäßig",
@@ -48,7 +52,8 @@ export const engagementAngebote: EngagementAngebot[] = [
   {
     id: "5",
     titel: "Workshop-Leitung im Jugendforum",
-    beschreibung: "Bringen Sie Ihre Fähigkeiten ein und leiten Sie einen Workshop für Jugendliche – ob Kochen, Coding oder Kunst.",
+    beschreibung:
+      "Bringen Sie Ihre Fähigkeiten ein und leiten Sie einen Workshop für Jugendliche - ob Kochen, Coding oder Kunst.",
     vereinId: "jugendhaus",
     vereinName: "Jugendforum Besigheim",
     art: "projektbezogen",

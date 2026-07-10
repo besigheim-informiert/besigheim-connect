@@ -17,14 +17,14 @@ const kurzKnapp = [
   "Mehr Workshop als Sitzung: Unsere Netzwerktreffen sind interaktiv und kurzweilig.",
   "Hier erfahren Sie, was es in den Vereinen und Initiativen Neues gibt.",
   "Finden Sie Mitstreiter für Ihre Idee und lassen Sie sich für wirksames Ehrenamt begeistern.",
-  "Gegenseitig unterstützen wir uns mit Rat und Tat – von einem starken Netzwerk profitieren alle.",
+  "Gegenseitig unterstützen wir uns mit Rat und Tat - von einem starken Netzwerk profitieren alle.",
 ];
 
 const prinzipien = [
   {
     icon: Lightbulb,
     title: "Projektbasiert",
-    text: "Projekte haben ein klares Ziel, dessen Umsetzung realistisch ist. Nach einem Jahr wird evaluiert – eine Gelingens-Garantie gibt es nicht.",
+    text: "Projekte haben ein klares Ziel, dessen Umsetzung realistisch ist. Nach einem Jahr wird evaluiert - eine Gelingens-Garantie gibt es nicht.",
   },
   {
     icon: Users,
@@ -34,7 +34,7 @@ const prinzipien = [
   {
     icon: Sparkles,
     title: "Frische Ideen",
-    text: "Ideen greifen reale Bedürfnisse auf und begeistern zum Mitmachen – nah an dem, was Besigheim bewegt.",
+    text: "Ideen greifen reale Bedürfnisse auf und begeistern zum Mitmachen - nah an dem, was Besigheim bewegt.",
   },
   {
     icon: HandHeart,
@@ -120,7 +120,7 @@ export default function NetzwerkQuartier() {
           </h2>
           <p className="mt-5 text-foreground/80 leading-relaxed">
             Wir reagieren auf Erkenntnisse der Sozialforschung: Die Menschen sind nicht weniger
-            engagiert – die Bedingungen müssen nur zum Leben passen. Wir ermöglichen
+            engagiert - die Bedingungen müssen nur zum Leben passen. Wir ermöglichen
             projektbasiertes, kurzfristiges und wirksames Engagement.
           </p>
         </div>
@@ -148,7 +148,7 @@ export default function NetzwerkQuartier() {
             <p className="mt-5 text-foreground/80 leading-relaxed">
               Der Generationenwechsel in den klassischen Strukturen des Ehrenamts ist
               herausfordernd. Im projektbasierten Ansatz sehen wir eine Chance, auch in Zukunft
-              Partizipation zu ermöglichen – etwa in der Nachbarschaftshilfe, der Inklusion oder
+              Partizipation zu ermöglichen - etwa in der Nachbarschaftshilfe, der Inklusion oder
               im Naturschutz.
             </p>
             <p className="mt-4 text-foreground/75 leading-relaxed">
@@ -177,7 +177,7 @@ export default function NetzwerkQuartier() {
             <p className="mt-5 text-secondary-foreground/85 leading-relaxed">
               Innerhalb des Netzwerks arbeiten Vereine, Unternehmen, lokal engagierte Initiativen
               und aktive Bürgerinnen und Bürger miteinander zusammen. Das Kernteam der
-              Quartiersarbeit moderiert, berät und koordiniert – zentraler Ideengeber sind die
+              Quartiersarbeit moderiert, berät und koordiniert - zentraler Ideengeber sind die
               Engagierten selbst.
             </p>
             <p className="mt-4 text-secondary-foreground/75 leading-relaxed">
@@ -196,7 +196,7 @@ export default function NetzwerkQuartier() {
               Sie möchten mitmachen oder eine Idee einbringen?
             </h2>
             <p className="mt-4 text-foreground/80 leading-relaxed">
-              Vorbeikommen, Ideen einbringen, sich anschließen – Engagement, das Spaß macht und
+              Vorbeikommen, Ideen einbringen, sich anschließen - Engagement, das Spaß macht und
               zum Leben passt. Schreiben Sie uns, wir freuen uns auf Sie.
             </p>
             <Button asChild className="rounded-none h-11 px-6 mt-6 bg-primary text-primary-foreground hover:bg-primary/90">

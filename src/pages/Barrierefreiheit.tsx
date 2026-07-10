@@ -37,7 +37,7 @@ function StatusDot({ status, label }: { status: Status; label: string }) {
     teilweise:  { cls: "bg-amber-400 text-foreground", text: "Teilweise",         Icon: Minus },
     nein:       { cls: "bg-primary text-primary-foreground", text: "Nicht barrierefrei", Icon: X },
     unbekannt:  { cls: "bg-muted text-muted-foreground border border-foreground/10", text: "Keine Info", Icon: HelpCircle },
-    na:         { cls: "bg-transparent text-muted-foreground border border-dashed border-foreground/20", text: "–", Icon: Minus },
+    na:         { cls: "bg-transparent text-muted-foreground border border-dashed border-foreground/20", text: "-", Icon: Minus },
   };
   const s = map[status];
   const Icon = s.Icon;
