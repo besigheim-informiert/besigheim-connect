@@ -31,7 +31,7 @@ export default function Index() {
         </div>
         <div className="container relative py-16 md:py-24 lg:py-28">
           <div className="max-w-2xl">
-            <span className="eyebrow text-highlight">Bürgerinfo Besigheim</span>
+            <span className="eyebrow text-highlight">Unser Besigheim</span>
             <h1 className="font-serif-display text-4xl md:text-5xl lg:text-6xl text-secondary-foreground mt-4 leading-[1.1]">
               Unser <span className="italic">Besigheim</span>
             </h1>
@@ -52,12 +52,12 @@ export default function Index() {
               Was Besigheim ausmacht — kompakt zusammengefasst.
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-foreground/10 border-y border-foreground/10">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {quickLinks.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className="group p-6 md:p-8 hover:bg-accent/40 transition-colors"
+                className="group border border-foreground/10 bg-background p-6 hover:bg-accent/40 transition-colors"
               >
                 <item.icon className="h-6 w-6 text-signal mb-6" strokeWidth={1.5} />
                 <h3 className="font-serif-display text-xl text-foreground">{item.label}</h3>
