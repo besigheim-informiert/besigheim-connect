@@ -2,14 +2,15 @@ import { Link } from "react-router-dom";
 import { Mail, ArrowRight, Users, Lightbulb, HandHeart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import sharepic from "@/assets/nwq-sharepic.jpg.asset.json";
-import flohmarkt from "@/assets/nwq-flohmarkt.jpg.asset.json";
-import workshop from "@/assets/nwq-workshop.jpg.asset.json";
-import altstadt from "@/assets/nwq-altstadt.jpg.asset.json";
-import treffen from "@/assets/nwq-treffen.jpg.asset.json";
-import gespraech from "@/assets/nwq-gespraech.jpg.asset.json";
-import thesen from "@/assets/nwq-thesen.jpg.asset.json";
-import austausch from "@/assets/nwq-austausch.jpg.asset.json";
+import flohmarkt from "@/assets/nwq-flohmarkt.jpg";
+import workshop from "@/assets/nwq-workshop.jpg";
+import altstadt from "@/assets/nwq-altstadt.jpg";
+import treffen from "@/assets/nwq-treffen.jpg";
+import gespraech from "@/assets/nwq-gespraech.jpg";
+import thesen from "@/assets/nwq-thesen.jpg";
+import austausch from "@/assets/nwq-austausch.jpg";
+
+import sharepic from "@/assets/netzwerk-quartier.jpg";
 
 const kurzKnapp = [
   "Wir bringen Menschen an einen Tisch, die in ihrer Stadt was bewegen wollen.",
@@ -61,12 +62,12 @@ export default function NetzwerkQuartier() {
             <p className="mt-4 text-foreground/75 leading-relaxed">
               Aus dem Netzwerk sind bereits zahlreiche Projektgruppen hervorgegangen, die Angebote
               für alle Generationen möglich machen. Als Netzwerk sind wir offen für alle
-              interessierten Bürger – eine feste Mitgliedschaft gibt es nicht.
+              interessierten Bürger - eine feste Mitgliedschaft gibt es nicht.
             </p>
           </div>
           <div className="relative">
             <img
-              src={sharepic.url}
+              src={sharepic}
               alt="Sharepic Netzwerktreffen: Du willst hier was bewegen? Dann komm zum Netzwerktreffen."
               className="w-full aspect-square object-cover"
               loading="lazy"
@@ -79,9 +80,9 @@ export default function NetzwerkQuartier() {
       <section className="border-t border-foreground/10 bg-accent/30">
         <div className="container py-14 md:py-20 grid gap-10 lg:grid-cols-2 lg:items-center">
           <div className="order-2 lg:order-1 grid grid-cols-2 gap-3">
-            <img src={treffen.url} alt="Netzwerktreffen im Gewölbekeller" className="w-full h-56 md:h-72 object-cover" loading="lazy" />
-            <img src={workshop.url} alt="Interaktive Feedback-Runde beim Netzwerktreffen" className="w-full h-56 md:h-72 object-cover" loading="lazy" />
-            <img src={gespraech.url} alt="Gespräch zwischen Engagierten" className="w-full h-56 md:h-72 object-cover col-span-2" loading="lazy" />
+            <img src={treffen} alt="Netzwerktreffen im Gewölbekeller" className="w-full h-56 md:h-72 object-cover" loading="lazy" />
+            <img src={workshop} alt="Interaktive Feedback-Runde beim Netzwerktreffen" className="w-full h-56 md:h-72 object-cover" loading="lazy" />
+            <img src={gespraech} alt="Gespräch zwischen Engagierten" className="w-full h-56 md:h-72 object-cover col-span-2" loading="lazy" />
           </div>
           <div className="order-1 lg:order-2">
             <span className="eyebrow text-primary">Der Treffpunkt</span>
@@ -157,9 +158,9 @@ export default function NetzwerkQuartier() {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <img src={flohmarkt.url} alt="Ehrenamtliche des Stadtflohmarkts in der Altstadt" className="w-full h-56 md:h-72 object-cover col-span-2" loading="lazy" />
-            <img src={thesen.url} alt="Abstimmung mit Klebepunkten zu Thesen" className="w-full h-56 md:h-72 object-cover" loading="lazy" />
-            <img src={austausch.url} alt="Austausch am Stehtisch beim Netzwerktreffen" className="w-full h-56 md:h-72 object-cover" loading="lazy" />
+            <img src={flohmarkt} alt="Ehrenamtliche des Stadtflohmarkts in der Altstadt" className="w-full h-56 md:h-72 object-cover col-span-2" loading="lazy" />
+            <img src={thesen} alt="Abstimmung mit Klebepunkten zu Thesen" className="w-full h-56 md:h-72 object-cover" loading="lazy" />
+            <img src={austausch} alt="Austausch am Stehtisch beim Netzwerktreffen" className="w-full h-56 md:h-72 object-cover" loading="lazy" />
           </div>
         </div>
       </section>
@@ -167,7 +168,7 @@ export default function NetzwerkQuartier() {
       {/* Gemeinsam mehr erreichen */}
       <section className="bg-secondary text-secondary-foreground">
         <div className="container py-14 md:py-20 grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-          <img src={altstadt.url} alt="Belebte Altstadt Besigheim" className="w-full h-64 md:h-96 object-cover" loading="lazy" />
+          <img src={altstadt} alt="Belebte Altstadt Besigheim" className="w-full h-64 md:h-96 object-cover" loading="lazy" />
           <div>
             <span className="eyebrow text-highlight">Gemeinsam mehr erreichen</span>
             <h2 className="font-serif-display text-2xl md:text-4xl leading-tight mt-3">
