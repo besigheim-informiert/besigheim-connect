@@ -33,7 +33,7 @@ export default function Index() {
             <div className="container relative z-10 px-6 md:px-12">
               <div className="max-w-2xl">
                 <h1 className="font-serif-display text-4xl md:text-5xl text-white mb-4 md:mb-6 leading-tight">
-                  Besigheim informiert
+                  Unser Besigheim
                 </h1>
                 <p className="text-primary-foreground/90 text-lg md:text-xl leading-relaxed font-light">
                   Die zentrale Informationsplattform für Vereine, Veranstaltungen,

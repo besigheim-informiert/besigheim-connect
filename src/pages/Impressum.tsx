@@ -8,11 +8,11 @@ export default function Impressum() {
         <div className="space-y-4 text-sm text-muted-foreground">
           <div>
             <h2 className="font-semibold text-foreground">Angaben gemäß § 5 TMG</h2>
-            <p>Besigheim informiert<br />Marktplatz 1<br />74354 Besigheim</p>
+            <p>Unser Besigheim<br />Marktplatz 1<br />74354 Besigheim</p>
           </div>
           <div>
             <h2 className="font-semibold text-foreground">Kontakt</h2>
-            <p>E-Mail: kontakt@besigheim-informiert.de</p>
+            <p>E-Mail: kontakt@unser-besigheim.de</p>
           </div>
           <div>
             <h2 className="font-semibold text-foreground">Haftungshinweis</h2>

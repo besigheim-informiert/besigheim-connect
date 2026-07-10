@@ -12,7 +12,7 @@ export default function Kontakt() {
         <div className="space-y-4 text-sm">
           <div className="flex items-center gap-3 text-muted-foreground">
             <Mail className="h-5 w-5 text-primary" />
-            <span>kontakt@besigheim-informiert.de</span>
+            <span>kontakt@unser-besigheim.de</span>
           </div>
           <div className="flex items-center gap-3 text-muted-foreground">
             <MapPin className="h-5 w-5 text-primary" />

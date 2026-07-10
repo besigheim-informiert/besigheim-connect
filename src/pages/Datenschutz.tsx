@@ -12,7 +12,7 @@ export default function Datenschutz() {
           </p>
           <div>
             <h2 className="font-semibold text-foreground">Verantwortlicher</h2>
-            <p>Besigheim informiert, Marktplatz 1, 74354 Besigheim<br />E-Mail: kontakt@besigheim-informiert.de</p>
+            <p>Unser Besigheim, Marktplatz 1, 74354 Besigheim<br />E-Mail: kontakt@unser-besigheim.de</p>
           </div>
           <div>
             <h2 className="font-semibold text-foreground">Erhebung und Verarbeitung</h2>

@@ -22,11 +22,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="container flex h-20 items-center justify-between">
           <Link to="/" className="flex items-baseline gap-2 group">
+            <span className="font-serif-display italic text-2xl md:text-[26px] leading-none text-primary">
+              Unser
+            </span>
             <span className="font-serif-display text-2xl md:text-[26px] font-bold tracking-tight leading-none">
               Besigheim
-            </span>
-            <span className="font-serif-display italic text-2xl md:text-[26px] leading-none text-primary">
-              informiert
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-1">
@@ -86,7 +86,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="container py-14 grid gap-10 md:grid-cols-3">
           <div>
             <h3 className="font-serif-display text-2xl mb-3">
-              Besigheim <span className="italic text-primary">informiert</span>
+              <span className="italic text-primary">Unser</span> Besigheim
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
               Die zentrale Informationsplattform für Vereine, Veranstaltungen und Engagement in Besigheim.
@@ -115,7 +115,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
         <div className="border-t border-foreground/10">
           <div className="container py-5 text-center text-xs text-muted-foreground">
-            © 2026 Besigheim informiert. Alle Rechte vorbehalten.
+            © 2026 Unser Besigheim. Alle Rechte vorbehalten.
           </div>
         </div>
       </footer>
