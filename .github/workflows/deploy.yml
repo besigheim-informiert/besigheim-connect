@@ -108,4 +108,4 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           role-session-name: besigheim-connect-github-actions
       - name: Deploy backend
-        run: npm run backend-deploy BesigheimConnectBackend --require-approval never
+        run: npm run backend-deploy --require-approval=never BesigheimConnectBackend
