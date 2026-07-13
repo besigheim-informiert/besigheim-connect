@@ -1,0 +1,12 @@
+{
+  "id": "huber",
+  "name": "Dr. med. Huber",
+  "kategorie": "Arztpraxis",
+  "facharzt": "HNO",
+  "strasse": "Bahnhofstr. 8b",
+  "telefon": "07143 32789",
+  "zugang": "nein",
+  "sehbehinderung": "na",
+  "wc": "na",
+  "parkplatz": "na"
+}

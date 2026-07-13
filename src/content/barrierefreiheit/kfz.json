@@ -1,0 +1,11 @@
+{
+  "id": "kfz",
+  "name": "KFZ-Zulassung",
+  "kategorie": "Verwaltung",
+  "strasse": "Kronenstr. 1",
+  "telefon": "07141 442068",
+  "zugang": "ja",
+  "sehbehinderung": "ja",
+  "wc": "unbekannt",
+  "parkplatz": "unbekannt"
+}

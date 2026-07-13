@@ -1,0 +1,11 @@
+{
+  "id": "rathaus",
+  "name": "Stadtverwaltung Rathaus",
+  "kategorie": "Verwaltung",
+  "strasse": "Marktplatz 12",
+  "telefon": "07143 8078-0",
+  "zugang": "ja",
+  "sehbehinderung": "nein",
+  "wc": "teilweise",
+  "parkplatz": "ja"
+}

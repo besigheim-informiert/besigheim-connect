@@ -39,15 +39,21 @@ export default function VereinDetail() {
             <CardContent className="p-5 space-y-3">
               <h3 className="font-semibold text-foreground">Kontakt</h3>
               <div className="space-y-2 text-sm">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Users className="h-4 w-4 text-primary" /> {verein.ansprechpartner}
-                </div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Mail className="h-4 w-4 text-primary" /> {verein.email}
-                </div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Phone className="h-4 w-4 text-primary" /> {verein.telefon}
-                </div>
+                {verein.ansprechpartner && (
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Users className="h-4 w-4 text-primary" /> {verein.ansprechpartner}
+                  </div>
+                )}
+                {verein.email && (
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Mail className="h-4 w-4 text-primary" /> {verein.email}
+                  </div>
+                )}
+                {verein.telefon && (
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Phone className="h-4 w-4 text-primary" /> {verein.telefon}
+                  </div>
+                )}
                 {verein.website && (
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Globe className="h-4 w-4 text-primary" /> <a href={verein.website} target="_blank" rel="noopener noreferrer" className="hover:text-primary">{verein.website}</a>

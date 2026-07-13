@@ -1,0 +1,11 @@
+{
+  "id": "rueck",
+  "name": "Dr. Rueck",
+  "kategorie": "Zahnarzt",
+  "strasse": "Kirchstr. 38",
+  "telefon": "07143 33355",
+  "zugang": "nein",
+  "sehbehinderung": "unbekannt",
+  "wc": "unbekannt",
+  "parkplatz": "unbekannt"
+}

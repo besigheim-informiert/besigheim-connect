@@ -20,6 +20,15 @@ const s3 = new S3Client({});
 const secretsManager = new SecretsManagerClient({});
 
 const documentRequirements = {
+  barrierefreiheit: [
+    "name",
+    "kategorie",
+    "strasse",
+    "zugang",
+    "sehbehinderung",
+    "wc",
+    "parkplatz",
+  ],
   engagement: [
     "titel",
     "beschreibung",
@@ -54,6 +63,13 @@ const documentRequirements = {
 } as const;
 
 type DocumentType = keyof typeof documentRequirements;
+
+const githubContentFolders: Record<DocumentType, string> = {
+  barrierefreiheit: "src/content/barrierefreiheit",
+  engagement: "src/content/engagement",
+  veranstaltung: "src/content/veranstaltungen",
+  verein: "src/content/vereine",
+};
 
 type ParsedDocument = {
   confidence?: number;
@@ -189,7 +205,7 @@ async function extractDocument(email: unknown): Promise<ParsedDocument> {
           text: [
             "Du extrahierst strukturierte Daten aus E-Mails fuer ein lokales Besigheimer Portal.",
             "Antworte ausschliesslich mit JSON, ohne Markdown.",
-            "Klassifiziere genau einen Typ: verein, veranstaltung, engagement oder unknown.",
+            "Klassifiziere genau einen Typ: verein, veranstaltung, engagement, barrierefreiheit oder unknown.",
             "Nutze diese Pflichtfelder:",
             JSON.stringify(documentRequirements),
             "Datumswerte muessen ISO-Format YYYY-MM-DD haben. Uhrzeiten muessen HH:mm sein.",
@@ -223,7 +239,10 @@ function parseJsonObject(text: string): ParsedDocument {
 }
 
 function normalizeType(type: unknown): DocumentType | undefined {
-  return type === "verein" || type === "veranstaltung" || type === "engagement"
+  return type === "verein" ||
+    type === "veranstaltung" ||
+    type === "engagement" ||
+    type === "barrierefreiheit"
     ? type
     : undefined;
 }
@@ -267,8 +286,8 @@ async function pushToGithub(input: {
   }
 
   const token = await loadGithubToken(secretName);
-  const branch = "main";
-  const path = `content/submissions/${input.type}/${input.id}.json`;
+  const branch = process.env.GITHUB_BRANCH ?? "main";
+  const path = `${githubContentFolders[input.type]}/${input.id}.json`;
   const content = Buffer.from(
     JSON.stringify(input.document, null, 2) + "\n"
   ).toString("base64");

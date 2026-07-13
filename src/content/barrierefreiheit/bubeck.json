@@ -1,0 +1,12 @@
+{
+  "id": "bubeck",
+  "name": "Bubeck-Praxen",
+  "kategorie": "Arztpraxis",
+  "facharzt": "Allgemeinmedizin",
+  "strasse": "Weinstr. 6",
+  "telefon": "07143 3001",
+  "zugang": "ja",
+  "sehbehinderung": "unbekannt",
+  "wc": "ja",
+  "parkplatz": "ja"
+}

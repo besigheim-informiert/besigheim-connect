@@ -1,0 +1,12 @@
+{
+  "id": "kaesehoch",
+  "name": "Kinderärzte 3 Käsehoch",
+  "kategorie": "Arztpraxis",
+  "facharzt": "Kinderarzt",
+  "strasse": "Bahnhofstr. 10",
+  "telefon": "07143 32720",
+  "zugang": "ja",
+  "sehbehinderung": "ja",
+  "wc": "teilweise",
+  "parkplatz": "ja"
+}

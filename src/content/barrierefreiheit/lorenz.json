@@ -1,0 +1,11 @@
+{
+  "id": "lorenz",
+  "name": "Physio Lorenz",
+  "kategorie": "Physiotherapie",
+  "strasse": "Kirchstraße 32",
+  "telefon": "07143 402479",
+  "zugang": "unbekannt",
+  "sehbehinderung": "unbekannt",
+  "wc": "unbekannt",
+  "parkplatz": "unbekannt"
+}

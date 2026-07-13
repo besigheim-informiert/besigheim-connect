@@ -1,0 +1,18 @@
+{
+  "id": "besigheimer-studiobuehne",
+  "name": "Besigheimer Studiobühne e.V.",
+  "kurzbeschreibung": "Kleiner Theaterverein mit Produktionen für Kinder, Jugendliche und Erwachsene.",
+  "beschreibung": "Die Besigheimer Studiobühne e.V. ist mit momentan 160 eingetragenen Mitgliedern einer der kleinsten Theatervereine in der Region Stuttgart. Im Hof und Keller des Besigheimer Steinhauses präsentiert die Studiobühne jedes Jahr vier Produktionen. Die Stücke reichen von Stücken von und für Kinder über Produktionen der Jugendgruppe bis hin zu Komödien, Tragödien und Dramen der Erwachsenen.",
+  "kategorie": "Kultur",
+  "zielgruppe": "Kinder, Jugendliche und Erwachsene",
+  "angebote": [
+    "Kindertheater",
+    "Jugendtheater",
+    "Theaterproduktionen",
+    "Komödien",
+    "Tragödien",
+    "Dramen"
+  ],
+  "website": "https://studiobuehne-besigheim.de/",
+  "adresse": "Pfarrgasse 26, 74354 Besigheim"
+}

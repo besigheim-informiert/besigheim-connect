@@ -1,0 +1,10 @@
+{
+  "id": "jobcenter",
+  "name": "Job Center",
+  "kategorie": "Verwaltung",
+  "strasse": "Kronenstr. 1",
+  "zugang": "ja",
+  "sehbehinderung": "ja",
+  "wc": "unbekannt",
+  "parkplatz": "teilweise"
+}

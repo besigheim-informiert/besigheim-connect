@@ -1,0 +1,11 @@
+{
+  "id": "buerger",
+  "name": "Katja Bürger",
+  "kategorie": "Hebamme",
+  "strasse": "Bahnhofstr. 10",
+  "telefon": "07143 9099229",
+  "zugang": "ja",
+  "sehbehinderung": "ja",
+  "wc": "teilweise",
+  "parkplatz": "ja"
+}

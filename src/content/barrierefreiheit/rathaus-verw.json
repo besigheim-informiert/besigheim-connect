@@ -1,0 +1,10 @@
+{
+  "id": "rathaus-verw",
+  "name": "Rathaus Verwaltungsgebäude",
+  "kategorie": "Verwaltung",
+  "strasse": "Marktplatz 12",
+  "zugang": "nein",
+  "sehbehinderung": "nein",
+  "wc": "nein",
+  "parkplatz": "ja"
+}

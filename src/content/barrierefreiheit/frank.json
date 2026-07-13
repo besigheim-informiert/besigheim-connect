@@ -1,0 +1,11 @@
+{
+  "id": "frank",
+  "name": "Dr. E. und S. Frank",
+  "kategorie": "Zahnarzt",
+  "strasse": "Bahnhofstr. 16/2",
+  "telefon": "07143 803133",
+  "zugang": "ja",
+  "sehbehinderung": "ja",
+  "wc": "ja",
+  "parkplatz": "teilweise"
+}

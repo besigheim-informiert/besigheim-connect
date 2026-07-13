@@ -98,7 +98,14 @@ The backend also creates an SES inbound mail flow:
 - Raw emails are stored in S3
 - A Lambda parses the email with Bedrock in the EU model profile
 - Parsed documents are stored in DynamoDB
-- Complete documents are committed to GitHub under `content/submissions/<type>/`
+- Complete documents are committed to GitHub as individual JSON files under `src/content/<type>/`
+
+Frontend content is loaded from one JSON file per entry:
+
+- `src/content/vereine/*.json`
+- `src/content/veranstaltungen/*.json`
+- `src/content/engagement/*.json`
+- `src/content/barrierefreiheit/*.json`
 
 After deployment, copy the `ApiUrl` stack output into the frontend environment:
 

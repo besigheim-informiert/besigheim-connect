@@ -1,0 +1,11 @@
+{
+  "id": "mann",
+  "name": "Dr. Mann",
+  "kategorie": "Zahnarzt",
+  "strasse": "Riedstr. 1",
+  "telefon": "07143 402613",
+  "zugang": "ja",
+  "sehbehinderung": "ja",
+  "wc": "unbekannt",
+  "parkplatz": "ja"
+}

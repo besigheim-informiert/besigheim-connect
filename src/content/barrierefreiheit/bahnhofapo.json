@@ -1,0 +1,11 @@
+{
+  "id": "bahnhofapo",
+  "name": "Bahnhofapotheke Besigheim",
+  "kategorie": "Apotheke",
+  "strasse": "Weinstraße 6",
+  "telefon": "07143 358849",
+  "zugang": "ja",
+  "sehbehinderung": "ja",
+  "wc": "ja",
+  "parkplatz": "ja"
+}
