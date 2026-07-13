@@ -25,19 +25,15 @@ permissions:
   pages: write
 
 concurrency:
-  group: deploy-${{ github.event.inputs.stage || 'dev' }}
+  group: deploy-dev
   cancel-in-progress: false
 
 env:
   AWS_ACCOUNT_ID: "027825871768"
   AWS_REGION: eu-central-1
-  BEDROCK_MODEL_ID: ${{ vars.BEDROCK_MODEL_ID || 'eu.amazon.nova-lite-v1:0' }}
   CDK_DEPLOY_ACCOUNT: "027825871768"
   CDK_DEPLOY_REGION: eu-central-1
-  FRONTEND_ORIGINS: ${{ github.event.inputs.frontend_origins || vars.FRONTEND_ORIGINS || format('https://{0}.github.io', github.repository_owner) }}
-  GITHUB_TOKEN_SECRET_NAME: ${{ vars.GITHUB_TOKEN_SECRET_NAME }}
-  MAIL_RECIPIENTS: ${{ vars.MAIL_RECIPIENTS || 'daten@unser-besigheim.de' }}
-  STAGE: ${{ github.event.inputs.stage || 'dev' }}
+  MAIL_RECIPIENTS: tanja.bayer@cubesoft.org
 
 jobs:
   frontend:
@@ -69,7 +65,7 @@ jobs:
 
       - name: Build frontend
         env:
-        VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/' }}
+          VITE_BASE_PATH: /
         run: npm run build
 
       - name: Add GitHub Pages SPA fallback

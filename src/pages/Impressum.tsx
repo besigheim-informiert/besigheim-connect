@@ -7,12 +7,35 @@ export default function Impressum() {
         <h1 className="text-3xl font-bold text-foreground mb-4">Impressum</h1>
         <div className="space-y-4 text-sm text-muted-foreground">
           <div>
-            <h2 className="font-semibold text-foreground">Angaben gemäß § 5 TMG</h2>
-            <p>Unser Besigheim<br />Marktplatz 1<br />74354 Besigheim</p>
+            <h2 className="font-semibold text-foreground">Angaben nach § 5 DDG</h2>
+            <p>
+              Betreiberin dieser Website:<br />
+              Tanja Bayer<br />
+              Meisenweg 14<br />
+              74354 Besigheim
+            </p>
           </div>
           <div>
             <h2 className="font-semibold text-foreground">Kontakt</h2>
-            <p>E-Mail: kontakt@unser-besigheim.de</p>
+            <p>
+              Tanja Bayer<br />
+              E-Mail: tanja.bayer@cubesoft.org
+            </p>
+          </div>
+          <div>
+            <h2 className="font-semibold text-foreground">Verantwortlich für den Inhalt</h2>
+            <p>
+              Tanja Bayer<br />
+              Meisenweg 14<br />
+              74354 Besigheim
+            </p>
+          </div>
+          <div>
+            <h2 className="font-semibold text-foreground">Hinweis zum Projekt</h2>
+            <p>
+              Unser Besigheim ist ein ehrenamtlich betriebenes, nicht kommerzielles Informationsangebot.
+              Hinter der Website steht derzeit keine Gesellschaft oder Firma.
+            </p>
           </div>
           <div>
             <h2 className="font-semibold text-foreground">Haftungshinweis</h2>

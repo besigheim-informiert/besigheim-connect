@@ -144,11 +144,11 @@ export default function Kontakt() {
         <div className="space-y-4 text-sm">
           <div className="flex items-center gap-3 text-muted-foreground">
             <Mail className="h-5 w-5 text-primary" />
-            <span>kontakt@unser-besigheim.de</span>
+            <span>tanja.bayer@cubesoft.org</span>
           </div>
           <div className="flex items-center gap-3 text-muted-foreground">
             <MapPin className="h-5 w-5 text-primary" />
-            <span>Marktplatz 1, 74354 Besigheim</span>
+            <span>Meisenweg 14, 74354 Besigheim</span>
           </div>
         </div>
       </section>
