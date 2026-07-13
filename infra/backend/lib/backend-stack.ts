@@ -88,6 +88,12 @@ export class BackendStack extends Stack {
       zone: hostedZone,
     });
 
+    new route53.TxtRecord(this, "GithubPagesVerificationRecord", {
+      recordName: "_github-pages-challenge-besigheim-informiert",
+      values: ["186996d9d506c0777438d7374bdab4"],
+      zone: hostedZone,
+    });
+
     const submissionsTable = new dynamodb.Table(
       this,
       "ContactSubmissionsTable",
