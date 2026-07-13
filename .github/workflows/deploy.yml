@@ -1,0 +1,115 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: CDK stage to deploy
+        required: true
+        type: choice
+        default: dev
+        options:
+          - dev
+          - prod
+      frontend_origins:
+        description: Comma-separated CORS origins for the frontend
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+  pages: write
+
+concurrency:
+  group: deploy-${{ github.event.inputs.stage || 'dev' }}
+  cancel-in-progress: false
+
+env:
+  AWS_ACCOUNT_ID: "027825871768"
+  AWS_REGION: eu-central-1
+  BEDROCK_MODEL_ID: ${{ vars.BEDROCK_MODEL_ID || 'eu.amazon.nova-lite-v1:0' }}
+  CDK_DEPLOY_ACCOUNT: "027825871768"
+  CDK_DEPLOY_REGION: eu-central-1
+  FRONTEND_ORIGINS: ${{ github.event.inputs.frontend_origins || vars.FRONTEND_ORIGINS || format('https://{0}.github.io', github.repository_owner) }}
+  GITHUB_TOKEN_SECRET_NAME: ${{ vars.GITHUB_TOKEN_SECRET_NAME }}
+  MAIL_RECIPIENTS: ${{ vars.MAIL_RECIPIENTS || 'daten@unser-besigheim.de' }}
+  STAGE: ${{ github.event.inputs.stage || 'dev' }}
+
+jobs:
+  frontend:
+    name: Deploy frontend to GitHub Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy-pages.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build frontend
+        env:
+        VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/' }}
+        run: npm run build
+
+      - name: Add GitHub Pages SPA fallback
+        run: cp dist/index.html dist/404.html
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+      - name: Deploy GitHub Pages
+        id: deploy-pages
+        uses: actions/deploy-pages@v6
+
+  backend:
+    name: Deploy backend to AWS
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::027825871768:role/GitHubActionsOIDC-GithubActionsOIDCRole9BB0595F-58Ifw5k0nsK6
+          role-session-name: besigheim-connect-github-actions
+      - name: Deploy backend
+        run: npm run backend-deploy -y BesigheimConnectBackend

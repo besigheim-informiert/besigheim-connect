@@ -1,0 +1,47 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "backend",
+  "projectType": "application",
+  "sourceRoot": "apps/backend/src",
+  "targets": {
+    "bootstrap": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdk bootstrap aws://027825871768/eu-central-1",
+        "cwd": "."
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["typecheck"],
+      "options": {
+        "command": "cdk deploy --require-approval broadening",
+        "cwd": "."
+      }
+    },
+    "diff": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["typecheck"],
+      "options": {
+        "command": "cdk diff",
+        "cwd": "."
+      }
+    },
+    "synth": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["typecheck"],
+      "outputs": ["{workspaceRoot}/cdk.out"],
+      "options": {
+        "command": "cdk synth",
+        "cwd": "."
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p apps/backend/tsconfig.json --noEmit",
+        "cwd": "."
+      }
+    }
+  }
+}
