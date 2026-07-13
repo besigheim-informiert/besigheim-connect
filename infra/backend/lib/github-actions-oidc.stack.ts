@@ -1,4 +1,4 @@
-import { Duration, Stack, StackProps } from "aws-cdk-lib";
+import { CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
 import {
   Effect,
   OpenIdConnectProvider,
@@ -11,7 +11,7 @@ import { Construct } from "constructs";
 
 export interface GithubActionsOidcStackProps extends StackProps {
   clientIds: string[];
-  roleName: string;
+  deployStackNames: string[];
   subject: string;
 }
 
@@ -28,73 +28,78 @@ export class GithubActionsOidcStack extends Stack {
       url: `https://token.actions.githubusercontent.com`,
     });
 
-    const cloudFormationPolicy = new PolicyDocument({
+    const cdkBootstrapQualifier = "hnb659fds";
+    const cdkAssetsBucketArn = `arn:${this.partition}:s3:::cdk-${cdkBootstrapQualifier}-assets-${this.account}-${this.region}`;
+    const cdkBootstrapVersionParameterArn = `arn:${this.partition}:ssm:${this.region}:${this.account}:parameter/cdk-bootstrap/${cdkBootstrapQualifier}/version`;
+    const cdkCloudFormationExecutionRoleArn = `arn:${this.partition}:iam::${this.account}:role/cdk-${cdkBootstrapQualifier}-cfn-exec-role-${this.account}-${this.region}`;
+    const cloudFormationStackArns = props.deployStackNames.map(
+      (stackName) =>
+        `arn:${this.partition}:cloudformation:${this.region}:${this.account}:stack/${stackName}/*`
+    );
+
+    const deployPolicy = new PolicyDocument({
       statements: [
         new PolicyStatement({
           actions: [
-            "acm:*",
-            "apigateway:*",
-            "applicationinsights:*",
-            "athena:*",
-            "autoscaling:*",
-            "aws-marketplace:*",
-            "ce:*",
-            "cloudformation:*",
-            "cloudfront:*",
-            "cloudwatch:*",
-            "cognito-identity:*",
-            "cognito-idp:*",
-            "cur:*",
-            "datasync:*",
-            "dynamodb:*",
-            "ec2:*",
-            "ec2-instance-connect:*",
-            "ec2messages:*",
-            "ecr:*",
-            "eks:*",
-            "elasticache:*",
-            "elasticfilesystem:*",
-            "elasticloadbalancing:*",
-            "events:*",
-            "glue:*",
-            "iam:*",
-            "imagebuilder:*",
-            "kms:*",
-            "lambda:*",
-            "launchwizard:*",
-            "logs:*",
-            "network-firewall:*",
-            "networkmanager:*",
-            "pipes:*",
-            "ram:*",
-            "resource-explorer:*",
-            "resource-explorer-2:*",
-            "resource-groups:*",
-            "route53:*",
-            "route53domains:*",
-            "s3:*",
-            "s3-object-lambda:*",
-            "scheduler:*",
-            "schemas:*",
-            "secretsmanager:*",
-            "servicequotas:*",
-            "shield:*",
-            "sns:*",
-            "ssm:*",
-            "ssmmessages:*",
-            "tag:*",
-            "transfer:*",
-            "waf:*",
-            "waf-regional:*",
-            "wafv2:*",
+            "cloudformation:CreateChangeSet",
+            "cloudformation:DeleteChangeSet",
+            "cloudformation:DescribeChangeSet",
+            "cloudformation:DescribeStackEvents",
+            "cloudformation:DescribeStacks",
+            "cloudformation:ExecuteChangeSet",
+            "cloudformation:GetTemplate",
+            "cloudformation:GetTemplateSummary",
           ],
+          effect: Effect.ALLOW,
+          resources: cloudFormationStackArns,
+        }),
+        new PolicyStatement({
+          actions: [
+            "cloudformation:DescribeStacks",
+            "cloudformation:ListStacks",
+            "cloudformation:ValidateTemplate",
+          ],
+          effect: Effect.ALLOW,
+          resources: ["*"],
+        }),
+        new PolicyStatement({
+          actions: [
+            "s3:GetBucketLocation",
+            "s3:GetEncryptionConfiguration",
+            "s3:ListBucket",
+          ],
+          effect: Effect.ALLOW,
+          resources: [cdkAssetsBucketArn],
+        }),
+        new PolicyStatement({
+          actions: ["s3:GetObject", "s3:PutObject"],
+          effect: Effect.ALLOW,
+          resources: [`${cdkAssetsBucketArn}/*`],
+        }),
+        new PolicyStatement({
+          actions: ["ssm:GetParameter"],
+          effect: Effect.ALLOW,
+          resources: [cdkBootstrapVersionParameterArn],
+        }),
+        new PolicyStatement({
+          actions: ["iam:GetRole", "iam:PassRole"],
+          conditions: {
+            StringEquals: {
+              "iam:PassedToService": "cloudformation.amazonaws.com",
+            },
+          },
+          effect: Effect.ALLOW,
+          resources: [cdkCloudFormationExecutionRoleArn],
+        }),
+        new PolicyStatement({
+          actions: ["sts:GetCallerIdentity"],
           effect: Effect.ALLOW,
           resources: ["*"],
         }),
       ],
     });
 
-    new Role(this, "GithubActionsOIDCRole", {
+    const deployRole = new Role(this, "GithubActionsOIDCRole", {
       description: "Role for Github Actions OIDC",
       assumedBy: new WebIdentityPrincipal(
         oidcProvider.openIdConnectProviderArn,
@@ -109,8 +114,12 @@ export class GithubActionsOidcStack extends Stack {
       ),
       maxSessionDuration: Duration.hours(2),
       inlinePolicies: {
-        CloudFormationPolicy: cloudFormationPolicy,
+        DeployPolicy: deployPolicy,
       },
+    });
+
+    new CfnOutput(this, "GithubActionsRoleArn", {
+      value: deployRole.roleArn,
     });
   }
 }

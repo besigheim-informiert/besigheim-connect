@@ -34,6 +34,6 @@ new BackendStack(app, `BesigheimConnectBackend`, {
 new GithubActionsOidcStack(app, "GitHubActionsOIDC", {
   env: { account: config.account, region: config.region },
   clientIds: ["sts.amazonaws.com"],
-  roleName: "GithubActionsRole",
+  deployStackNames: ["BesigheimConnectBackend"],
   subject: "repo:besigheim-informiert/besigheim-connect:*",
 });

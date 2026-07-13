@@ -105,7 +105,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: arn:aws:iam::027825871768:role/GitHubActionsOIDC-GithubActionsOIDCRole9BB0595F-58Ifw5k0nsK6
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           role-session-name: besigheim-connect-github-actions
       - name: Deploy backend
         run: npm run backend-deploy -y BesigheimConnectBackend

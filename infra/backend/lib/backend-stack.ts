@@ -104,7 +104,7 @@ export class BackendStack extends Stack {
           type: dynamodb.AttributeType.STRING,
         },
 
-        removalPolicy: RemovalPolicy.DESTROY,
+        removalPolicy: RemovalPolicy.RETAIN,
         timeToLiveAttribute: "expiresAt",
       }
     );
@@ -116,6 +116,20 @@ export class BackendStack extends Stack {
         billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
         partitionKey: {
           name: "id",
+          type: dynamodb.AttributeType.STRING,
+        },
+        removalPolicy: RemovalPolicy.RETAIN,
+        timeToLiveAttribute: "expiresAt",
+      }
+    );
+
+    const contactRateLimitTable = new dynamodb.Table(
+      this,
+      "ContactRateLimitTable",
+      {
+        billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+        partitionKey: {
+          name: "key",
           type: dynamodb.AttributeType.STRING,
         },
         removalPolicy: RemovalPolicy.DESTROY,
@@ -137,6 +151,7 @@ export class BackendStack extends Stack {
       depsLockFilePath: path.join(workspaceRoot, "package-lock.json"),
       entry: path.join(workspaceRoot, "apps/backend/src/handler.ts"),
       environment: {
+        RATE_LIMIT_TABLE_NAME: contactRateLimitTable.tableName,
         SUBMISSIONS_TABLE_NAME: submissionsTable.tableName,
       },
       handler: "handler",
@@ -148,6 +163,7 @@ export class BackendStack extends Stack {
     });
 
     submissionsTable.grantWriteData(apiHandler);
+    contactRateLimitTable.grantReadWriteData(apiHandler);
 
     const emailBucket = new s3.Bucket(this, "IncomingEmailBucket", {
       autoDeleteObjects: false,
@@ -160,7 +176,7 @@ export class BackendStack extends Stack {
           prefix: "raw/",
         },
       ],
-      removalPolicy: RemovalPolicy.DESTROY,
+      removalPolicy: RemovalPolicy.RETAIN,
     });
 
     const mailIngestLogGroup = new logs.LogGroup(
@@ -263,6 +279,7 @@ export class BackendStack extends Stack {
     });
 
     const httpApi = new apigatewayv2.HttpApi(this, "HttpApi", {
+      createDefaultStage: false,
       corsPreflight: {
         allowHeaders: ["content-type"],
         allowMethods: [
@@ -273,22 +290,6 @@ export class BackendStack extends Stack {
         allowOrigins: props.allowedOrigins,
         maxAge: Duration.days(10),
       },
-    });
-
-    new apigatewayv2.ApiMapping(this, "ApiDomainMapping", {
-      api: httpApi,
-      domainName: apiDomain,
-    });
-
-    new route53.ARecord(this, "ApiAliasRecord", {
-      recordName: "api",
-      target: route53.RecordTarget.fromAlias(
-        new ApiGatewayv2DomainProperties(
-          apiDomain.regionalDomainName,
-          apiDomain.regionalHostedZoneId
-        )
-      ),
-      zone: hostedZone,
     });
 
     const apiIntegration = new integrations.HttpLambdaIntegration(
@@ -306,6 +307,32 @@ export class BackendStack extends Stack {
       integration: apiIntegration,
       methods: [apigatewayv2.HttpMethod.POST],
       path: "/contact",
+    });
+
+    const defaultStage = httpApi.addStage("DefaultStage", {
+      autoDeploy: true,
+      stageName: "$default",
+      throttle: {
+        burstLimit: 20,
+        rateLimit: 10,
+      },
+    });
+
+    new apigatewayv2.ApiMapping(this, "ApiDomainMapping", {
+      api: httpApi,
+      domainName: apiDomain,
+      stage: defaultStage,
+    });
+
+    new route53.ARecord(this, "ApiAliasRecord", {
+      recordName: "api",
+      target: route53.RecordTarget.fromAlias(
+        new ApiGatewayv2DomainProperties(
+          apiDomain.regionalDomainName,
+          apiDomain.regionalHostedZoneId
+        )
+      ),
+      zone: hostedZone,
     });
 
     new CfnOutput(this, "ApiUrl", {
@@ -338,6 +365,10 @@ export class BackendStack extends Stack {
 
     new CfnOutput(this, "IngestedDocumentsTableName", {
       value: ingestedDocumentsTable.tableName,
+    });
+
+    new CfnOutput(this, "ContactRateLimitTableName", {
+      value: contactRateLimitTable.tableName,
     });
 
     new CfnOutput(this, "IncomingEmailBucketName", {

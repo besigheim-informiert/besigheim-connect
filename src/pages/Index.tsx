@@ -36,7 +36,7 @@ export default function Index() {
               Unser <span className="italic">Besigheim</span>
             </h1>
             <p className="mt-6 text-secondary-foreground/85 text-lg md:text-xl leading-relaxed font-light max-w-xl">
-              Die zentrale Informationsplattform für Vereine, Veranstaltungen,
+              Die gemeinsame Informationsplattform für Vereine, Veranstaltungen,
               Engagement und barrierefreie Einrichtungen in Besigheim.
             </p>
           </div>

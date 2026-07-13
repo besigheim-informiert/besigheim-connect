@@ -89,7 +89,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <span className="italic text-primary">Unser</span> Besigheim
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
-              Die zentrale Informationsplattform für Vereine, Veranstaltungen und Engagement in Besigheim.
+              Die gemeinsame Informationsplattform für Vereine, Veranstaltungen und Engagement in Besigheim.
             </p>
           </div>
           <div>
