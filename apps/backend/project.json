@@ -15,7 +15,7 @@
       "executor": "nx:run-commands",
       "dependsOn": ["typecheck"],
       "options": {
-        "command": "cdk deploy --require-approval broadening",
+        "command": "cdk deploy broadening",
         "cwd": "."
       }
     },
