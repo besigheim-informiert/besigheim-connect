@@ -99,12 +99,12 @@ export default function Barrierefreiheit() {
     <Layout>
       {/* Header */}
       <section className="border-b border-foreground/10 bg-accent/40">
-        <div className="container py-14 md:py-16">
+        <div className="container py-8 md:py-16">
           <span className="eyebrow text-primary">Barrierefreies Besigheim</span>
-          <h1 className="font-serif-display text-4xl md:text-5xl font-bold leading-tight tracking-tight mt-3 max-w-3xl">
+          <h1 className="font-serif-display text-2xl md:text-5xl font-bold leading-tight tracking-tight mt-2 md:mt-3 max-w-3xl">
             Barrieresituation für Menschen mit <span className="italic text-primary">Einschränkungen</span>.
           </h1>
-          <p className="mt-4 text-foreground/75 max-w-2xl leading-relaxed">
+          <p className="mt-3 md:mt-4 text-sm md:text-base text-foreground/75 max-w-2xl leading-relaxed">
             Übersicht über Einrichtungen in Besigheim und ihre Zugänglichkeit. Die Angaben
             basieren auf einer Erhebung der <em>Alltagshilfe des Netzwerk Quartier Besigheim</em>.
           </p>
@@ -221,7 +221,7 @@ export default function Barrierefreiheit() {
       </section>
 
       {/* Liste */}
-      <section className="container py-10">
+      <section className="container py-6 md:py-10">
         <div className="mb-4 text-sm text-muted-foreground">
           {gefiltert.length} Einrichtung{gefiltert.length === 1 ? "" : "en"} gefunden
         </div>
@@ -262,9 +262,9 @@ export default function Barrierefreiheit() {
                   )}
                 </div>
 
-                <div className="md:col-span-3 flex md:justify-end gap-4 md:gap-3">
+                <div className="md:col-span-3 flex flex-wrap md:justify-end gap-3 md:gap-3">
                   {kriterien.map((k) => (
-                    <div key={k.key} className="flex flex-col items-center gap-1.5">
+                    <div key={k.key} className="flex flex-col items-center gap-1 md:gap-1.5 w-14">
                       <k.icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" strokeWidth={1.75} />
                       <StatusDot status={e[k.key]} label={k.label} />
                       <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{k.short}</span>
