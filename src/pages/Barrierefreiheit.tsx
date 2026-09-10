@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Search, Accessibility, Eye, Toilet, ParkingSquare, Phone, MapPin, Check, Minus, X, HelpCircle } from "lucide-react";
+import { Search, Accessibility, Eye, Toilet, ParkingSquare, Phone, MapPin, Check, Minus, X, HelpCircle, SlidersHorizontal, ChevronDown } from "lucide-react";
 import Layout from "@/components/Layout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -57,6 +57,8 @@ export default function Barrierefreiheit() {
   const [query, setQuery] = useState("");
   const [kat, setKat] = useState<Kategorie | "alle">("alle");
   const [zugangFilter, setZugangFilter] = useState<Status | "alle">("alle");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const aktiveFilter = (kat !== "alle" ? 1 : 0) + (zugangFilter !== "alle" ? 1 : 0);
 
   const overallStatus = (e: Einrichtung): "ja" | "teilweise" | "nein" | "unbekannt" => {
     const vals = [e.zugang, e.sehbehinderung, e.wc, e.parkplatz].filter((v) => v !== "na");
@@ -97,12 +99,12 @@ export default function Barrierefreiheit() {
     <Layout>
       {/* Header */}
       <section className="border-b border-foreground/10 bg-accent/40">
-        <div className="container py-14 md:py-16">
+        <div className="container py-8 md:py-16">
           <span className="eyebrow text-primary">Barrierefreies Besigheim</span>
-          <h1 className="font-serif-display text-4xl md:text-5xl font-bold leading-tight tracking-tight mt-3 max-w-3xl">
+          <h1 className="font-serif-display text-2xl md:text-5xl font-bold leading-tight tracking-tight mt-2 md:mt-3 max-w-3xl">
             Barrieresituation für Menschen mit <span className="italic text-primary">Einschränkungen</span>.
           </h1>
-          <p className="mt-4 text-foreground/75 max-w-2xl leading-relaxed">
+          <p className="mt-3 md:mt-4 text-sm md:text-base text-foreground/75 max-w-2xl leading-relaxed">
             Übersicht über Einrichtungen in Besigheim und ihre Zugänglichkeit. Die Angaben
             basieren auf einer Erhebung der <em>Alltagshilfe des Netzwerk Quartier Besigheim</em>.
           </p>
@@ -111,20 +113,37 @@ export default function Barrierefreiheit() {
       </section>
 
       {/* Filter + Stats */}
-      <section className="border-b border-foreground/10 bg-background sticky top-20 z-40 backdrop-blur supports-[backdrop-filter]:bg-background/90">
-        <div className="container py-5 space-y-4">
+      <section className="border-b border-foreground/10 bg-background md:sticky md:top-20 z-40 backdrop-blur supports-[backdrop-filter]:bg-background/90">
+        <div className="container py-4 md:py-5 space-y-3 md:space-y-4">
           <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Nach Name, Adresse oder Fachrichtung suchen…"
+                placeholder="Suchen…"
                 className="pl-9 h-11 rounded-none border-foreground/20"
                 aria-label="Einrichtung suchen"
               />
             </div>
-            <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              className="rounded-none h-11 md:hidden justify-between"
+              onClick={() => setFilterOpen((v) => !v)}
+              aria-expanded={filterOpen}
+            >
+              <span className="inline-flex items-center gap-2">
+                <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
+                Filter
+                {aktiveFilter > 0 && (
+                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] text-primary-foreground">
+                    {aktiveFilter}
+                  </span>
+                )}
+              </span>
+              <ChevronDown className={`h-4 w-4 transition-transform ${filterOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+            </Button>
+            <div className="hidden md:flex flex-wrap gap-2">
               {statusFilterOptions.map((o) => (
                 <Button
                   key={o.value}
@@ -146,31 +165,53 @@ export default function Barrierefreiheit() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant={kat === "alle" ? "secondary" : "ghost"}
-              className="rounded-none h-9 text-xs"
-              onClick={() => setKat("alle")}
-            >
-              Alle Kategorien
-            </Button>
-            {kategorien.map((k) => (
+          <div className={`${filterOpen ? "block" : "hidden"} md:block space-y-3`}>
+            <div className="flex flex-wrap gap-2 md:hidden">
+              {statusFilterOptions.map((o) => (
+                <Button
+                  key={o.value}
+                  variant={zugangFilter === o.value ? "default" : "outline"}
+                  className="rounded-none h-9 text-xs"
+                  onClick={() => setZugangFilter(o.value)}
+                >
+                  {o.value !== "alle" && (
+                    <span className={`inline-block h-2.5 w-2.5 rounded-full mr-2 ${
+                      o.value === "ja" ? "bg-emerald-600" :
+                      o.value === "teilweise" ? "bg-amber-400" :
+                      o.value === "nein" ? "bg-primary" :
+                      "bg-muted-foreground/40"
+                    }`} aria-hidden="true" />
+                  )}
+                  {o.label}
+                </Button>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
               <Button
-                key={k}
-                variant={kat === k ? "secondary" : "ghost"}
+                variant={kat === "alle" ? "secondary" : "ghost"}
                 className="rounded-none h-9 text-xs"
-                onClick={() => setKat(k)}
+                onClick={() => setKat("alle")}
               >
-                {k}
+                Alle Kategorien
               </Button>
-            ))}
+              {kategorien.map((k) => (
+                <Button
+                  key={k}
+                  variant={kat === k ? "secondary" : "ghost"}
+                  className="rounded-none h-9 text-xs"
+                  onClick={() => setKat(k)}
+                >
+                  {k}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Stats bar */}
       <section className="border-b border-foreground/10">
-        <div className="container py-6 grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="container py-5 md:py-6 grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
           <StatCard label="Einrichtungen gesamt" value={stats.total} />
           <StatCard label="Barrierefrei" value={stats.ja} tone="good" />
           <StatCard label="Teilweise" value={stats.teilweise} tone="warn" />
@@ -180,7 +221,7 @@ export default function Barrierefreiheit() {
       </section>
 
       {/* Liste */}
-      <section className="container py-10">
+      <section className="container py-6 md:py-10">
         <div className="mb-4 text-sm text-muted-foreground">
           {gefiltert.length} Einrichtung{gefiltert.length === 1 ? "" : "en"} gefunden
         </div>
@@ -221,9 +262,9 @@ export default function Barrierefreiheit() {
                   )}
                 </div>
 
-                <div className="md:col-span-3 flex md:justify-end gap-4 md:gap-3">
+                <div className="md:col-span-3 flex flex-wrap md:justify-end gap-3 md:gap-3">
                   {kriterien.map((k) => (
-                    <div key={k.key} className="flex flex-col items-center gap-1.5">
+                    <div key={k.key} className="flex flex-col items-center gap-1 md:gap-1.5 w-14">
                       <k.icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" strokeWidth={1.75} />
                       <StatusDot status={e[k.key]} label={k.label} />
                       <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{k.short}</span>
