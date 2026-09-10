@@ -277,7 +277,7 @@ export default function Barrierefreiheit() {
         )}
 
         <p className="mt-10 text-xs text-muted-foreground max-w-2xl">
-          Quelle: Alltagshilfe des Netzwerk Quartier Besigheim. Angaben ohne Gewähr — Rückmeldungen
+          Quelle: Alltagshilfe des Netzwerk Quartier Besigheim. Angaben ohne Gewähr - Rückmeldungen
           zu fehlenden oder veralteten Daten sind willkommen.
         </p>
       </section>

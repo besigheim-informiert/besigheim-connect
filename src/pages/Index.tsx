@@ -50,7 +50,7 @@ export default function Index() {
           <div className="max-w-2xl mb-10 md:mb-14">
             <span className="eyebrow text-signal">Themen im Überblick</span>
             <h2 className="font-serif-display text-2xl md:text-4xl leading-tight mt-3">
-              Was Besigheim ausmacht — kompakt zusammengefasst.
+              Was Besigheim ausmacht - kompakt zusammengefasst.
             </h2>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -81,7 +81,7 @@ export default function Index() {
               Barrierefreiheit in Besigheim
             </h2>
             <p className="mt-5 text-foreground/80 leading-relaxed">
-              Wir zeigen transparent, welche Einrichtungen in Besigheim barrierefrei zugänglich sind —
+              Wir zeigen transparent, welche Einrichtungen in Besigheim barrierefrei zugänglich sind -
               mit klaren Angaben zu Zugang, WC, Parkplatz und Orientierung für Menschen mit
               Sehbehinderung.
             </p>
@@ -203,7 +203,7 @@ export default function Index() {
               Besigheim lebt vom Mitmachen.
             </h2>
             <p className="mt-5 text-secondary-foreground/85 leading-relaxed">
-              Ob Fußballtraining für Kinder, Musikproben oder Nachbarschaftshilfe — hier finden Sie
+              Ob Fußballtraining für Kinder, Musikproben oder Nachbarschaftshilfe - hier finden Sie
               konkrete Möglichkeiten, sich einzubringen und Menschen zu treffen, die etwas bewegen
               wollen.
             </p>
