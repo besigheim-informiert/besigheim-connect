@@ -13,63 +13,18 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { simpleParser, type AddressObject } from "mailparser";
 import { createHash, randomUUID } from "node:crypto";
 import { Readable } from "node:stream";
+import {
+  type ContentType,
+  ingestRequiredFields as documentRequirements,
+  publishedContentDir as githubContentFolders,
+} from "../../../src/shared/content-schema";
 
 const bedrock = new BedrockRuntimeClient({});
 const dynamodb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const s3 = new S3Client({});
 const secretsManager = new SecretsManagerClient({});
 
-const documentRequirements = {
-  barrierefreiheit: [
-    "name",
-    "kategorie",
-    "strasse",
-    "zugang",
-    "sehbehinderung",
-    "wc",
-    "parkplatz",
-  ],
-  engagement: [
-    "titel",
-    "beschreibung",
-    "vereinId",
-    "vereinName",
-    "art",
-    "kontakt",
-  ],
-  veranstaltung: [
-    "titel",
-    "beschreibung",
-    "datum",
-    "uhrzeit",
-    "ort",
-    "vereinId",
-    "vereinName",
-    "kategorie",
-    "kontakt",
-  ],
-  verein: [
-    "name",
-    "kurzbeschreibung",
-    "beschreibung",
-    "kategorie",
-    "zielgruppe",
-    "angebote",
-    "ansprechpartner",
-    "email",
-    "telefon",
-    "adresse",
-  ],
-} as const;
-
-type DocumentType = keyof typeof documentRequirements;
-
-const githubContentFolders: Record<DocumentType, string> = {
-  barrierefreiheit: "src/content/barrierefreiheit",
-  engagement: "src/content/engagement",
-  veranstaltung: "src/content/veranstaltungen",
-  verein: "src/content/vereine",
-};
+type DocumentType = ContentType;
 
 type ParsedDocument = {
   confidence?: number;
@@ -209,6 +164,7 @@ async function extractDocument(email: unknown): Promise<ParsedDocument> {
             "Nutze diese Pflichtfelder:",
             JSON.stringify(documentRequirements),
             "Datumswerte muessen ISO-Format YYYY-MM-DD haben. Uhrzeiten muessen HH:mm sein.",
+            "Bei veranstaltung ist datum der erste Tag. Geht die Veranstaltung ueber mehrere Tage, setze zusaetzlich das optionale Feld enddatum auf den letzten Tag; bei eintaegigen Veranstaltungen lass enddatum weg.",
             "Falls Pflichtfelder fehlen, liste sie in missingFields. Erfinde keine Daten.",
             "Das Feld document enthaelt nur Daten des erkannten Typs.",
           ].join(" "),

@@ -1,17 +1,6 @@
-export interface Verein {
-  id: string;
-  name: string;
-  kurzbeschreibung: string;
-  beschreibung: string;
-  kategorie: string;
-  zielgruppe: string;
-  angebote: string[];
-  ansprechpartner?: string;
-  email?: string;
-  telefon?: string;
-  website?: string;
-  adresse: string;
-}
+import type { Verein } from "@/shared/content-schema";
+
+export type { Verein };
 
 const vereinModules = import.meta.glob("../content/vereine/*.json", {
   eager: true,

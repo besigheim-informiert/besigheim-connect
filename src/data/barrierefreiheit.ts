@@ -1,31 +1,12 @@
-export type Status = "ja" | "teilweise" | "nein" | "unbekannt" | "na";
+import type {
+  BarriereKategorie,
+  BarriereStatus,
+  Einrichtung,
+} from "@/shared/content-schema";
 
-export type Kategorie =
-  | "Arztpraxis"
-  | "Zahnarzt"
-  | "Tierarzt"
-  | "Hebamme"
-  | "Apotheke"
-  | "Physiotherapie"
-  | "Logopädie"
-  | "Ergotherapie"
-  | "Polizei"
-  | "Post"
-  | "Recht & Notariat"
-  | "Verwaltung";
-
-export interface Einrichtung {
-  id: string;
-  name: string;
-  kategorie: Kategorie;
-  facharzt?: string;
-  strasse: string;
-  telefon?: string;
-  zugang: Status;
-  sehbehinderung: Status;
-  wc: Status;
-  parkplatz: Status;
-}
+export type Status = BarriereStatus;
+export type Kategorie = BarriereKategorie;
+export type { Einrichtung };
 
 const einrichtungModules = import.meta.glob(
   "../content/barrierefreiheit/*.json",

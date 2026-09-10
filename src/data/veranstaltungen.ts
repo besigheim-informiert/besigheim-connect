@@ -1,15 +1,6 @@
-export interface Veranstaltung {
-  id: string;
-  titel: string;
-  beschreibung: string;
-  datum: string;
-  uhrzeit: string;
-  ort: string;
-  vereinId: string;
-  vereinName: string;
-  kategorie: string;
-  kontakt: string;
-}
+import type { Veranstaltung } from "@/shared/content-schema";
+
+export type { Veranstaltung };
 
 const veranstaltungModules = import.meta.glob(
   "../content/veranstaltungen/*.json",

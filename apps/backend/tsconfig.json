@@ -10,5 +10,9 @@
     "target": "ES2022",
     "types": ["node", "aws-lambda"]
   },
-  "include": ["src/**/*.ts", "../../infra/backend/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "../../infra/backend/**/*.ts",
+    "../../src/shared/**/*.ts"
+  ]
 }

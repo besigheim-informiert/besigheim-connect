@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
 import { vereine } from "@/data/vereine";
 import { veranstaltungen } from "@/data/veranstaltungen";
+import { tagLabel } from "@/lib/veranstaltung";
 
 export default function VereinDetail() {
   const { id } = useParams<{ id: string }>();
@@ -88,7 +89,7 @@ export default function VereinDetail() {
                 <Card key={e.id}>
                   <CardContent className="p-4 flex items-center gap-4">
                     <div className="text-center bg-primary/10 rounded-lg p-2 w-16 flex-shrink-0">
-                      <div className="text-lg font-bold text-primary">{new Date(e.datum).getDate()}</div>
+                      <div className="text-lg font-bold text-primary">{tagLabel(e)}</div>
                       <div className="text-xs text-muted-foreground">{new Date(e.datum).toLocaleDateString("de-DE", { month: "short" })}</div>
                     </div>
                     <div>

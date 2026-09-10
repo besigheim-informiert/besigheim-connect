@@ -1,0 +1,22 @@
+{
+  "id": "stadtkapelle-besigheim",
+  "name": "Musikverein Stadtkapelle Besigheim e.V.",
+  "kurzbeschreibung": "Musikverein aus Besigheim mit Stadtkapelle, Jugendkapelle und Jugendgruppe sowie einer eigenen Theatergruppe.",
+  "beschreibung": "Der Musikverein Stadtkapelle Besigheim e.V. besteht seit 1951 und vereint Menschen verschiedener Altersgruppen mit Freude am Musizieren - von Unterhaltungsmusik bis hin zu konzertanter Blasmusik. Der Verein umfasst drei Orchester: die Stadtkapelle als Hauptorchester für erfahrene Musikerinnen und Musiker unter der Leitung von Kang-Jung Sung, die Jugendkapelle für fortgeschrittene Jugendliche sowie die Jugendgruppe für Anfänger - beide unter der Leitung von Jörg Weiß. Geprobt wird mittwochs im Steinhaus. Neben Konzerten und Ständchen veranstaltet der Verein jedes Jahr die Musik- und Weintage in der Alten Kelter und betreibt eine eigene Theatergruppe mit humorvollen Aufführungen.",
+  "kategorie": "Musik",
+  "zielgruppe": "Menschen aller Altersgruppen mit Freude am Musizieren - von Anfängern bis zu erfahrenen Musikern",
+  "angebote": [
+    "Stadtkapelle (Blasorchester)",
+    "Jugendkapelle",
+    "Jugendgruppe für Anfänger",
+    "Konzerte",
+    "Ständchen und Serenaden",
+    "Theatergruppe",
+    "Musik- und Weintage"
+  ],
+  "ansprechpartner": "Benjamin Ziegler (Vorsitzender)",
+  "email": "vorstand@stadtkapelle-besigheim.de",
+  "telefon": "07143 2086664",
+  "website": "https://stadtkapelle-besigheim.de/",
+  "adresse": "Turmstr. 2, 74354 Besigheim"
+}

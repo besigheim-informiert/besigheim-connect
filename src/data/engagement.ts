@@ -1,12 +1,6 @@
-export interface EngagementAngebot {
-  id: string;
-  titel: string;
-  beschreibung: string;
-  vereinId: string;
-  vereinName: string;
-  art: "regelmäßig" | "projektbezogen" | "einmalig";
-  kontakt: string;
-}
+import type { EngagementAngebot } from "@/shared/content-schema";
+
+export type { EngagementAngebot };
 
 const engagementModules = import.meta.glob("../content/engagement/*.json", {
   eager: true,

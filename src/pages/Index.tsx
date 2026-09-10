@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { vereine } from "@/data/vereine";
 import { veranstaltungen } from "@/data/veranstaltungen";
+import { tagLabel } from "@/lib/veranstaltung";
 import heroBg from "@/assets/hero-besigheim.jpg";
 
 const quickLinks = [
@@ -168,7 +169,7 @@ export default function Index() {
                         {d.toLocaleDateString("de-DE", { month: "short" }).replace(".", "")}
                       </span>
                       <span className="block text-3xl font-serif-display text-foreground leading-none mt-1">
-                        {d.getDate()}
+                        {tagLabel(e)}
                       </span>
                     </div>
                     <div className="min-w-0">

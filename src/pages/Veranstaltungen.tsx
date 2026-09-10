@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
 import { veranstaltungen } from "@/data/veranstaltungen";
 import { kategorien } from "@/data/vereine";
+import { tagLabel } from "@/lib/veranstaltung";
 
 export default function Veranstaltungen() {
   const [activeKat, setActiveKat] = useState<string | null>(null);
@@ -40,7 +41,7 @@ export default function Veranstaltungen() {
               <Card key={e.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6 flex flex-col md:flex-row md:items-center gap-4">
                   <div className="flex-shrink-0 text-center bg-primary/10 rounded-lg p-3 md:w-20">
-                    <div className="text-2xl font-bold text-primary">{new Date(e.datum).getDate()}</div>
+                    <div className="text-2xl font-bold text-primary">{tagLabel(e)}</div>
                     <div className="text-xs text-muted-foreground">
                       {new Date(e.datum).toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
                     </div>
