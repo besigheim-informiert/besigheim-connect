@@ -1,0 +1,17 @@
+{
+  "id": "hospizdienst-neckar-stromberg",
+  "name": "Ambulanter Hospizdienst Neckar-Stromberg e.V.",
+  "kurzbeschreibung": "Ambulante Hospizbegleitung für schwerkranke und sterbende Menschen und ihre Angehörigen.",
+  "beschreibung": "Der Ambulante Hospizdienst Neckar-Stromberg e.V. begleitet schwerkranke und sterbende Menschen sowie ihre Angehörigen. Neben der Begleitung im Alltag gehören Beratung und Öffentlichkeitsarbeit zu den Aufgaben des Vereins - etwa der Filmabend zum Welthospiztag, den der Hospizdienst gemeinsam mit der Familienbildung Besigheim veranstaltet.",
+  "kategorie": "Soziales",
+  "zielgruppe": "Schwerkranke und sterbende Menschen, Angehörige, Interessierte",
+  "angebote": [
+    "Hospizbegleitung",
+    "Beratung für Angehörige",
+    "Öffentlichkeitsarbeit",
+    "Veranstaltungen"
+  ],
+  "email": "info@hospiz-neckar-stromberg.de",
+  "telefon": "01520 3604067",
+  "website": "https://www.hospiz-neckar-stromberg.de"
+}

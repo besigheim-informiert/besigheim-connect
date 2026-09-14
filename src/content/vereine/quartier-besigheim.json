@@ -1,0 +1,18 @@
+{
+  "id": "quartier-besigheim",
+  "name": "Netzwerk Quartier Besigheim",
+  "kurzbeschreibung": "Quartiersarbeit der Stadt Besigheim: moderiert, berät und koordiniert bürgerschaftliches Engagement.",
+  "beschreibung": "Das Netzwerk Quartier Besigheim bündelt die Quartiersarbeit in der Stadt. Es moderiert, berät und koordiniert - zentrale Ideengeber sind die Bürgerinnen und Bürger selbst. Das Netzwerk bringt Vereine, Initiativen und engagierte Menschen zusammen, begleitet Projekte und organisiert offene Angebote und Veranstaltungen im Quartier.",
+  "kategorie": "Soziales",
+  "zielgruppe": "Bürgerinnen und Bürger, Vereine, Initiativen und Engagierte in Besigheim",
+  "angebote": [
+    "Quartiersarbeit",
+    "Beratung und Vernetzung",
+    "Offene Treffs",
+    "Veranstaltungen"
+  ],
+  "ansprechpartner": "Verena Ungar, Quartiersmanagerin Besigheim",
+  "email": "quartier@besigheim.de",
+  "telefon": "07143 8078-393",
+  "website": "https://unser-besigheim.de/netzwerk-quartier"
+}

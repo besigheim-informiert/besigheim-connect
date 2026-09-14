@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Mail, ArrowRight, Users, Lightbulb, HandHeart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
+import { netzwerktreffen } from "@/data/veranstaltungen";
+import { datumLabel, istKommend, monatKurz, tagLabel } from "@/lib/veranstaltung";
 import flohmarkt from "@/assets/nwq-flohmarkt.jpg";
 import workshop from "@/assets/nwq-workshop.jpg";
 import altstadt from "@/assets/nwq-altstadt.jpg";
@@ -44,6 +46,11 @@ const prinzipien = [
 ];
 
 export default function NetzwerkQuartier() {
+  const kommendeTreffen = netzwerktreffen.filter((e) => istKommend(e));
+  const vergangeneTreffen = netzwerktreffen
+    .filter((e) => !istKommend(e))
+    .reverse();
+
   return (
     <Layout>
       {/* Hero */}
@@ -111,8 +118,82 @@ export default function NetzwerkQuartier() {
         </div>
       </section>
 
-      {/* Prinzipien */}
+      {/* Kalender der Netzwerktreffen */}
       <section className="container py-14 md:py-20">
+        <div className="max-w-2xl">
+          <span className="eyebrow text-primary">Kalender</span>
+          <h2 className="font-serif-display text-2xl md:text-4xl leading-tight mt-3">
+            Die nächsten Netzwerktreffen
+          </h2>
+          <p className="mt-5 text-foreground/80 leading-relaxed">
+            Alle Termine auf einen Blick. Ein Klick auf einen Termin führt zu allen Details -
+            Uhrzeit, Ort und Programm.
+          </p>
+        </div>
+
+        {kommendeTreffen.length === 0 ? (
+          <p className="mt-10 border border-foreground/10 bg-accent/30 p-6 text-sm text-muted-foreground leading-relaxed">
+            Aktuell ist kein Netzwerktreffen terminiert. Sobald der nächste Termin feststeht,
+            finden Sie ihn an dieser Stelle.
+          </p>
+        ) : (
+          <ul className="mt-10 divide-y divide-foreground/10 border-y border-foreground/10">
+            {kommendeTreffen.map((e) => (
+              <li key={e.id}>
+                <Link
+                  to={`/veranstaltungen/${e.id}`}
+                  className="group flex items-center gap-5 py-5 md:py-6"
+                >
+                  <div className="text-center min-w-[64px] border-r border-foreground/10 pr-5">
+                    <span className="block text-xs uppercase tracking-widest text-primary font-bold">
+                      {monatKurz(e).replace(".", "")}
+                    </span>
+                    <span className="block text-3xl font-serif-display text-foreground leading-none mt-1">
+                      {tagLabel(e)}
+                    </span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-serif-display text-lg text-foreground leading-tight group-hover:text-primary transition-colors">
+                      {e.titel}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                      {datumLabel(e)}, {e.uhrzeit} Uhr
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{e.ort}</p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground group-hover:text-primary transition-colors" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {vergangeneTreffen.length > 0 && (
+          <div className="mt-12">
+            <span className="eyebrow text-muted-foreground">Bereits stattgefunden</span>
+            <ul className="mt-4 divide-y divide-foreground/10 border-y border-foreground/10">
+              {vergangeneTreffen.map((e) => (
+                <li key={e.id}>
+                  <Link
+                    to={`/veranstaltungen/${e.id}`}
+                    className="group flex items-baseline gap-4 py-3 text-sm"
+                  >
+                    <span className="text-muted-foreground shrink-0 tabular-nums">
+                      {datumLabel(e)}
+                    </span>
+                    <span className="text-foreground/75 group-hover:text-primary transition-colors">
+                      {e.titel}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+
+      {/* Prinzipien */}
+      <section className="container py-14 md:py-20 border-t border-foreground/10">
         <div className="max-w-2xl">
           <span className="eyebrow text-primary">Wirksames Ehrenamt</span>
           <h2 className="font-serif-display text-2xl md:text-4xl leading-tight mt-3">

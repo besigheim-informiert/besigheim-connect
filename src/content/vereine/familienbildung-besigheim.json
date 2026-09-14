@@ -1,0 +1,19 @@
+{
+  "id": "familienbildung-besigheim",
+  "name": "Evangelische Familienbildung Besigheim",
+  "kurzbeschreibung": "Offene Treffs, Kurse und Veranstaltungen für Familien und Erwachsene in Besigheim.",
+  "beschreibung": "Die Evangelische Familienbildung Besigheim ist eine Einrichtung der Evangelischen Familienbildung im Landkreis Ludwigsburg. Sie bietet offene Treffs, Kurse und Veranstaltungen für Familien und Erwachsene in Besigheim an, darunter der Eltern- und Babytreff \"Neugeboren!\" und der Lesekreis \"Klassiker lesen\". Das aktuelle Programm steht unter www.familienbildung-besigheim.de.",
+  "kategorie": "Soziales",
+  "zielgruppe": "Familien, Eltern mit Babys und Kleinkindern, Erwachsene",
+  "angebote": [
+    "Eltern- und Babytreff",
+    "Lesekreis",
+    "Kurse",
+    "Offene Treffs"
+  ],
+  "ansprechpartner": "Verwaltung",
+  "email": "info@familienbildung-besigheim.de",
+  "telefon": "+49 176 11954257",
+  "website": "https://www.familienbildungludwigsburg.de/ueber-uns/unsere-einrichtungen",
+  "adresse": "Pfarrgasse 3, 74354 Besigheim"
+}

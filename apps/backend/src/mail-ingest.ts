@@ -165,6 +165,7 @@ async function extractDocument(email: unknown): Promise<ParsedDocument> {
             JSON.stringify(documentRequirements),
             "Datumswerte muessen ISO-Format YYYY-MM-DD haben. Uhrzeiten muessen HH:mm sein.",
             "Bei veranstaltung ist datum der erste Tag. Geht die Veranstaltung ueber mehrere Tage, setze zusaetzlich das optionale Feld enddatum auf den letzten Tag; bei eintaegigen Veranstaltungen lass enddatum weg.",
+            "Wiederholt sich eine veranstaltung regelmaessig, beschreibe den Rhythmus im optionalen Feld wiederholung (zum Beispiel 'Jeden Donnerstag ausserhalb der Ferien') und setze datum auf den naechsten Termin; bei einmaligen Veranstaltungen lass wiederholung weg.",
             "Falls Pflichtfelder fehlen, liste sie in missingFields. Erfinde keine Daten.",
             "Das Feld document enthaelt nur Daten des erkannten Typs.",
           ].join(" "),

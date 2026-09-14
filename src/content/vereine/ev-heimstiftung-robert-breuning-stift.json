@@ -1,0 +1,14 @@
+{
+  "id": "ev-heimstiftung-robert-breuning-stift",
+  "name": "Evangelische Heimstiftung - Robert-Breuning-Stift",
+  "kurzbeschreibung": "Pflegeeinrichtung der Evangelischen Heimstiftung in Besigheim.",
+  "beschreibung": "Das Robert-Breuning-Stift ist die Einrichtung der Evangelischen Heimstiftung in Besigheim. Neben Pflege und Betreuung öffnet sich das Haus mit Veranstaltungen für Angehörige und Interessierte, zum Beispiel mit Vorträgen rund um das Thema Demenz.",
+  "kategorie": "Soziales",
+  "zielgruppe": "Seniorinnen und Senioren, pflegebedürftige Menschen, Angehörige",
+  "angebote": [
+    "Pflege und Betreuung",
+    "Beratung für Angehörige",
+    "Vorträge und Veranstaltungen"
+  ],
+  "website": "https://www.ev-heimstiftung.de/besigheim-robert-breuning-stift/"
+}

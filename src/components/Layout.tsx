@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { Show, SignInButton, UserButton } from "@clerk/react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
@@ -29,36 +30,50 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               Besigheim
             </span>
           </Link>
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const active = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`relative px-3 py-2 text-sm font-medium transition-colors ${
-                    active
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {item.label}
-                  {active && (
-                    <span className="absolute left-3 right-3 -bottom-[1px] h-[2px] bg-primary" />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Menü öffnen"
-          >
-            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+          <div className="flex items-center gap-2">
+            <nav className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => {
+                const active = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`relative px-3 py-2 text-sm font-medium transition-colors ${
+                      active
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {item.label}
+                    {active && (
+                      <span className="absolute left-3 right-3 -bottom-[1px] h-[2px] bg-primary" />
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+            <div className="hidden md:flex items-center gap-2 pl-2">
+              <Show when="signed-out">
+                <SignInButton mode="modal">
+                  <Button variant="outline" size="sm">
+                    Anmelden
+                  </Button>
+                </SignInButton>
+              </Show>
+              <Show when="signed-in">
+                <UserButton />
+              </Show>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Menü öffnen"
+            >
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
         {menuOpen && (
           <nav className="md:hidden border-t border-foreground/10 bg-background pb-4">
@@ -76,6 +91,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 {item.label}
               </Link>
             ))}
+            <div className="flex items-center gap-3 px-6 py-4">
+              <Show when="signed-out">
+                <SignInButton mode="modal">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Anmelden
+                  </Button>
+                </SignInButton>
+              </Show>
+              <Show when="signed-in">
+                <UserButton />
+              </Show>
+            </div>
           </nav>
         )}
       </header>

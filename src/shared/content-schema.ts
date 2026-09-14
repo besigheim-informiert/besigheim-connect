@@ -91,7 +91,7 @@ export interface Verein {
   email?: string;
   telefon?: string;
   website?: string;
-  adresse: string;
+  adresse?: string;
 }
 
 export interface Veranstaltung {
@@ -101,11 +101,17 @@ export interface Veranstaltung {
   datum: string; // ISO YYYY-MM-DD - start (or only) day
   enddatum?: string; // ISO YYYY-MM-DD - last day for multi-day events; omit for single-day
   uhrzeit: string; // HH:mm
+  /**
+   * Free-text recurrence rhythm for series events, e.g. "Jeden Donnerstag
+   * außerhalb der Ferien". `datum` then holds the next occurrence. Omit for
+   * one-off events.
+   */
+  wiederholung?: string;
   ort: string;
   vereinId: string;
   vereinName: string;
   kategorie: string;
-  kontakt: string;
+  kontakt?: string;
 }
 
 export interface EngagementAngebot {
@@ -184,7 +190,7 @@ export const contentFields: Record<ContentType, readonly FieldDef[]> = {
     { name: "kategorie", label: "Kategorie", kind: "text", required: true },
     { name: "zielgruppe", label: "Zielgruppe", kind: "text", required: true },
     { name: "angebote", label: "Angebote", kind: "list", required: true },
-    { name: "adresse", label: "Adresse", kind: "text", required: true },
+    { name: "adresse", label: "Adresse", kind: "text", required: false },
     {
       name: "ansprechpartner",
       label: "Ansprechpartner",
@@ -206,9 +212,15 @@ export const contentFields: Record<ContentType, readonly FieldDef[]> = {
     { name: "datum", label: "Datum", kind: "date", required: true },
     { name: "enddatum", label: "Enddatum", kind: "date", required: false },
     { name: "uhrzeit", label: "Uhrzeit", kind: "time", required: true },
+    {
+      name: "wiederholung",
+      label: "Wiederholung",
+      kind: "text",
+      required: false,
+    },
     { name: "ort", label: "Ort", kind: "text", required: true },
     { name: "kategorie", label: "Kategorie", kind: "text", required: true },
-    { name: "kontakt", label: "Kontakt", kind: "text", required: true },
+    { name: "kontakt", label: "Kontakt", kind: "text", required: false },
     { name: "vereinId", label: "Verein-ID", kind: "text", required: true },
     { name: "vereinName", label: "Vereinsname", kind: "text", required: true },
   ],
@@ -306,7 +318,6 @@ export const ingestRequiredFields: Record<ContentType, readonly string[]> = {
     "vereinId",
     "vereinName",
     "kategorie",
-    "kontakt",
   ],
   verein: [
     "name",

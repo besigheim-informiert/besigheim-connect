@@ -1,0 +1,13 @@
+{
+  "id": "buergernetzwerk-besigheim",
+  "name": "Bürgernetzwerk Besigheim",
+  "kurzbeschreibung": "Bürgerschaftliches Netzwerk in Besigheim, unter anderem Veranstalter der Kleidertauschbörse.",
+  "beschreibung": "Das Bürgernetzwerk Besigheim bringt engagierte Bürgerinnen und Bürger zusammen und organisiert Aktionen in der Stadt. Dazu gehört die Kleidertauschbörse in der Alten Kelter, bei der Kleidung abgegeben und mitgenommen werden kann.",
+  "kategorie": "Soziales",
+  "zielgruppe": "Bürgerinnen und Bürger in Besigheim",
+  "angebote": [
+    "Kleidertauschbörse",
+    "Bürgerschaftliches Engagement"
+  ],
+  "email": "buerger.netzwerk-besigheim@t-online.de"
+}

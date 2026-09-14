@@ -1,0 +1,17 @@
+{
+  "id": "kinomobil-baden-wuerttemberg",
+  "name": "Kinomobil Baden-Württemberg e.V.",
+  "kurzbeschreibung": "Mobiles Kino, das Filmvorführungen in Orte ohne festes Kino bringt.",
+  "beschreibung": "Der Kinomobil Baden-Württemberg e.V. bringt als mobiles Kino Filmvorführungen in Gemeinden ohne eigenes Kino. In Besigheim gastiert das KinoMobil in der Alten Kelter und zeigt an einem Tag mehrere Filme - vom Kinderfilm am Nachmittag bis zum Abendprogramm für Erwachsene.",
+  "kategorie": "Kultur",
+  "zielgruppe": "Filminteressierte aller Altersgruppen, Kinder, Familien und Erwachsene",
+  "angebote": [
+    "Mobiles Kino",
+    "Filmvorführungen",
+    "Kinderfilme"
+  ],
+  "ansprechpartner": "Geschäftsführung",
+  "telefon": "0711 2579208",
+  "website": "https://www.kinomobil-bw.de/kinomobil/%C3%BCber-das-kinomobil",
+  "adresse": "Lange Str. 51, 70174 Stuttgart"
+}

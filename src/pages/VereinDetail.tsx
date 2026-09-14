@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
 import { vereine } from "@/data/vereine";
 import { veranstaltungen } from "@/data/veranstaltungen";
-import { tagLabel } from "@/lib/veranstaltung";
+import { monatKurz, tagLabel } from "@/lib/veranstaltung";
 
 export default function VereinDetail() {
   const { id } = useParams<{ id: string }>();
@@ -60,9 +60,11 @@ export default function VereinDetail() {
                     <Globe className="h-4 w-4 text-primary" /> <a href={verein.website} target="_blank" rel="noopener noreferrer" className="hover:text-primary">{verein.website}</a>
                   </div>
                 )}
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <MapPin className="h-4 w-4 text-primary" /> {verein.adresse}
-                </div>
+                {verein.adresse && (
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <MapPin className="h-4 w-4 text-primary" /> {verein.adresse}
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -86,17 +88,22 @@ export default function VereinDetail() {
             <h2 className="text-xl font-semibold text-foreground mb-4">Kommende Veranstaltungen</h2>
             <div className="space-y-3">
               {vereinEvents.map((e) => (
-                <Card key={e.id}>
-                  <CardContent className="p-4 flex items-center gap-4">
-                    <div className="text-center bg-primary/10 rounded-lg p-2 w-16 flex-shrink-0">
-                      <div className="text-lg font-bold text-primary">{tagLabel(e)}</div>
-                      <div className="text-xs text-muted-foreground">{new Date(e.datum).toLocaleDateString("de-DE", { month: "short" })}</div>
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-foreground">{e.titel}</h3>
-                      <p className="text-xs text-muted-foreground">{e.uhrzeit} Uhr · {e.ort}</p>
-                    </div>
-                  </CardContent>
+                <Card key={e.id} className="hover:shadow-md transition-shadow">
+                  <Link to={`/veranstaltungen/${e.id}`} className="block">
+                    <CardContent className="p-4 flex items-center gap-4">
+                      <div className="text-center bg-primary/10 rounded-lg p-2 w-16 flex-shrink-0">
+                        <div className="text-lg font-bold text-primary">{tagLabel(e)}</div>
+                        <div className="text-xs text-muted-foreground">{monatKurz(e)}</div>
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-foreground">{e.titel}</h3>
+                        <p className="text-xs text-muted-foreground">{e.uhrzeit} Uhr · {e.ort}</p>
+                        {e.wiederholung && (
+                          <p className="text-xs text-muted-foreground">{e.wiederholung}</p>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Link>
                 </Card>
               ))}
             </div>

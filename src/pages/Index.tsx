@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { vereine } from "@/data/vereine";
 import { veranstaltungen } from "@/data/veranstaltungen";
-import { tagLabel } from "@/lib/veranstaltung";
+import { istKommend, monatKurz, tagLabel } from "@/lib/veranstaltung";
 import heroBg from "@/assets/hero-besigheim.jpg";
 
 const quickLinks = [
@@ -16,7 +16,7 @@ const quickLinks = [
 
 export default function Index() {
   const featuredVereine = vereine.slice(0, 4);
-  const upcomingEvents = veranstaltungen.slice(0, 4);
+  const upcomingEvents = veranstaltungen.filter((e) => istKommend(e)).slice(0, 4);
 
   return (
     <Layout>
@@ -160,29 +160,34 @@ export default function Index() {
               </div>
             </div>
             <ul className="divide-y divide-foreground/10 border-y border-foreground/10">
-              {upcomingEvents.map((e) => {
-                const d = new Date(e.datum);
-                return (
-                  <li key={e.id} className="py-5 md:py-6 flex gap-5">
+              {upcomingEvents.map((e) => (
+                <li key={e.id}>
+                  <Link
+                    to={`/veranstaltungen/${e.id}`}
+                    className="py-5 md:py-6 flex gap-5 group"
+                  >
                     <div className="text-center min-w-[54px] border-r border-foreground/10 pr-5">
                       <span className="block text-xs uppercase tracking-widest text-signal font-bold">
-                        {d.toLocaleDateString("de-DE", { month: "short" }).replace(".", "")}
+                        {monatKurz(e).replace(".", "")}
                       </span>
                       <span className="block text-3xl font-serif-display text-foreground leading-none mt-1">
                         {tagLabel(e)}
                       </span>
                     </div>
                     <div className="min-w-0">
-                      <h4 className="font-serif-display text-lg text-foreground leading-tight">
+                      <h4 className="font-serif-display text-lg text-foreground leading-tight group-hover:text-signal transition-colors">
                         {e.titel}
                       </h4>
                       <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">
                         {e.uhrzeit} · {e.ort}
                       </p>
+                      {e.wiederholung && (
+                        <p className="text-xs text-muted-foreground mt-1">{e.wiederholung}</p>
+                      )}
                     </div>
-                  </li>
-                );
-              })}
+                  </Link>
+                </li>
+              ))}
             </ul>
             <Link
               to="/veranstaltungen"

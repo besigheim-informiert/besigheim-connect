@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Vereine from "./pages/Vereine";
 import VereinDetail from "./pages/VereinDetail";
 import Veranstaltungen from "./pages/Veranstaltungen";
+import VeranstaltungDetail from "./pages/VeranstaltungDetail";
 import Mitmachen from "./pages/Mitmachen";
 import Barrierefreiheit from "./pages/Barrierefreiheit";
 import NetzwerkQuartier from "./pages/NetzwerkQuartier";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/vereine" element={<Vereine />} />
           <Route path="/vereine/:id" element={<VereinDetail />} />
           <Route path="/veranstaltungen" element={<Veranstaltungen />} />
+          <Route path="/veranstaltungen/:id" element={<VeranstaltungDetail />} />
           <Route path="/mitmachen" element={<Mitmachen />} />
           <Route path="/barrierefrei" element={<Barrierefreiheit />} />
           <Route path="/netzwerk-quartier" element={<NetzwerkQuartier />} />
