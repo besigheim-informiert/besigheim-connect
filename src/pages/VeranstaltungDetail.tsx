@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
+import Fliesstext from "@/components/Fliesstext";
+import VeranstaltungsBild from "@/components/VeranstaltungsBild";
 import { veranstaltungen } from "@/data/veranstaltungen";
 import { vereine } from "@/data/vereine";
 import { datumLabel, istKommend } from "@/lib/veranstaltung";
@@ -52,6 +54,8 @@ export default function VeranstaltungDetail() {
         </div>
         <h1 className="text-3xl font-bold text-foreground mb-6">{veranstaltung.titel}</h1>
 
+        <VeranstaltungsBild veranstaltung={veranstaltung} className="mb-8" />
+
         <Card className="mb-8">
           <CardContent className="p-5 space-y-3 text-sm">
             <div className="flex items-start gap-2 text-muted-foreground">
@@ -85,9 +89,10 @@ export default function VeranstaltungDetail() {
           </CardContent>
         </Card>
 
-        <p className="text-foreground/85 leading-relaxed break-words whitespace-pre-line">
-          {veranstaltung.beschreibung}
-        </p>
+        <Fliesstext
+          text={veranstaltung.beschreibung}
+          className="text-foreground/85 leading-relaxed break-words whitespace-pre-line"
+        />
 
         {veranstaltung.kontakt && (
           <div className="mt-8 border-t border-foreground/10 pt-6">

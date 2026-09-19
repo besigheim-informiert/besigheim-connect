@@ -3,6 +3,7 @@ import { Mail, ArrowRight, Users, Lightbulb, HandHeart, Sparkles } from "lucide-
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { netzwerktreffen } from "@/data/veranstaltungen";
+import VeranstaltungsBild from "@/components/VeranstaltungsBild";
 import { datumLabel, istKommend, monatKurz, tagLabel } from "@/lib/veranstaltung";
 import flohmarkt from "@/assets/nwq-flohmarkt.jpg";
 import workshop from "@/assets/nwq-workshop.jpg";
@@ -152,6 +153,7 @@ export default function NetzwerkQuartier() {
                       {tagLabel(e)}
                     </span>
                   </div>
+                  <VeranstaltungsBild veranstaltung={e} className="hidden sm:block w-28 shrink-0" />
                   <div className="min-w-0 flex-1">
                     <h3 className="font-serif-display text-lg text-foreground leading-tight group-hover:text-primary transition-colors">
                       {e.titel}

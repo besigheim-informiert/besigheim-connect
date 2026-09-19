@@ -6,9 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import VeranstaltungsKalender from "@/components/VeranstaltungsKalender";
-import { veranstaltungen } from "@/data/veranstaltungen";
-import { kategorien } from "@/data/vereine";
+import VeranstaltungsBild, { bildFormat } from "@/components/VeranstaltungsBild";
+import { kategorien, veranstaltungen } from "@/data/veranstaltungen";
 import { datumLabel, laeuftAm, monatLang, tagLabel } from "@/lib/veranstaltung";
+import { cn } from "@/lib/utils";
 
 export default function Veranstaltungen() {
   const [activeKat, setActiveKat] = useState<string | null>(null);
@@ -85,43 +86,66 @@ export default function Veranstaltungen() {
                 Keine Veranstaltungen gefunden.
               </p>
             ) : (
-              <div className="space-y-4">
+              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {filtered.map((e) => (
-                  <Card key={e.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6 flex flex-col md:flex-row md:items-center gap-4">
-                      <div className="flex-shrink-0 text-center bg-primary/10 rounded-lg p-3 md:w-20">
-                        <div className="text-2xl font-bold text-primary">{tagLabel(e)}</div>
-                        <div className="text-xs text-muted-foreground">{monatLang(e)}</div>
+                  <Card
+                    key={e.id}
+                    className="group relative flex flex-col overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    {e.bild ? (
+                      <VeranstaltungsBild veranstaltung={e} />
+                    ) : (
+                      // Events without a picture keep a tile of the same shape, so
+                      // the cards in a row stay aligned.
+                      <div
+                        className={cn(
+                          bildFormat,
+                          "flex flex-col items-center justify-center bg-primary/10"
+                        )}
+                        aria-hidden="true"
+                      >
+                        <span className="text-4xl font-bold text-primary leading-none">
+                          {tagLabel(e)}
+                        </span>
+                        <span className="text-xs text-muted-foreground mt-1">{monatLang(e)}</span>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h2 className="font-semibold text-foreground text-lg">
-                            <Link to={`/veranstaltungen/${e.id}`} className="hover:text-primary">
-                              {e.titel}
-                            </Link>
-                          </h2>
-                          <Badge variant="secondary">{e.kategorie}</Badge>
-                        </div>
-                        <p className="text-xs text-muted-foreground break-words line-clamp-3">
-                          {e.beschreibung}
-                        </p>
-                        <div className="text-xs text-muted-foreground mt-2 flex flex-wrap gap-3">
-                          <span>{e.uhrzeit} Uhr</span>
-                          {e.wiederholung && (
-                            <span className="inline-flex items-center gap-1">
-                              <Repeat className="h-3.5 w-3.5" aria-hidden="true" />
-                              {e.wiederholung}
-                            </span>
-                          )}
-                          <span>{e.ort}</span>
-                          <Link
-                            to={`/vereine/${e.vereinId}`}
-                            className="text-primary hover:underline"
-                          >
-                            {e.vereinName}
-                          </Link>
-                        </div>
+                    )}
+
+                    <CardContent className="flex flex-1 flex-col p-5">
+                      <Badge variant="secondary" className="self-start mb-2">
+                        {e.kategorie}
+                      </Badge>
+                      <h2 className="font-semibold text-foreground text-lg leading-tight">
+                        {/* Stretched link: the whole card is clickable, while the
+                            accessible name stays the event title. */}
+                        <Link
+                          to={`/veranstaltungen/${e.id}`}
+                          className="hover:text-primary after:absolute after:inset-0"
+                        >
+                          {e.titel}
+                        </Link>
+                      </h2>
+                      <p className="text-xs text-muted-foreground break-words line-clamp-2 mt-2">
+                        {e.beschreibung}
+                      </p>
+                      <div className="text-xs text-muted-foreground mt-3 flex flex-wrap gap-x-3 gap-y-1">
+                        <span>
+                          {datumLabel(e)}, {e.uhrzeit} Uhr
+                        </span>
+                        {e.wiederholung && (
+                          <span className="inline-flex items-center gap-1">
+                            <Repeat className="h-3.5 w-3.5" aria-hidden="true" />
+                            {e.wiederholung}
+                          </span>
+                        )}
+                        <span>{e.ort}</span>
                       </div>
+                      <Link
+                        to={`/vereine/${e.vereinId}`}
+                        className="relative z-10 self-start text-xs text-primary hover:underline mt-2"
+                      >
+                        {e.vereinName}
+                      </Link>
                     </CardContent>
                   </Card>
                 ))}

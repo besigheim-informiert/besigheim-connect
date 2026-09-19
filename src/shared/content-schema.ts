@@ -112,6 +112,14 @@ export interface Veranstaltung {
   vereinName: string;
   kategorie: string;
   kontakt?: string;
+  /**
+   * Optional event picture, as a path below `public/` served from the site
+   * root, e.g. "/veranstaltungen/netzwerktreffen.jpg". Kept out of `src/assets`
+   * so the mail ingest can drop an attachment in without touching the build.
+   */
+  bild?: string;
+  /** Alt text for `bild`. Falls back to the event title when not set. */
+  bildAlt?: string;
 }
 
 export interface EngagementAngebot {
@@ -162,7 +170,8 @@ export type FieldKind =
   | "date" // ISO YYYY-MM-DD
   | "time" // HH:mm
   | "select"
-  | "list"; // string[]
+  | "list" // string[]
+  | "image"; // path below public/, e.g. "/veranstaltungen/foo.jpg"
 
 export interface FieldDef {
   name: string;
@@ -221,6 +230,8 @@ export const contentFields: Record<ContentType, readonly FieldDef[]> = {
     { name: "ort", label: "Ort", kind: "text", required: true },
     { name: "kategorie", label: "Kategorie", kind: "text", required: true },
     { name: "kontakt", label: "Kontakt", kind: "text", required: false },
+    { name: "bild", label: "Bild", kind: "image", required: false },
+    { name: "bildAlt", label: "Bildbeschreibung", kind: "text", required: false },
     { name: "vereinId", label: "Verein-ID", kind: "text", required: true },
     { name: "vereinName", label: "Vereinsname", kind: "text", required: true },
   ],

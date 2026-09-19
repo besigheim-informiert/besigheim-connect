@@ -66,6 +66,12 @@ jobs:
       - name: Build frontend
         env:
           VITE_BASE_PATH: /
+          # Clerk publishable key of the production instance (clerk.unser-besigheim.de).
+          # Publishable keys are public by design - they ship in the JS bundle and are
+          # bound to that domain. The secret key (sk_...) must never appear here.
+          # A repository variable of the same name overrides this, e.g. to point a
+          # deployment at another Clerk instance without a commit.
+          VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY || 'pk_live_Y2xlcmsudW5zZXItYmVzaWdoZWltLmRlJA' }}
         run: npm run build
 
       - name: Add GitHub Pages SPA fallback

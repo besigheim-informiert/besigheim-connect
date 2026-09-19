@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { istNetzwerktreffen } from "@/data/veranstaltungen";
+import { istNetzwerktreffen, kategorien, veranstaltungen } from "@/data/veranstaltungen";
 import { datumLabel, isoTag, istKommend, laeuftAm, tagLabel, terminTage } from "@/lib/veranstaltung";
 import type { Veranstaltung } from "@/shared/content-schema";
 
@@ -108,5 +108,17 @@ describe("istNetzwerktreffen", () => {
         vereinId: "spvgg-besigheim",
       })
     ).toBe(false);
+  });
+});
+
+describe("kategorien", () => {
+  it("enthält jede Kategorie der veröffentlichten Veranstaltungen genau einmal", () => {
+    expect([...kategorien].sort()).toEqual(
+      [...new Set(veranstaltungen.map((e) => e.kategorie))].sort()
+    );
+  });
+
+  it("stellt die bevorzugte Reihenfolge voran", () => {
+    expect(kategorien.indexOf("Begegnung")).toBeLessThan(kategorien.indexOf("Kultur"));
   });
 });

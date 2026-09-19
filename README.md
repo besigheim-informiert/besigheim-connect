@@ -66,6 +66,22 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 
+## Authentication (Clerk)
+
+The frontend reads its Clerk publishable key from `VITE_CLERK_PUBLISHABLE_KEY`.
+`ClerkProvider` in `src/main.tsx` picks the variable up automatically through `import.meta.env`, so it is never passed as a prop.
+Vite inlines the value at build time - if it is missing, `ClerkProvider` throws and the deployed page stays blank.
+
+For local development, put the **test** instance key in `.env.local` (gitignored):
+
+```sh
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+```
+
+The production instance (`clerk.unser-besigheim.de`) is wired into `.github/workflows/deploy.yml`.
+Publishable keys (`pk_...`) are public by design and are bound to their domain; secret keys (`sk_...`) belong in `.env.local` or a secret store and must never be committed.
+
 ## AWS backend
 
 The frontend remains at the repository root so Lovable can continue to edit and preview it with `npm run dev`.
@@ -148,6 +164,7 @@ Configure these repository settings before the first run:
 - Optional variable `FRONTEND_ORIGINS`: comma-separated CORS origins, for example `https://www.example.de`
 - Optional variable `VITE_API_BASE_URL`: deployed backend API URL used by the contact form
 - Optional variable `VITE_BASE_PATH`: GitHub Pages base path. Defaults to `/<repository-name>/`; use `/` for a custom domain or user/organization Pages site
+- Optional variable `VITE_CLERK_PUBLISHABLE_KEY`: overrides the production Clerk key that the deploy workflow bakes into the build. Only needed to point a deployment at a different Clerk instance
 - Optional variable `MAIL_RECIPIENTS`: comma-separated inbound email recipients for SES
 - Optional variable `BEDROCK_MODEL_ID`: EU-hosted Bedrock model or inference profile
 - Optional variable `GITHUB_TOKEN_SECRET_NAME`: AWS Secrets Manager secret name that contains a GitHub token for committing parsed documents
