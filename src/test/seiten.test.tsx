@@ -1,17 +1,9 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-
-// Layout pulls in Clerk, which needs a provider we do not want in a render smoke test.
-vi.mock("@clerk/react", () => ({
-  Show: () => null,
-  SignInButton: () => null,
-  UserButton: () => null,
-}));
-
-const { default: VeranstaltungDetail } = await import("@/pages/VeranstaltungDetail");
-const { default: Veranstaltungen } = await import("@/pages/Veranstaltungen");
-const { default: NetzwerkQuartier } = await import("@/pages/NetzwerkQuartier");
+import VeranstaltungDetail from "@/pages/VeranstaltungDetail";
+import Veranstaltungen from "@/pages/Veranstaltungen";
+import NetzwerkQuartier from "@/pages/NetzwerkQuartier";
 
 function renderRoute(pfad: string, element: React.ReactElement, pattern: string) {
   return render(

@@ -19,6 +19,7 @@ import {
   aws_s3_notifications as s3Notifications,
   aws_ses as ses,
   aws_ses_actions as sesActions,
+  aws_ssm as ssm,
   custom_resources as customResources,
 } from "aws-cdk-lib";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
@@ -43,8 +44,21 @@ const githubPagesIpv6Addresses = [
 export type BackendStackProps = StackProps & {
   allowedOrigins: string[];
   baseDomain: string;
+  /** Clerk publishable key (`pk_...`) - public, used to locate the JWKS for token verification. */
+  clerkPublishableKey: string;
+  /** Repository the admin API publishes content to, `owner/name`. */
+  githubContentRepo: string;
+  githubContentBranch: string;
+  /**
+   * SSM Parameter Store SecureString holding a GitHub token with `contents: write`
+   * on the repo. Created outside CDK so the token never enters a template.
+   * Standard-tier parameters are free, unlike Secrets Manager secrets.
+   */
+  githubTokenParameterName: string;
   githubPagesDnsTarget: string;
   mailRecipients: string[];
+  /** Clerk organisation whose admins review AI-extracted mail submissions. */
+  siteAdminOrgSlug: string;
 };
 
 export class BackendStack extends Stack {
@@ -123,6 +137,26 @@ export class BackendStack extends Stack {
       }
     );
 
+    // Review queue: everything the mail ingest extracted, newest first.
+    ingestedDocumentsTable.addGlobalSecondaryIndex({
+      indexName: "status-index",
+      partitionKey: {
+        name: "status",
+        type: dynamodb.AttributeType.STRING,
+      },
+      sortKey: {
+        name: "createdAt",
+        type: dynamodb.AttributeType.STRING,
+      },
+    });
+
+    const githubTokenParameter =
+      ssm.StringParameter.fromSecureStringParameterAttributes(
+        this,
+        "GithubContentToken",
+        { parameterName: props.githubTokenParameterName }
+      );
+
     const contactRateLimitTable = new dynamodb.Table(
       this,
       "ContactRateLimitTable",
@@ -151,7 +185,14 @@ export class BackendStack extends Stack {
       depsLockFilePath: path.join(workspaceRoot, "package-lock.json"),
       entry: path.join(workspaceRoot, "apps/backend/src/handler.ts"),
       environment: {
+        ALLOWED_ORIGINS: props.allowedOrigins.join(","),
+        CLERK_PUBLISHABLE_KEY: props.clerkPublishableKey,
+        GITHUB_BRANCH: props.githubContentBranch,
+        GITHUB_REPO: props.githubContentRepo,
+        GITHUB_TOKEN_PARAMETER_NAME: props.githubTokenParameterName,
+        INGESTED_DOCUMENTS_TABLE_NAME: ingestedDocumentsTable.tableName,
         RATE_LIMIT_TABLE_NAME: contactRateLimitTable.tableName,
+        SITE_ADMIN_ORG_SLUG: props.siteAdminOrgSlug,
         SUBMISSIONS_TABLE_NAME: submissionsTable.tableName,
       },
       handler: "handler",
@@ -159,11 +200,14 @@ export class BackendStack extends Stack {
       memorySize: 256,
       projectRoot: workspaceRoot,
       runtime: lambda.Runtime.NODEJS_24_X,
-      timeout: Duration.seconds(10),
+      // Publishing lists a content folder and commits through the GitHub API.
+      timeout: Duration.seconds(25),
     });
 
     submissionsTable.grantWriteData(apiHandler);
     contactRateLimitTable.grantReadWriteData(apiHandler);
+    ingestedDocumentsTable.grantReadWriteData(apiHandler);
+    githubTokenParameter.grantRead(apiHandler);
 
     const emailBucket = new s3.Bucket(this, "IncomingEmailBucket", {
       autoDeleteObjects: false,
@@ -281,11 +325,13 @@ export class BackendStack extends Stack {
     const httpApi = new apigatewayv2.HttpApi(this, "HttpApi", {
       createDefaultStage: false,
       corsPreflight: {
-        allowHeaders: ["content-type"],
+        allowHeaders: ["authorization", "content-type"],
         allowMethods: [
+          apigatewayv2.CorsHttpMethod.DELETE,
           apigatewayv2.CorsHttpMethod.GET,
           apigatewayv2.CorsHttpMethod.OPTIONS,
           apigatewayv2.CorsHttpMethod.POST,
+          apigatewayv2.CorsHttpMethod.PUT,
         ],
         allowOrigins: props.allowedOrigins,
         maxAge: Duration.days(10),
@@ -307,6 +353,17 @@ export class BackendStack extends Stack {
       integration: apiIntegration,
       methods: [apigatewayv2.HttpMethod.POST],
       path: "/contact",
+    });
+
+    httpApi.addRoutes({
+      integration: apiIntegration,
+      methods: [
+        apigatewayv2.HttpMethod.DELETE,
+        apigatewayv2.HttpMethod.GET,
+        apigatewayv2.HttpMethod.POST,
+        apigatewayv2.HttpMethod.PUT,
+      ],
+      path: "/admin/{proxy+}",
     });
 
     const defaultStage = httpApi.addStage("DefaultStage", {

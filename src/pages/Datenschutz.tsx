@@ -70,14 +70,30 @@ export default function Datenschutz() {
             <p>
               Kontaktformular-Nachrichten werden derzeit bis zu 180 Tage gespeichert. Automatisiert eingehende
               E-Mail-Daten und daraus extrahierte strukturierte Informationen werden derzeit bis zu 365 Tage
-              gespeichert, soweit sie nicht vorher geprüft, veröffentlicht oder gelöscht werden. Gesetzliche
+              gespeichert, soweit sie nicht vorher geprüft, veröffentlicht oder gelöscht werden. Automatisch
+              ausgelesene Inhalte werden erst nach Prüfung und Freigabe durch eine Person veröffentlicht. Gesetzliche
               Aufbewahrungspflichten bleiben unberührt.
+            </p>
+          </div>
+          <div>
+            <h2 className="font-semibold text-foreground">Vereinsverwaltung und Anmeldung</h2>
+            <p>
+              Vereine, die ihre Inhalte selbst pflegen, erhalten auf Einladung einen Zugang zur
+              Vereinsverwaltung. Für die Anmeldung nutzen wir den Dienst Clerk (Clerk, Inc., USA). Dabei
+              werden E-Mail-Adresse, Name, Vereinszugehörigkeit sowie technische Sitzungsdaten
+              (IP-Adresse, Browserinformationen, Anmeldezeitpunkt) verarbeitet. Clerk setzt hierfür
+              technisch notwendige Cookies, die ausschließlich der Anmeldung dienen. Die Übermittlung in
+              die USA erfolgt auf Grundlage der EU-Standardvertragsklauseln. Änderungen, die Vereine
+              über die Verwaltung vornehmen, werden mit dem Benutzerkonto des Bearbeitenden im
+              Änderungsverlauf der Website gespeichert.
             </p>
           </div>
           <div>
             <h2 className="font-semibold text-foreground">Cookies und Tracking</h2>
             <p>
-              Diese Website setzt derzeit keine eigenen Cookies und verwendet keine Analyse- oder Werbe-Tracking-Tools.
+              Diese Website setzt beim reinen Besuch keine eigenen Cookies und verwendet keine Analyse-
+              oder Werbe-Tracking-Tools. Technisch notwendige Cookies werden nur bei der Anmeldung zur
+              Vereinsverwaltung gesetzt.
             </p>
           </div>
           <div>
