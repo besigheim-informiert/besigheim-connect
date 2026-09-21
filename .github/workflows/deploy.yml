@@ -114,4 +114,8 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           role-session-name: besigheim-connect-github-actions
       - name: Deploy backend
+        env:
+          # Must be the same Clerk instance as the frontend build above: the admin API
+          # verifies session tokens against the JWKS of this instance.
+          CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY || 'pk_live_Y2xlcmsudW5zZXItYmVzaWdoZWltLmRlJA' }}
         run: npm run backend-deploy BesigheimConnectBackend -- --require-approval never

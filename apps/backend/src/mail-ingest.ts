@@ -5,10 +5,6 @@ import {
 } from "@aws-sdk/client-bedrock-runtime";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import {
-  GetSecretValueCommand,
-  SecretsManagerClient,
-} from "@aws-sdk/client-secrets-manager";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { simpleParser, type AddressObject } from "mailparser";
 import { createHash, randomUUID } from "node:crypto";
@@ -16,13 +12,17 @@ import { Readable } from "node:stream";
 import {
   type ContentType,
   ingestRequiredFields as documentRequirements,
-  publishedContentDir as githubContentFolders,
 } from "../../../src/shared/content-schema";
 
+/**
+ * Mail ingest: SES -> S3 -> here. The AI extraction is only a *proposal*:
+ * every submission is stored as `needs_review` and published solely by a
+ * Plattform-Admin through the admin API (`POST /admin/freigabe/:id/freigeben`).
+ * Nothing on this path ever writes to the git repository.
+ */
 const bedrock = new BedrockRuntimeClient({});
 const dynamodb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const s3 = new S3Client({});
-const secretsManager = new SecretsManagerClient({});
 
 type DocumentType = ContentType;
 
@@ -67,9 +67,6 @@ export async function handler(event: S3Event) {
     const isComplete = Boolean(type && missingFields.length === 0);
     const id = createDocumentId(type, document, key);
     const now = new Date();
-    const githubResult = isComplete
-      ? await pushToGithub({ document, id, type })
-      : { skipped: true };
 
     await dynamodb.send(
       new PutCommand({
@@ -85,7 +82,6 @@ export async function handler(event: S3Event) {
             to: formatAddress(parsedEmail.to) ?? null,
           },
           expiresAt: Math.floor(now.getTime() / 1000) + 365 * 24 * 60 * 60,
-          github: githubResult,
           id,
           isComplete,
           missingFields,
@@ -94,7 +90,7 @@ export async function handler(event: S3Event) {
             bucket,
             key,
           },
-          status: isComplete ? "complete" : "needs_review",
+          status: "needs_review",
           type: type ?? "unknown",
         },
         TableName: tableName,
@@ -230,90 +226,7 @@ function findMissingFields(
   return [...missing].sort();
 }
 
-async function pushToGithub(input: {
-  document: Record<string, unknown>;
-  id: string;
-  type: DocumentType | undefined;
-}) {
-  const repo = process.env.GITHUB_REPO;
-  const secretName = process.env.GITHUB_TOKEN_SECRET_NAME;
 
-  if (!repo || !secretName || !input.type) {
-    return { skipped: true };
-  }
-
-  const token = await loadGithubToken(secretName);
-  const branch = process.env.GITHUB_BRANCH ?? "main";
-  const path = `${githubContentFolders[input.type]}/${input.id}.json`;
-  const content = Buffer.from(
-    JSON.stringify(input.document, null, 2) + "\n"
-  ).toString("base64");
-  const response = await fetch(
-    `https://api.github.com/repos/${repo}/contents/${path}`,
-    {
-      body: JSON.stringify({
-        branch,
-        committer: {
-          email: "github-actions[bot]@users.noreply.github.com",
-          name: "besigheim-connect mail ingest",
-        },
-        content,
-        message: `Add ${input.type} submission ${input.id}`,
-      }),
-      headers: {
-        accept: "application/vnd.github+json",
-        authorization: `Bearer ${token}`,
-        "content-type": "application/json",
-        "user-agent": "besigheim-connect-mail-ingest",
-        "x-github-api-version": "2022-11-28",
-      },
-      method: "PUT",
-    }
-  );
-
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(
-      `GitHub commit failed with ${response.status}: ${body.slice(0, 500)}`
-    );
-  }
-
-  const result = (await response.json()) as {
-    commit?: { sha?: string };
-    content?: { html_url?: string; path?: string };
-  };
-  return {
-    commitSha: result.commit?.sha ?? null,
-    path: result.content?.path ?? path,
-    skipped: false,
-    url: result.content?.html_url ?? null,
-  };
-}
-
-async function loadGithubToken(secretName: string): Promise<string> {
-  const response = await secretsManager.send(
-    new GetSecretValueCommand({
-      SecretId: secretName,
-    })
-  );
-
-  const secret = response.SecretString ?? "";
-
-  try {
-    const parsed = JSON.parse(secret) as { token?: unknown };
-    if (typeof parsed.token === "string" && parsed.token.trim()) {
-      return parsed.token.trim();
-    }
-  } catch {
-    // Plain secret strings are supported too.
-  }
-
-  if (!secret.trim()) {
-    throw new Error(`GitHub token secret ${secretName} is empty`);
-  }
-
-  return secret.trim();
-}
 
 function createDocumentId(
   type: DocumentType | undefined,
