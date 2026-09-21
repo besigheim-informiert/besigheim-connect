@@ -204,8 +204,8 @@ und werden erst nach Prüfung durch einen Plattform-Admin veröffentlicht.
    - *User & Authentication → Restrictions*: Sign-up-Modus **Restricted** - Konten entstehen nur per Einladung.
    - *Organizations → Settings*: „Allow users to create organizations“ **deaktivieren**.
    - Pro Verein eine Organization anlegen, **Slug = Verein-ID** aus `src/content/vereine/<id>.json`
-     (z. B. `spvgg-besigheim`). Die Organization `quartier-besigheim` ist die Plattform-Administration;
-     ihre Admins sehen zusätzlich die Freigabe.
+     (z. B. `spvgg-besigheim`). Die Organization `unser-besigheim` ist die Plattform-Administration und selbst kein Verein;
+     ihre Admins sehen die Freigabe. Wer zusätzlich einen Verein pflegt, wird auch in dessen Organization eingeladen.
    - Vereinsadmins per E-Mail in ihre Organization einladen (Rolle `admin`).
 2. **GitHub**: nichts zu tun. Der Workflow nutzt den Publishable Key der Produktions-Instanz für
    den Frontend-Build **und** das Backend-Deployment (die API prüft Tokens gegen genau diese Instanz).
@@ -226,6 +226,6 @@ und werden erst nach Prüfung durch einen Plattform-Admin veröffentlicht.
 | Nicht angemeldet / ohne Organization | nichts |
 | `member` eines Vereins | eigene Vereinsdaten und Veranstaltungen ansehen |
 | `admin` eines Vereins | eigene Vereinsdaten bearbeiten, Veranstaltungen anlegen, ändern, löschen |
-| `admin` von `quartier-besigheim` | zusätzlich E-Mail-Einreichungen prüfen, freigeben, ablehnen |
+| `admin` von `unser-besigheim` (Plattform) | E-Mail-Einreichungen prüfen, freigeben, ablehnen. Keine Vereinsseite: zum Bearbeiten eines Vereins in dessen Organization wechseln |
 
 Der Verein kommt immer aus dem verifizierten Clerk-Token (Org-Slug), nie aus dem Request.

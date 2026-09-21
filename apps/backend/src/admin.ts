@@ -6,8 +6,10 @@
  *    its events. Their organisation slug *is* the club id; every write is
  *    scoped to it and published straight to git.
  *  - Plattform-Admins (admins of the organisation named in
- *    `SITE_ADMIN_ORG_SLUG`) additionally review what the mail ingest extracted
- *    with AI: those records are never published without a human approving them.
+ *    `SITE_ADMIN_ORG_SLUG`) review what the mail ingest extracted with AI:
+ *    those records are never published without a human approving them. That
+ *    organisation is the platform itself, not a club - it has no club page and
+ *    no events of its own, so the club endpoints are closed to it.
  */
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
 import {
@@ -61,6 +63,8 @@ class HttpError extends Error {
 type Principal = AuthContext & {
   vereinId?: string;
   kannBearbeiten: boolean;
+  /** The active organisation is the platform organisation (any role). */
+  istPlattformOrg: boolean;
   istPlattformAdmin: boolean;
 };
 
@@ -90,11 +94,14 @@ async function authenticate(event: APIGatewayProxyEventV2, deps: AdminDeps): Pro
   }
   const ctx = await verifySessionToken(token, deps.auth);
   const kannBearbeiten = ctx.orgRole === "admin";
+  const istPlattformOrg = ctx.orgSlug === deps.siteAdminOrgSlug;
   return {
     ...ctx,
-    istPlattformAdmin: kannBearbeiten && ctx.orgSlug === deps.siteAdminOrgSlug,
+    istPlattformAdmin: kannBearbeiten && istPlattformOrg,
+    istPlattformOrg,
     kannBearbeiten,
-    vereinId: ctx.orgSlug,
+    // The platform organisation's slug must never be used as a club id.
+    vereinId: istPlattformOrg ? undefined : ctx.orgSlug,
   };
 }
 
@@ -110,6 +117,7 @@ async function route(
   if (method === "GET" && resource === "me" && segments.length === 1) {
     return json(200, {
       istPlattformAdmin: principal.istPlattformAdmin,
+      istPlattformOrg: principal.istPlattformOrg,
       kannBearbeiten: principal.kannBearbeiten,
       rolle: principal.orgRole ?? null,
       userId: principal.userId,
@@ -509,6 +517,12 @@ function reviewBody(
 // ---------------------------------------------------------------------------
 
 function requireVerein(principal: Principal): string {
+  if (principal.istPlattformOrg) {
+    throw new HttpError(
+      403,
+      "Die Plattform-Organisation hat keine Vereinsseite. Wechseln Sie zu einem Verein, um dessen Daten zu bearbeiten.",
+    );
+  }
   if (!principal.vereinId) {
     throw new HttpError(403, "Bitte wählen Sie zuerst einen Verein aus.");
   }

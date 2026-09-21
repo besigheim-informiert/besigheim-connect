@@ -90,10 +90,16 @@ function SignedInShell({ title, children }: { title: string; children: React.Rea
     );
   }
 
+  // The platform organisation is not a club: it only gets the review queue.
+  const vereinTabs = me.data?.istPlattformOrg
+    ? []
+    : [
+        { label: "Vereinsdaten", path: "/admin/verein" },
+        { label: "Veranstaltungen", path: "/admin/veranstaltungen" },
+      ];
   const tabs = [
     { label: "Übersicht", path: "/admin" },
-    { label: "Vereinsdaten", path: "/admin/verein" },
-    { label: "Veranstaltungen", path: "/admin/veranstaltungen" },
+    ...vereinTabs,
     ...(me.data?.istPlattformAdmin ? [{ label: "Freigabe", path: "/admin/freigabe" }] : []),
   ];
 
@@ -127,7 +133,7 @@ function SignedInShell({ title, children }: { title: string; children: React.Rea
           );
         })}
       </nav>
-      {me.data && !me.data.kannBearbeiten && (
+      {me.data && !me.data.kannBearbeiten && !me.data.istPlattformOrg && (
         <p className="rounded-md border border-foreground/10 bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
           Sie sind Mitglied dieses Vereins, aber nicht Administrator. Sie können die Daten ansehen,
           aber nicht ändern.

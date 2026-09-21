@@ -23,7 +23,8 @@ const config = {
   githubTokenParameterName: "/besigheim-connect/github-token",
   githubPagesDnsTarget: "besigheim-informiert.github.io",
   mailRecipients: ["tanja.bayer@cubesoft.org"],
-  siteAdminOrgSlug: "quartier-besigheim",
+  // Platform organisation: its admins review mail submissions. It is not a club and has no club page.
+  siteAdminOrgSlug: "unser-besigheim",
 };
 
 Tags.of(app).add("Application", "besigheim-connect");

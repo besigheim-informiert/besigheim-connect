@@ -27,6 +27,8 @@ export type Me = {
   vereinId: string | null;
   rolle: string | null;
   kannBearbeiten: boolean;
+  /** Active organisation is the platform itself - no club page, no events. */
+  istPlattformOrg: boolean;
   istPlattformAdmin: boolean;
 };
 
@@ -93,9 +95,10 @@ export function useMe(enabled = true) {
 }
 
 /** The club's published data; `null` when the club has no content file yet. */
-export function useVerein() {
+export function useVerein(enabled = true) {
   const request = useAdminRequest();
   return useQuery({
+    enabled,
     queryFn: async () => {
       try {
         return await request<Verein>("GET", "/verein");
@@ -108,9 +111,10 @@ export function useVerein() {
   });
 }
 
-export function useVeranstaltungen() {
+export function useVeranstaltungen(enabled = true) {
   const request = useAdminRequest();
   return useQuery({
+    enabled,
     queryFn: () => request<Veranstaltung[]>("GET", "/veranstaltungen"),
     queryKey: ["admin", "veranstaltungen"],
   });
