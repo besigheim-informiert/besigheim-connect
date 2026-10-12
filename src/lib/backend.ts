@@ -1,4 +1,4 @@
-const apiBaseUrl = "https://api.unser-besigheim.de";
+export const apiBaseUrl = "https://api.unser-besigheim.de";
 
 export type ContactMessage = {
   email: string;

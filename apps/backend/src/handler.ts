@@ -2,6 +2,9 @@ import type { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from "
 import { randomUUID } from "node:crypto";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { handleAdminRequest, type AdminDeps } from "./admin";
+import { githubConfigFromEnv } from "./github";
+import { json, parseJsonBody } from "./http";
 
 const dynamodb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,7 +48,38 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
     return createContactSubmission(event);
   }
 
+  if (path === "/admin" || path.startsWith("/admin/")) {
+    const deps = adminDepsFromEnv();
+    if (!deps) {
+      console.error("Missing admin endpoint environment variables");
+      return json(500, { message: "Die Verwaltung ist noch nicht konfiguriert." });
+    }
+    return handleAdminRequest(event, deps);
+  }
+
   return json(404, { message: "Not found" });
+}
+
+function adminDepsFromEnv(): AdminDeps | undefined {
+  const github = githubConfigFromEnv();
+  const publishableKey = process.env.CLERK_PUBLISHABLE_KEY;
+  const ingestedTableName = process.env.INGESTED_DOCUMENTS_TABLE_NAME;
+  const siteAdminOrgSlug = process.env.SITE_ADMIN_ORG_SLUG;
+
+  if (!github || !publishableKey || !ingestedTableName || !siteAdminOrgSlug) {
+    return undefined;
+  }
+
+  return {
+    auth: {
+      authorizedParties: (process.env.ALLOWED_ORIGINS ?? "").split(",").map((origin) => origin.trim()).filter(Boolean),
+      publishableKey,
+    },
+    dynamodb,
+    github,
+    ingestedTableName,
+    siteAdminOrgSlug,
+  };
 }
 
 async function createContactSubmission(
@@ -83,7 +117,7 @@ async function createContactSubmission(
     );
   }
 
-  const payload = parsePayload(event);
+  const payload: ContactPayload | null = parseJsonBody(event);
 
   if (!payload) {
     return json(400, { message: "Invalid JSON body." });
@@ -208,19 +242,6 @@ function isConditionalCheckFailed(error: unknown): boolean {
   );
 }
 
-function parsePayload(event: APIGatewayProxyEventV2): ContactPayload | null {
-  if (!event.body) {
-    return null;
-  }
-
-  try {
-    const body = event.isBase64Encoded ? Buffer.from(event.body, "base64").toString("utf8") : event.body;
-    const parsed = JSON.parse(body);
-    return typeof parsed === "object" && parsed !== null ? parsed : null;
-  } catch {
-    return null;
-  }
-}
 
 function cleanText(value: unknown, maxLength: number): string {
   if (typeof value !== "string") {
@@ -228,19 +249,4 @@ function cleanText(value: unknown, maxLength: number): string {
   }
 
   return value.trim().replace(/\s+/g, " ").slice(0, maxLength);
-}
-
-function json(
-  statusCode: number,
-  body: unknown,
-  headers?: Record<string, string>,
-): APIGatewayProxyStructuredResultV2 {
-  return {
-    body: JSON.stringify(body),
-    headers: {
-      "content-type": "application/json; charset=utf-8",
-      ...headers,
-    },
-    statusCode,
-  };
 }

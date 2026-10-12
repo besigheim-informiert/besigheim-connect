@@ -114,7 +114,7 @@ The backend also creates an SES inbound mail flow:
 - Raw emails are stored in S3
 - A Lambda parses the email with Bedrock in the EU model profile
 - Parsed documents are stored in DynamoDB
-- Complete documents are committed to GitHub as individual JSON files under `src/content/<type>/`
+- Nothing from this path is published automatically: every parsed document waits as `needs_review` until a platform admin approves it in `/admin/freigabe` (see 'Vereinsverwaltung' below), which commits it as a JSON file under `src/content/<type>/`
 
 Frontend content is loaded from one JSON file per entry:
 
@@ -146,9 +146,9 @@ Mail ingestion can be configured with:
 
 - `MAIL_RECIPIENTS`: comma-separated SES recipient addresses or domains. Defaults to `daten@unser-besigheim.de`
 - `BEDROCK_MODEL_ID`: Bedrock model or inference profile. Defaults to `eu.amazon.nova-lite-v1:0`
-- `GITHUB_REPOSITORY`: owner/repo used for document commits. GitHub Actions sets this automatically
-- `GITHUB_BRANCH`: target branch for document commits. Defaults to `main`
-- `GITHUB_TOKEN_SECRET_NAME`: optional AWS Secrets Manager secret containing a GitHub token. If omitted, parsing and DynamoDB storage still run, but GitHub commits are skipped
+
+The mail ingest itself never writes to GitHub. Content commits are made by the admin API; its repository, branch and
+token parameter are set in `infra/backend/bin/backend.ts` (see 'Vereinsverwaltung' below).
 
 For SES receiving, verify the domain/address in SES and point the domain MX record at the inbound SES endpoint for `eu-central-1`.
 The deployed receipt rule set is activated by the stack.
@@ -167,7 +167,6 @@ Configure these repository settings before the first run:
 - Optional variable `VITE_CLERK_PUBLISHABLE_KEY`: overrides the production Clerk key that the deploy workflow bakes into the build. Only needed to point a deployment at a different Clerk instance
 - Optional variable `MAIL_RECIPIENTS`: comma-separated inbound email recipients for SES
 - Optional variable `BEDROCK_MODEL_ID`: EU-hosted Bedrock model or inference profile
-- Optional variable `GITHUB_TOKEN_SECRET_NAME`: AWS Secrets Manager secret name that contains a GitHub token for committing parsed documents
 
 The AWS role needs permission to deploy the CDK stack and access the CDK bootstrap resources in the account.
 In GitHub repository settings, set Pages to deploy from GitHub Actions.
@@ -190,3 +189,43 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Vereinsverwaltung (`/admin`)
+
+Vereinsadmins pflegen Vereinsdaten und Veranstaltungen selbst; jede Änderung wird
+als Commit nach `src/content/` geschrieben und durch den Deploy-Workflow veröffentlicht.
+Per E-Mail eingegangene Inhalte (KI-Extraktion) landen dagegen in einer Freigabe-Warteschlange
+und werden erst nach Prüfung durch einen Plattform-Admin veröffentlicht.
+
+### Einrichtung
+
+1. **Clerk-Dashboard**
+   - *Organizations* aktivieren. Rollen: `admin` (darf schreiben), `member` (nur lesen).
+   - *User & Authentication → Restrictions*: Sign-up-Modus **Restricted** - Konten entstehen nur per Einladung.
+   - *Organizations → Settings*: „Allow users to create organizations“ **deaktivieren**.
+   - Pro Verein eine Organization anlegen, **Slug = Verein-ID** aus `src/content/vereine/<id>.json`
+     (z. B. `spvgg-besigheim`). Die Organization `unser-besigheim` ist die Plattform-Administration und selbst kein Verein;
+     ihre Admins sehen die Freigabe. Wer zusätzlich einen Verein pflegt, wird auch in dessen Organization eingeladen.
+   - Vereinsadmins per E-Mail in ihre Organization einladen (Rolle `admin`).
+2. **GitHub**: nichts zu tun. Der Workflow nutzt den Publishable Key der Produktions-Instanz für
+   den Frontend-Build **und** das Backend-Deployment (die API prüft Tokens gegen genau diese Instanz).
+   Die optionale Repository-Variable `VITE_CLERK_PUBLISHABLE_KEY` überschreibt beide gemeinsam.
+3. **AWS**: Parameter `/besigheim-connect/github-token` im Systems Manager Parameter Store anlegen
+   (Typ `SecureString`, Standard-Tier, kostenlos) - ein Fine-grained Personal Access Token nur für
+   dieses Repository mit `Contents: Read and write`:
+   ```sh
+   aws ssm put-parameter --name /besigheim-connect/github-token --type SecureString --value '<token>'
+   ```
+   Token erneuern: denselben Befehl mit `--overwrite` ausführen.
+4. Lokal: `.env.local` mit `VITE_CLERK_PUBLISHABLE_KEY=pk_test_...` (siehe `.gitignore`).
+
+### Berechtigungen (serverseitig erzwungen)
+
+| Wer | Darf |
+| --- | --- |
+| Nicht angemeldet / ohne Organization | nichts |
+| `member` eines Vereins | eigene Vereinsdaten und Veranstaltungen ansehen |
+| `admin` eines Vereins | eigene Vereinsdaten bearbeiten, Veranstaltungen anlegen, ändern, löschen |
+| `admin` von `unser-besigheim` (Plattform) | E-Mail-Einreichungen prüfen, freigeben, ablehnen. Keine Vereinsseite: zum Bearbeiten eines Vereins in dessen Organization wechseln |
+
+Der Verein kommt immer aus dem verifizierten Clerk-Token (Org-Slug), nie aus dem Request.

@@ -343,3 +343,178 @@ export const ingestRequiredFields: Record<ContentType, readonly string[]> = {
     "adresse",
   ],
 };
+
+// ---------------------------------------------------------------------------
+// Ids, validation and normalisation - shared by the admin API (server-side
+// enforcement) and the admin forms (immediate feedback). Framework-free.
+// ---------------------------------------------------------------------------
+
+/**
+ * Fields the server derives from the caller's organisation and never accepts
+ * from a form. They are hidden in the admin forms and overwritten on save.
+ */
+export const derivedFields: Record<ContentType, readonly string[]> = {
+  verein: [],
+  veranstaltung: ["vereinId", "vereinName"],
+  engagement: ["vereinId", "vereinName"],
+  barrierefreiheit: [],
+};
+
+const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+/** Site-root path below `public/`, e.g. "/veranstaltungen/netzwerktreffen.jpg". */
+const imagePathPattern = /^\/[A-Za-z0-9/_.-]+\.(?:jpe?g|png|webp|avif|gif)$/i;
+
+/** URL-safe slug: lower-case ASCII letters, digits and single hyphens. */
+export function slugify(value: string, maxLength = 80): string {
+  return value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/ß/g, "ss")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, maxLength)
+    .replace(/-+$/g, "");
+}
+
+export function isSlug(value: unknown): value is string {
+  return typeof value === "string" && slugPattern.test(value);
+}
+
+/** True for a real calendar day in ISO form (rejects 2026-02-30). */
+export function isIsoDate(value: unknown): value is string {
+  if (typeof value !== "string" || !isoDatePattern.test(value)) return false;
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+}
+
+/**
+ * File/URL id of a published record. Events encode day, time and title (as
+ * the existing content files do) so the folder sorts chronologically; the
+ * other types use their name. Ids are assigned once and kept on edit.
+ */
+export function buildRecordId(
+  type: ContentType,
+  record: Record<string, unknown>,
+): string {
+  if (type === "veranstaltung") {
+    const datum = String(record.datum ?? "");
+    const uhrzeit = String(record.uhrzeit ?? "").replace(":", "-");
+    return `${datum}-${uhrzeit}-${slugify(String(record.titel ?? ""))}`;
+  }
+  const label = String(record.titel ?? record.name ?? "");
+  return slugify(label);
+}
+
+export type ValidationResult =
+  | { ok: true; record: Record<string, unknown> }
+  | { ok: false; errors: Record<string, string> };
+
+/**
+ * Validate and normalise form input for a content type.
+ *
+ * Returns a cleaned record containing only known fields: strings are trimmed,
+ * empty optional fields are dropped, lists are deduplicated. `derivedFields`
+ * are ignored here - the caller sets them. `id` is passed through untouched
+ * when present. Messages are German because they are shown to editors as-is.
+ */
+export function validateRecord(
+  type: ContentType,
+  input: Record<string, unknown>,
+): ValidationResult {
+  const errors: Record<string, string> = {};
+  const record: Record<string, unknown> = {};
+  const derived = derivedFields[type];
+
+  for (const field of contentFields[type]) {
+    if (derived.includes(field.name)) continue;
+    const raw = input[field.name];
+
+    if (field.kind === "list") {
+      const items = listItems(raw);
+      if (items.length === 0) {
+        if (field.required) errors[field.name] = `${field.label} muss mindestens einen Eintrag enthalten.`;
+        continue;
+      }
+      record[field.name] = items;
+      continue;
+    }
+
+    const value = typeof raw === "string" ? raw.trim() : raw == null ? "" : String(raw).trim();
+
+    if (!value) {
+      if (field.required) errors[field.name] = `${field.label} ist ein Pflichtfeld.`;
+      continue;
+    }
+
+    const problem = checkValue(field, value);
+    if (problem) {
+      errors[field.name] = problem;
+      continue;
+    }
+
+    record[field.name] = field.kind === "textarea" ? value.replace(/\r\n/g, "\n") : value;
+  }
+
+  if (
+    type === "veranstaltung" &&
+    typeof record.enddatum === "string" &&
+    typeof record.datum === "string" &&
+    record.enddatum < record.datum
+  ) {
+    errors.enddatum = "Das Enddatum darf nicht vor dem Datum liegen.";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return { errors, ok: false };
+  }
+
+  if (typeof input.id === "string" && input.id) {
+    record.id = input.id;
+  }
+
+  return { ok: true, record };
+}
+
+function checkValue(field: FieldDef, value: string): string | undefined {
+  switch (field.kind) {
+    case "date":
+      return isIsoDate(value) ? undefined : `${field.label} muss ein gültiges Datum (JJJJ-MM-TT) sein.`;
+    case "time":
+      return timePattern.test(value) ? undefined : `${field.label} muss im Format HH:MM sein.`;
+    case "email":
+      return emailPattern.test(value) ? undefined : `${field.label} ist keine gültige E-Mail-Adresse.`;
+    case "url":
+      return /^https?:\/\/\S+$/i.test(value)
+        ? undefined
+        : `${field.label} muss mit http:// oder https:// beginnen.`;
+    case "image":
+      return imagePathPattern.test(value) && !value.includes("..")
+        ? undefined
+        : `${field.label} muss ein Pfad zu einer Bilddatei sein, zum Beispiel /veranstaltungen/bild.jpg.`;
+    case "select":
+      return field.options?.includes(value)
+        ? undefined
+        : `${field.label} muss einer der vorgegebenen Werte sein.`;
+    default:
+      return value.length > 5000 ? `${field.label} ist zu lang.` : undefined;
+  }
+}
+
+/** Accepts an array of strings or a newline/comma separated string. */
+function listItems(raw: unknown): string[] {
+  const parts = Array.isArray(raw)
+    ? raw.map((item) => (typeof item === "string" ? item : String(item ?? "")))
+    : typeof raw === "string"
+      ? raw.split(/\r?\n|,/)
+      : [];
+  return [...new Set(parts.map((item) => item.trim()).filter(Boolean))];
+}

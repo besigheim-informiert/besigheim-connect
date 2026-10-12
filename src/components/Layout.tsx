@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { Show, SignInButton, UserButton } from "@clerk/react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
@@ -52,18 +51,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 );
               })}
             </nav>
-            <div className="hidden md:flex items-center gap-2 pl-2">
-              <Show when="signed-out">
-                <SignInButton mode="modal">
-                  <Button variant="outline" size="sm">
-                    Anmelden
-                  </Button>
-                </SignInButton>
-              </Show>
-              <Show when="signed-in">
-                <UserButton />
-              </Show>
-            </div>
             <Button
               variant="ghost"
               size="icon"
@@ -91,22 +78,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 {item.label}
               </Link>
             ))}
-            <div className="flex items-center gap-3 px-6 py-4">
-              <Show when="signed-out">
-                <SignInButton mode="modal">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Anmelden
-                  </Button>
-                </SignInButton>
-              </Show>
-              <Show when="signed-in">
-                <UserButton />
-              </Show>
-            </div>
           </nav>
         )}
       </header>
@@ -141,6 +112,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <li><Link to="/impressum" className="text-muted-foreground hover:text-primary transition-colors">Impressum</Link></li>
               <li><Link to="/datenschutz" className="text-muted-foreground hover:text-primary transition-colors">Datenschutz</Link></li>
               <li><Link to="/kontakt" className="text-muted-foreground hover:text-primary transition-colors">Kontakt</Link></li>
+              <li><Link to="/admin" className="text-muted-foreground hover:text-primary transition-colors">Vereinsverwaltung</Link></li>
             </ul>
           </div>
         </div>

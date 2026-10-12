@@ -16,6 +16,12 @@ import Kontakt from "./pages/Kontakt";
 import Impressum from "./pages/Impressum";
 import Datenschutz from "./pages/Datenschutz";
 import NotFound from "./pages/NotFound";
+import AdminUebersicht from "./pages/admin/AdminUebersicht";
+import AdminVerein from "./pages/admin/AdminVerein";
+import AdminVeranstaltungen from "./pages/admin/AdminVeranstaltungen";
+import AdminVeranstaltungFormular from "./pages/admin/AdminVeranstaltungFormular";
+import AdminFreigabe from "./pages/admin/AdminFreigabe";
+import AdminFreigabeDetail from "./pages/admin/AdminFreigabeDetail";
 
 const queryClient = new QueryClient();
 const routerBasename = import.meta.env.BASE_URL === "/" ? undefined : import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -39,6 +45,13 @@ const App = () => (
           <Route path="/kontakt" element={<Kontakt />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />
+          <Route path="/admin" element={<AdminUebersicht />} />
+          <Route path="/admin/verein" element={<AdminVerein />} />
+          <Route path="/admin/veranstaltungen" element={<AdminVeranstaltungen />} />
+          <Route path="/admin/veranstaltungen/neu" element={<AdminVeranstaltungFormular />} />
+          <Route path="/admin/veranstaltungen/:id" element={<AdminVeranstaltungFormular />} />
+          <Route path="/admin/freigabe" element={<AdminFreigabe />} />
+          <Route path="/admin/freigabe/:id" element={<AdminFreigabeDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
