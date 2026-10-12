@@ -39,6 +39,33 @@ const githubPagesIpv6Addresses = [
   "2606:50c0:8002::153",
   "2606:50c0:8003::153",
 ];
+const clerkCnameRecords = [
+  {
+    domainName: "accounts.clerk.services",
+    id: "ClerkAccountsCnameRecord",
+    recordName: "accounts",
+  },
+  {
+    domainName: "frontend-api.clerk.services",
+    id: "ClerkFrontendApiCnameRecord",
+    recordName: "clerk",
+  },
+  {
+    domainName: "dkim1.1wz3n23gfdz9.clerk.services",
+    id: "ClerkDkim1CnameRecord",
+    recordName: "clk._domainkey",
+  },
+  {
+    domainName: "dkim2.1wz3n23gfdz9.clerk.services",
+    id: "ClerkDkim2CnameRecord",
+    recordName: "clk2._domainkey",
+  },
+  {
+    domainName: "mail.1wz3n23gfdz9.clerk.services",
+    id: "ClerkMailCnameRecord",
+    recordName: "clkmail",
+  },
+];
 
 export type BackendStackProps = StackProps & {
   allowedOrigins: string[];
@@ -93,6 +120,15 @@ export class BackendStack extends Stack {
       values: ["186996d9d506c0777438d7374bdab4"],
       zone: hostedZone,
     });
+
+    for (const record of clerkCnameRecords) {
+      new route53.CnameRecord(this, record.id, {
+        domainName: record.domainName,
+        recordName: record.recordName,
+        ttl: Duration.minutes(5),
+        zone: hostedZone,
+      });
+    }
 
     const submissionsTable = new dynamodb.Table(
       this,
@@ -281,7 +317,7 @@ export class BackendStack extends Stack {
     const httpApi = new apigatewayv2.HttpApi(this, "HttpApi", {
       createDefaultStage: false,
       corsPreflight: {
-        allowHeaders: ["content-type"],
+        allowHeaders: ["authorization", "content-type"],
         allowMethods: [
           apigatewayv2.CorsHttpMethod.GET,
           apigatewayv2.CorsHttpMethod.OPTIONS,

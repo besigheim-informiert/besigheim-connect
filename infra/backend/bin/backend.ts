@@ -13,6 +13,7 @@ const config = {
     "https://unser-besigheim.de",
     "https://www.unser-besigheim.de",
     "https://localhost:4403",
+    "http://localhost:8080",
   ],
   githubPagesDnsTarget: "besigheim-informiert.github.io",
   mailRecipients: ["tanja.bayer@cubesoft.org"],
