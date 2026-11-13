@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import VeranstaltungDetail from "@/pages/VeranstaltungDetail";
@@ -14,6 +14,17 @@ function renderRoute(pfad: string, element: React.ReactElement, pattern: string)
     </MemoryRouter>
   );
 }
+
+// The pages decide what is "upcoming" (and which month the calendar opens on) from
+// today's date. Pin the clock so the tests do not break as the sample events pass.
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-09-01T10:00:00"));
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 describe("Veranstaltungs-Detailseite", () => {
   it("zeigt Titel, Datum, Uhrzeit und Ort", () => {
