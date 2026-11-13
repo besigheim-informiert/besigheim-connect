@@ -192,7 +192,7 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/c
 
 ## Vereinsverwaltung (`/admin`)
 
-Vereinsadmins pflegen Vereinsdaten und Veranstaltungen selbst; jede Änderung wird
+Vereinsadmins pflegen Vereinsdaten, Veranstaltungen und Engagement-Angebote selbst; jede Änderung wird
 als Commit nach `src/content/` geschrieben und durch den Deploy-Workflow veröffentlicht.
 Per E-Mail eingegangene Inhalte (KI-Extraktion) landen dagegen in einer Freigabe-Warteschlange
 und werden erst nach Prüfung durch einen Plattform-Admin veröffentlicht.
@@ -224,8 +224,8 @@ und werden erst nach Prüfung durch einen Plattform-Admin veröffentlicht.
 | Wer | Darf |
 | --- | --- |
 | Nicht angemeldet / ohne Organization | nichts |
-| `member` eines Vereins | eigene Vereinsdaten und Veranstaltungen ansehen |
-| `admin` eines Vereins | eigene Vereinsdaten bearbeiten, Veranstaltungen anlegen, ändern, löschen |
+| `member` eines Vereins | eigene Vereinsdaten, Veranstaltungen und Engagement-Angebote ansehen |
+| `admin` eines Vereins | eigene Vereinsdaten bearbeiten, Veranstaltungen und Engagement-Angebote anlegen, ändern, löschen |
 | `admin` von `unser-besigheim` (Plattform) | E-Mail-Einreichungen prüfen, freigeben, ablehnen. Keine Vereinsseite: zum Bearbeiten eines Vereins in dessen Organization wechseln |
 
 Der Verein kommt immer aus dem verifizierten Clerk-Token (Org-Slug), nie aus dem Request.

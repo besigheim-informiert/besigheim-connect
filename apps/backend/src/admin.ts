@@ -130,15 +130,16 @@ async function route(
     if (method === "PUT") return putVerein(event, principal, deps);
   }
 
-  if (resource === "veranstaltungen") {
+  const clubType = clubResources[resource];
+  if (clubType) {
     if (segments.length === 1) {
-      if (method === "GET") return listVeranstaltungen(principal, deps);
-      if (method === "POST") return createVeranstaltung(event, principal, deps);
+      if (method === "GET") return listClubRecords(clubType, principal, deps);
+      if (method === "POST") return createClubRecord(clubType, event, principal, deps);
     }
     if (segments.length === 2 && isSlug(id)) {
-      if (method === "GET") return getVeranstaltung(id, principal, deps);
-      if (method === "PUT") return updateVeranstaltung(id, event, principal, deps);
-      if (method === "DELETE") return deleteVeranstaltung(id, principal, deps);
+      if (method === "GET") return getClubRecord(clubType, id, principal, deps);
+      if (method === "PUT") return updateClubRecord(clubType, id, event, principal, deps);
+      if (method === "DELETE") return deleteClubRecord(clubType, id, principal, deps);
     }
   }
 
@@ -193,61 +194,89 @@ async function putVerein(
 }
 
 // ---------------------------------------------------------------------------
-// Veranstaltungen
+// Club-owned records: Veranstaltungen and Engagement-Angebote
 // ---------------------------------------------------------------------------
 
-async function listVeranstaltungen(principal: Principal, deps: AdminDeps): Promise<HttpResult> {
+/** Content types a club maintains itself, keyed by their API resource name. */
+const clubResources: Record<string, ClubContentType | undefined> = {
+  engagement: "engagement",
+  veranstaltungen: "veranstaltung",
+};
+
+type ClubContentType = "veranstaltung" | "engagement";
+
+const notFoundMessage: Record<ClubContentType, string> = {
+  engagement: "Engagement-Angebot nicht gefunden.",
+  veranstaltung: "Veranstaltung nicht gefunden.",
+};
+
+/** Newest events first; engagement offers alphabetically. */
+function compareClubRecords(type: ClubContentType) {
+  return (a: Record<string, unknown>, b: Record<string, unknown>) =>
+    type === "veranstaltung"
+      ? eventSortKey(b).localeCompare(eventSortKey(a))
+      : String(a.titel ?? "").localeCompare(String(b.titel ?? ""), "de");
+}
+
+async function listClubRecords(
+  type: ClubContentType,
+  principal: Principal,
+  deps: AdminDeps,
+): Promise<HttpResult> {
   const vereinId = requireVerein(principal);
-  const files = await listRecords(deps.github, "veranstaltung");
+  const files = await listRecords(deps.github, type);
   const records = files
     .map((file) => file.record)
     .filter((record) => record.vereinId === vereinId)
-    .sort((a, b) => eventSortKey(b).localeCompare(eventSortKey(a)));
+    .sort(compareClubRecords(type));
   return json(200, records);
 }
 
-async function getVeranstaltung(
+async function getClubRecord(
+  type: ClubContentType,
   id: string,
   principal: Principal,
   deps: AdminDeps,
 ): Promise<HttpResult> {
-  const file = await ownedVeranstaltung(id, principal, deps);
+  const file = await ownedRecord(type, id, principal, deps);
   return json(200, file.record);
 }
 
-async function createVeranstaltung(
+async function createClubRecord(
+  type: ClubContentType,
   event: APIGatewayProxyEventV2,
   principal: Principal,
   deps: AdminDeps,
 ): Promise<HttpResult> {
   const vereinId = requireVerein(principal);
   requireEditor(principal);
-  const record = validateBody("veranstaltung", event);
+  const record = validateBody(type, event);
   const verein = await requireVereinRecord(vereinId, deps);
   record.vereinId = vereinId;
   record.vereinName = verein.name;
   delete record.id;
 
-  const id = await uniqueId("veranstaltung", record, deps);
+  const id = await uniqueId(type, record, deps);
   record.id = id;
   const result = await writeRecord(deps.github, {
     id,
-    message: commitMessage("veranstaltung", "angelegt", id, principal),
-    record: orderKeys(record, "veranstaltung"),
-    type: "veranstaltung",
+    message: commitMessage(type, "angelegt", id, principal),
+    record: orderKeys(record, type),
+    type,
   });
   return json(201, { ...record, _commit: result.commitSha });
 }
 
-async function updateVeranstaltung(
+async function updateClubRecord(
+  type: ClubContentType,
   id: string,
   event: APIGatewayProxyEventV2,
   principal: Principal,
   deps: AdminDeps,
 ): Promise<HttpResult> {
   requireEditor(principal);
-  const existing = await ownedVeranstaltung(id, principal, deps);
-  const record = validateBody("veranstaltung", event);
+  const existing = await ownedRecord(type, id, principal, deps);
+  const record = validateBody(type, event);
   const verein = await readRecord(deps.github, "verein", principal.vereinId as string);
   record.id = id;
   record.vereinId = existing.record.vereinId;
@@ -255,40 +284,42 @@ async function updateVeranstaltung(
 
   const result = await writeRecord(deps.github, {
     id,
-    message: commitMessage("veranstaltung", "aktualisiert", id, principal),
-    record: orderKeys(record, "veranstaltung"),
+    message: commitMessage(type, "aktualisiert", id, principal),
+    record: orderKeys(record, type),
     sha: existing.sha,
-    type: "veranstaltung",
+    type,
   });
   return json(200, { ...record, _commit: result.commitSha });
 }
 
-async function deleteVeranstaltung(
+async function deleteClubRecord(
+  type: ClubContentType,
   id: string,
   principal: Principal,
   deps: AdminDeps,
 ): Promise<HttpResult> {
   requireEditor(principal);
-  const existing = await ownedVeranstaltung(id, principal, deps);
+  const existing = await ownedRecord(type, id, principal, deps);
   await deleteRecord(deps.github, {
     id,
-    message: commitMessage("veranstaltung", "gelöscht", id, principal),
+    message: commitMessage(type, "gelöscht", id, principal),
     sha: existing.sha,
-    type: "veranstaltung",
+    type,
   });
   return json(200, { id });
 }
 
-/** The event file, provided it belongs to the caller's club - otherwise 404 (never leak other clubs' ids). */
-async function ownedVeranstaltung(
+/** The record file, provided it belongs to the caller's club - otherwise 404 (never leak other clubs' ids). */
+async function ownedRecord(
+  type: ClubContentType,
   id: string,
   principal: Principal,
   deps: AdminDeps,
 ): Promise<ContentFile> {
   const vereinId = requireVerein(principal);
-  const file = await readRecord(deps.github, "veranstaltung", id);
+  const file = await readRecord(deps.github, type, id);
   if (!file || file.record.vereinId !== vereinId) {
-    throw new HttpError(404, "Veranstaltung nicht gefunden.");
+    throw new HttpError(404, notFoundMessage[type]);
   }
   return file;
 }

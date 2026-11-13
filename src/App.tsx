@@ -20,6 +20,8 @@ import AdminUebersicht from "./pages/admin/AdminUebersicht";
 import AdminVerein from "./pages/admin/AdminVerein";
 import AdminVeranstaltungen from "./pages/admin/AdminVeranstaltungen";
 import AdminVeranstaltungFormular from "./pages/admin/AdminVeranstaltungFormular";
+import AdminEngagement from "./pages/admin/AdminEngagement";
+import AdminEngagementFormular from "./pages/admin/AdminEngagementFormular";
 import AdminFreigabe from "./pages/admin/AdminFreigabe";
 import AdminFreigabeDetail from "./pages/admin/AdminFreigabeDetail";
 
@@ -50,6 +52,9 @@ const App = () => (
           <Route path="/admin/veranstaltungen" element={<AdminVeranstaltungen />} />
           <Route path="/admin/veranstaltungen/neu" element={<AdminVeranstaltungFormular />} />
           <Route path="/admin/veranstaltungen/:id" element={<AdminVeranstaltungFormular />} />
+          <Route path="/admin/engagement" element={<AdminEngagement />} />
+          <Route path="/admin/engagement/neu" element={<AdminEngagementFormular />} />
+          <Route path="/admin/engagement/:id" element={<AdminEngagementFormular />} />
           <Route path="/admin/freigabe" element={<AdminFreigabe />} />
           <Route path="/admin/freigabe/:id" element={<AdminFreigabeDetail />} />
           <Route path="*" element={<NotFound />} />

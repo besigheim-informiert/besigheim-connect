@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { CalendarPlus, ClipboardCheck, Pencil } from "lucide-react";
+import { CalendarPlus, ClipboardCheck, HandHeart, Pencil } from "lucide-react";
 import AdminShell from "@/components/admin/AdminShell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  useEngagementAngebote,
   useFreigabeListe,
   useMe,
   useVeranstaltungen,
@@ -24,6 +25,7 @@ function Inhalt() {
   const istVerein = Boolean(me.data && !me.data.istPlattformOrg);
   const verein = useVerein(istVerein);
   const veranstaltungen = useVeranstaltungen(istVerein);
+  const engagement = useEngagementAngebote(istVerein);
   const freigabe = useFreigabeListe(Boolean(me.data?.istPlattformAdmin));
   const kommende = (veranstaltungen.data ?? []).filter((e) => istKommend(e));
 
@@ -99,6 +101,39 @@ function Inhalt() {
                 </Button>
                 <Button asChild variant="outline" size="sm">
                   <Link to="/admin/veranstaltungen">Alle anzeigen</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-5 space-y-3">
+              <h2 className="font-semibold text-foreground">Engagement</h2>
+              {engagement.isLoading && (
+                <p className="text-sm text-muted-foreground">Wird geladen …</p>
+              )}
+              {engagement.isError && (
+                <p className="text-sm text-destructive">
+                  {engagement.error.message}
+                </p>
+              )}
+              {engagement.data && (
+                <p className="text-sm text-muted-foreground">
+                  {engagement.data.length === 1
+                    ? "1 Angebot auf der Seite Mitmachen."
+                    : `${engagement.data.length} Angebote auf der Seite Mitmachen.`}
+                </p>
+              )}
+              <div className="flex flex-wrap gap-2">
+                {me.data.kannBearbeiten && (
+                  <Button asChild size="sm">
+                    <Link to="/admin/engagement/neu">
+                      <HandHeart className="h-4 w-4" /> Neues Angebot
+                    </Link>
+                  </Button>
+                )}
+                <Button asChild variant="outline" size="sm">
+                  <Link to="/admin/engagement">Alle anzeigen</Link>
                 </Button>
               </div>
             </CardContent>

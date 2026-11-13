@@ -96,6 +96,7 @@ function SignedInShell({ title, children }: { title: string; children: React.Rea
     : [
         { label: "Vereinsdaten", path: "/admin/verein" },
         { label: "Veranstaltungen", path: "/admin/veranstaltungen" },
+        { label: "Engagement", path: "/admin/engagement" },
       ];
   const tabs = [
     { label: "Übersicht", path: "/admin" },
