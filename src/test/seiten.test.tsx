@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import VeranstaltungDetail from "@/pages/VeranstaltungDetail";
@@ -44,7 +44,16 @@ describe("Veranstaltungs-Detailseite", () => {
   });
 });
 
+/** Pin "today" so tests about upcoming vs. past events don't drift with the real date. */
+function heuteIst(iso: string) {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date(`${iso}T12:00:00`));
+}
+
 describe("Veranstaltungskalender", () => {
+  beforeEach(() => heuteIst("2026-09-01"));
+  afterEach(() => vi.useRealTimers());
+
   it("verlinkt jeden Termin auf seine eigene Seite", () => {
     renderRoute("/veranstaltungen", <Veranstaltungen />, "/veranstaltungen");
 
@@ -83,6 +92,18 @@ describe("Veranstaltungskalender", () => {
     expect(screen.queryByRole("link", { name: "Stricken und Häkeln" })).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Alle Termine zeigen" }));
+    expect(screen.getByRole("link", { name: "Stricken und Häkeln" })).toBeInTheDocument();
+  });
+
+  it("blendet vergangene Termine in der Gesamtliste aus, zeigt sie aber am gewählten Tag", () => {
+    heuteIst("2026-10-10");
+    renderRoute("/veranstaltungen", <Veranstaltungen />, "/veranstaltungen");
+
+    // 07.10.2026 ist vorbei - nicht in "Alle", aber weiterhin im Kalender anklickbar.
+    expect(screen.queryByRole("link", { name: "Stricken und Häkeln" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Großes Vereins- und Netzwerktreffen" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("gridcell", { name: "7" }));
     expect(screen.getByRole("link", { name: "Stricken und Häkeln" })).toBeInTheDocument();
   });
 });
