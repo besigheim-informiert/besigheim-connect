@@ -8,7 +8,7 @@ import Layout from "@/components/Layout";
 import VeranstaltungsKalender from "@/components/VeranstaltungsKalender";
 import VeranstaltungsBild, { bildFormat } from "@/components/VeranstaltungsBild";
 import { kategorien, veranstaltungen } from "@/data/veranstaltungen";
-import { datumLabel, laeuftAm, monatLang, tagLabel } from "@/lib/veranstaltung";
+import { datumLabel, istKommend, laeuftAm, monatLang, tagLabel } from "@/lib/veranstaltung";
 import { cn } from "@/lib/utils";
 
 export default function Veranstaltungen() {
@@ -26,8 +26,13 @@ export default function Veranstaltungen() {
     [sortiert, activeKat]
   );
 
+  // Past events stay in the calendar but drop out of the full list: they only
+  // show up once someone picks their day.
   const filtered = useMemo(
-    () => (activeTag ? nachKategorie.filter((e) => laeuftAm(e, activeTag)) : nachKategorie),
+    () =>
+      activeTag
+        ? nachKategorie.filter((e) => laeuftAm(e, activeTag))
+        : nachKategorie.filter((e) => istKommend(e)),
     [nachKategorie, activeTag]
   );
 
