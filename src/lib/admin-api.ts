@@ -8,7 +8,7 @@
 import { useAuth } from "@clerk/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
-import type { ContentType, Veranstaltung, Verein } from "@/shared/content-schema";
+import type { ContentType, EngagementAngebot, Veranstaltung, Verein } from "@/shared/content-schema";
 import { apiBaseUrl } from "@/lib/backend";
 
 export class ApiError extends Error {
@@ -156,6 +156,45 @@ export function useDeleteVeranstaltung() {
   return useMutation({
     mutationFn: (id: string) => request<{ id: string }>("DELETE", `/veranstaltungen/${id}`),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "veranstaltungen"] }),
+  });
+}
+
+export function useEngagementAngebote(enabled = true) {
+  const request = useAdminRequest();
+  return useQuery({
+    enabled,
+    queryFn: () => request<EngagementAngebot[]>("GET", "/engagement"),
+    queryKey: ["admin", "engagement"],
+  });
+}
+
+export function useEngagementAngebot(id: string | undefined) {
+  const request = useAdminRequest();
+  return useQuery({
+    enabled: Boolean(id),
+    queryFn: () => request<EngagementAngebot>("GET", `/engagement/${id}`),
+    queryKey: ["admin", "engagement", id],
+  });
+}
+
+export function useSaveEngagementAngebot(id: string | undefined) {
+  const request = useAdminRequest();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (values: Record<string, unknown>) =>
+      id
+        ? request<EngagementAngebot>("PUT", `/engagement/${id}`, values)
+        : request<EngagementAngebot>("POST", "/engagement", values),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "engagement"] }),
+  });
+}
+
+export function useDeleteEngagementAngebot() {
+  const request = useAdminRequest();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => request<{ id: string }>("DELETE", `/engagement/${id}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "engagement"] }),
   });
 }
 
