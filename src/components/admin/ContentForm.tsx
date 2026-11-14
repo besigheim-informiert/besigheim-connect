@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { FieldDef } from "@/shared/content-schema";
+import BildFeld from "./BildFeld";
 
 /** Form state: every field as a string; list fields hold one entry per line. */
 export type FormValues = Record<string, string>;
@@ -26,9 +27,14 @@ type Props = {
   /** Datalist suggestions for free-text fields, e.g. known categories. */
   suggestions?: Record<string, readonly string[]>;
   disabled?: boolean;
+  /**
+   * Uploads a picture and resolves to its public URL. When set, `image`
+   * fields get an upload control; otherwise they stay a plain path input.
+   */
+  uploadImage?: (bild: { dateiname: string; daten: string }) => Promise<string>;
 };
 
-export default function ContentForm({ fields, values, errors, onChange, hidden = [], suggestions = {}, disabled }: Props) {
+export default function ContentForm({ fields, values, errors, onChange, hidden = [], suggestions = {}, disabled, uploadImage }: Props) {
   return (
     <div className="grid gap-5">
       {fields
@@ -70,6 +76,27 @@ export default function ContentForm({ fields, values, errors, onChange, hidden =
                 )}
                 {errorText}
               </div>
+            );
+          }
+
+          if (field.kind === "image" && uploadImage) {
+            return (
+              <BildFeld
+                key={field.name}
+                id={id}
+                label={
+                  <>
+                    {field.label}
+                    {field.required && <span className="text-destructive"> *</span>}
+                  </>
+                }
+                value={values[field.name] ?? ""}
+                onChange={(pfad) => onChange(field.name, pfad)}
+                upload={uploadImage}
+                error={error}
+                disabled={disabled}
+                fehlenderAltText={field.name === "bild" && "bildAlt" in values && !values.bildAlt?.trim()}
+              />
             );
           }
 
