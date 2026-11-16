@@ -33,6 +33,7 @@ import {
   type AuthContext,
 } from "./auth";
 import {
+  GithubTokenError,
   deleteRecord,
   listRecords,
   readRecord,
@@ -84,6 +85,14 @@ export async function handleAdminRequest(
     }
     if (error instanceof HttpError) {
       return json(error.statusCode, { details: error.details, message: error.message });
+    }
+    if (error instanceof GithubTokenError) {
+      // Setup problem: logged in English for operators, explained in German to editors.
+      console.error(`GitHub token ${error.reason}: ${error.message}`);
+      return json(503, {
+        message:
+          "Die Vereinsverwaltung ist gerade nicht erreichbar, weil die Verbindung zur Veröffentlichung nicht eingerichtet ist. Bitte wenden Sie sich an die Plattform-Administration.",
+      });
     }
     console.error("Admin request failed", error);
     return json(500, { message: "Die Anfrage konnte nicht verarbeitet werden." });

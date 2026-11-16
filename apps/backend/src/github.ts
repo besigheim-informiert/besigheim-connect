@@ -160,9 +160,24 @@ function parseBlob(base64: string): Record<string, unknown> {
   return typeof parsed === "object" && parsed !== null ? parsed : {};
 }
 
+/**
+ * The GitHub token is missing from Parameter Store or GitHub rejects it
+ * (expired, revoked, wrong). A setup problem, not a bug: the admin API answers
+ * 503 with a hint instead of a generic 500.
+ */
+export class GithubTokenError extends Error {
+  constructor(
+    readonly reason: "missing" | "rejected",
+    message: string,
+  ) {
+    super(message);
+    this.name = "GithubTokenError";
+  }
+}
+
 async function request(config: GithubConfig, endpoint: string, init?: RequestInit) {
   const token = await loadToken(config.tokenParameterName);
-  return fetch(`https://api.github.com/repos/${config.repo}/${endpoint}`, {
+  const response = await fetch(`https://api.github.com/repos/${config.repo}/${endpoint}`, {
     ...init,
     headers: {
       accept: "application/vnd.github+json",
@@ -173,6 +188,15 @@ async function request(config: GithubConfig, endpoint: string, init?: RequestIni
       ...init?.headers,
     },
   });
+  if (response.status === 401) {
+    // Forget the token so a renewed one is read on the next request, not only after a cold start.
+    cachedToken = undefined;
+    throw new GithubTokenError(
+      "rejected",
+      `GitHub rejected the token from ${config.tokenParameterName} (expired, revoked or wrong)`,
+    );
+  }
+  return response;
 }
 
 async function assertOk(response: Response, action: string) {
@@ -184,18 +208,27 @@ async function assertOk(response: Response, action: string) {
 /**
  * The token lives in SSM Parameter Store as a SecureString (standard tier, no
  * monthly charge). Cached for the Lambda's lifetime; a rotated token is picked
- * up with the next cold start.
+ * up with the next cold start, or right away once GitHub rejects the old one.
+ * A missing parameter is not cached, so creating it takes effect immediately.
  */
 async function loadToken(parameterName: string): Promise<string> {
   if (cachedToken?.name === parameterName) return cachedToken.value;
 
-  const response = await ssm.send(
-    new GetParameterCommand({ Name: parameterName, WithDecryption: true }),
-  );
-  const value = response.Parameter?.Value?.trim() ?? "";
+  let value = "";
+  try {
+    const response = await ssm.send(
+      new GetParameterCommand({ Name: parameterName, WithDecryption: true }),
+    );
+    value = response.Parameter?.Value?.trim() ?? "";
+  } catch (error) {
+    if ((error as { name?: string }).name === "ParameterNotFound") {
+      throw new GithubTokenError("missing", `GitHub token parameter ${parameterName} does not exist`);
+    }
+    throw error;
+  }
 
   if (!value) {
-    throw new Error(`GitHub token parameter ${parameterName} is empty`);
+    throw new GithubTokenError("missing", `GitHub token parameter ${parameterName} is empty`);
   }
   cachedToken = { name: parameterName, value };
   return value;
