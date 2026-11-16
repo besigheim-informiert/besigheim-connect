@@ -5,6 +5,7 @@ import { DynamoDBDocumentClient, PutCommand, UpdateCommand } from "@aws-sdk/lib-
 import { handleAdminRequest, type AdminDeps } from "./admin";
 import { githubConfigFromEnv } from "./github";
 import { json, parseJsonBody } from "./http";
+import { s3ImageStoreFromEnv } from "./images";
 
 const dynamodb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -77,6 +78,7 @@ function adminDepsFromEnv(): AdminDeps | undefined {
     },
     dynamodb,
     github,
+    images: s3ImageStoreFromEnv(),
     ingestedTableName,
     siteAdminOrgSlug,
   };

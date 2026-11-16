@@ -41,11 +41,14 @@ import {
   type GithubConfig,
 } from "./github";
 import { json, parseJsonBody, type HttpResult } from "./http";
+import { decodeBase64, detectImageType, imageKey, imageUrl, maxImageBytes, type ImageStore } from "./images";
 
 export type AdminDeps = {
   auth: AuthConfig;
   dynamodb: DynamoDBDocumentClient;
   github: GithubConfig;
+  /** Picture storage; uploads answer 503 when it is not configured. */
+  images?: ImageStore;
   ingestedTableName: string;
   siteAdminOrgSlug: string;
 };
@@ -128,6 +131,10 @@ async function route(
   if (resource === "verein" && segments.length === 1) {
     if (method === "GET") return getVerein(principal, deps);
     if (method === "PUT") return putVerein(event, principal, deps);
+  }
+
+  if (resource === "bilder" && segments.length === 1 && method === "POST") {
+    return uploadBild(event, principal, deps);
   }
 
   const clubType = clubResources[resource];
@@ -322,6 +329,49 @@ async function ownedRecord(
     throw new HttpError(404, notFoundMessage[type]);
   }
   return file;
+}
+
+// ---------------------------------------------------------------------------
+// Bilder (event pictures)
+// ---------------------------------------------------------------------------
+
+/**
+ * Store an uploaded picture in S3 and return its public URL for the `bild`
+ * field. Body: `{ dateiname, daten }` with `daten` as base64 (a data-URL prefix
+ * is accepted). The picture is online immediately; nothing is committed.
+ */
+async function uploadBild(
+  event: APIGatewayProxyEventV2,
+  principal: Principal,
+  deps: AdminDeps,
+): Promise<HttpResult> {
+  const vereinId = requireVerein(principal);
+  requireEditor(principal);
+  if (!deps.images) {
+    throw new HttpError(503, "Das Hochladen von Bildern ist in dieser Umgebung nicht eingerichtet.");
+  }
+  const body = parseJsonBody(event);
+  const daten = typeof body?.daten === "string" ? decodeBase64(body.daten) : undefined;
+  if (!daten) {
+    throw new HttpError(400, "Die Bilddatei konnte nicht gelesen werden.");
+  }
+  if (daten.length > maxImageBytes) {
+    throw new HttpError(413, "Das Bild ist zu groß. Erlaubt sind höchstens 3 MB.");
+  }
+  const type = detectImageType(daten);
+  if (!type) {
+    throw new HttpError(415, "Bitte laden Sie ein Bild im Format JPEG, PNG, WebP oder AVIF hoch.");
+  }
+
+  const dateiname = typeof body?.dateiname === "string" ? body.dateiname : "bild";
+  const key = imageKey(vereinId, dateiname, type);
+  await deps.images.put({
+    body: daten,
+    contentType: type.mimeType,
+    key,
+    metadata: { "uploaded-by": principal.userId, verein: vereinId },
+  });
+  return json(201, { pfad: imageUrl(key) });
 }
 
 // ---------------------------------------------------------------------------

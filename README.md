@@ -108,6 +108,12 @@ The stack creates an HTTP API with:
 - `POST /contact`
 
 Contact submissions are stored in DynamoDB with a 180-day TTL.
+
+Event pictures uploaded in `/admin` are stored in a private S3 bucket and served through CloudFront on
+`https://bilder.unser-besigheim.de` (certificate in `us-east-1`, created from this stack). An upload is online
+immediately and is not committed to the repository; only the event that references it is. Keys carry a random
+suffix and are never overwritten, so they are cached as immutable. Older pictures below `public/` keep working.
+`bildBaseUrl` in `src/shared/content-schema.ts` must match the `bilder.<baseDomain>` host of the stack.
 The backend also creates an SES inbound mail flow:
 
 - SES receipt rule receives configured mail recipients
@@ -225,7 +231,7 @@ und werden erst nach Prüfung durch einen Plattform-Admin veröffentlicht.
 | --- | --- |
 | Nicht angemeldet / ohne Organization | nichts |
 | `member` eines Vereins | eigene Vereinsdaten, Veranstaltungen und Engagement-Angebote ansehen |
-| `admin` eines Vereins | eigene Vereinsdaten bearbeiten, Veranstaltungen und Engagement-Angebote anlegen, ändern, löschen |
+| `admin` eines Vereins | eigene Vereinsdaten bearbeiten, Veranstaltungen und Engagement-Angebote anlegen, ändern, löschen, Veranstaltungsbilder hochladen (liegen in S3, sofort unter `bilder.unser-besigheim.de` erreichbar) |
 | `admin` von `unser-besigheim` (Plattform) | E-Mail-Einreichungen prüfen, freigeben, ablehnen. Keine Vereinsseite: zum Bearbeiten eines Vereins in dessen Organization wechseln |
 
 Der Verein kommt immer aus dem verifizierten Clerk-Token (Org-Slug), nie aus dem Request.

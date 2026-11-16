@@ -6,7 +6,7 @@ import ContentForm, { toFormValues, type FormValues } from "@/components/admin/C
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { veranstaltungen as veroeffentlichte } from "@/data/veranstaltungen";
-import { ApiError, useMe, useSaveVeranstaltung, useVeranstaltung } from "@/lib/admin-api";
+import { ApiError, useMe, useSaveVeranstaltung, useUploadBild, useVeranstaltung } from "@/lib/admin-api";
 import { contentFields, derivedFields, validateRecord } from "@/shared/content-schema";
 
 const fields = contentFields.veranstaltung;
@@ -26,6 +26,7 @@ function Formular({ id }: { id: string | undefined }) {
   const me = useMe();
   const bestehende = useVeranstaltung(id);
   const speichern = useSaveVeranstaltung(id);
+  const uploadBild = useUploadBild();
   const [values, setValues] = useState<FormValues>(() => toFormValues(undefined, fields));
   const [errors, setErrors] = useState<Record<string, string>>({});
   const kategorien = useMemo(
@@ -82,6 +83,7 @@ function Formular({ id }: { id: string | undefined }) {
         errors={errors}
         disabled={readOnly || speichern.isPending}
         suggestions={{ kategorie: kategorien }}
+        uploadImage={uploadBild}
         onChange={(name, value) => setValues((current) => ({ ...current, [name]: value }))}
       />
       {!readOnly && (

@@ -9,6 +9,8 @@ import {
   type StackProps,
   aws_apigatewayv2 as apigatewayv2,
   aws_certificatemanager as acm,
+  aws_cloudfront as cloudfront,
+  aws_cloudfront_origins as origins,
   aws_apigatewayv2_integrations as integrations,
   aws_dynamodb as dynamodb,
   aws_iam as iam,
@@ -23,7 +25,7 @@ import {
   custom_resources as customResources,
 } from "aws-cdk-lib";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
-import { ApiGatewayv2DomainProperties } from "aws-cdk-lib/aws-route53-targets";
+import { ApiGatewayv2DomainProperties, CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { Construct } from "constructs";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -93,6 +95,8 @@ export class BackendStack extends Stack {
     super(scope, id, props);
 
     const apiDomainName = `api.${props.baseDomain}`;
+    // Must match `bildBaseUrl` in src/shared/content-schema.ts - stored `bild` URLs are validated against it.
+    const imageDomainName = `bilder.${props.baseDomain}`;
 
     const hostedZone = new route53.PublicHostedZone(this, "HostedZone", {
       zoneName: props.baseDomain,
@@ -186,6 +190,55 @@ export class BackendStack extends Stack {
       },
     });
 
+    // Event pictures uploaded in the admin area. Private bucket, served through
+    // CloudFront on bilder.<domain>: a picture is online the moment it is
+    // uploaded, without a commit or a site deploy. Object keys carry a random
+    // suffix and are never overwritten, so they are cached as immutable.
+    const imageBucket = new s3.Bucket(this, "ImageBucket", {
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true,
+      removalPolicy: RemovalPolicy.RETAIN,
+    });
+
+    // CloudFront only accepts certificates from us-east-1. Creating it from this
+    // stack keeps everything deployable by the existing GitHub deploy role,
+    // which is scoped to this stack in eu-central-1.
+    const imageCertificate = new acm.DnsValidatedCertificate(this, "ImageCertificate", {
+      domainName: imageDomainName,
+      hostedZone,
+      region: "us-east-1",
+    });
+
+    const imageDistribution = new cloudfront.Distribution(this, "ImageDistribution", {
+      certificate: imageCertificate,
+      comment: "besigheim-connect event pictures",
+      defaultBehavior: {
+        allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+        cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+        origin: origins.S3BucketOrigin.withOriginAccessControl(imageBucket),
+        responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      },
+      domainNames: [imageDomainName],
+      httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
+      minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+      // Europe and North America edge locations only - the visitors are local.
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
+    });
+
+    new route53.ARecord(this, "ImageARecord", {
+      recordName: "bilder",
+      target: route53.RecordTarget.fromAlias(new CloudFrontTarget(imageDistribution)),
+      zone: hostedZone,
+    });
+
+    new route53.AaaaRecord(this, "ImageAaaaRecord", {
+      recordName: "bilder",
+      target: route53.RecordTarget.fromAlias(new CloudFrontTarget(imageDistribution)),
+      zone: hostedZone,
+    });
+
     const githubTokenParameter =
       ssm.StringParameter.fromSecureStringParameterAttributes(
         this,
@@ -226,6 +279,7 @@ export class BackendStack extends Stack {
         GITHUB_BRANCH: props.githubContentBranch,
         GITHUB_REPO: props.githubContentRepo,
         GITHUB_TOKEN_PARAMETER_NAME: props.githubTokenParameterName,
+        IMAGE_BUCKET_NAME: imageBucket.bucketName,
         INGESTED_DOCUMENTS_TABLE_NAME: ingestedDocumentsTable.tableName,
         RATE_LIMIT_TABLE_NAME: contactRateLimitTable.tableName,
         SITE_ADMIN_ORG_SLUG: props.siteAdminOrgSlug,
@@ -244,6 +298,7 @@ export class BackendStack extends Stack {
     contactRateLimitTable.grantReadWriteData(apiHandler);
     ingestedDocumentsTable.grantReadWriteData(apiHandler);
     githubTokenParameter.grantRead(apiHandler);
+    imageBucket.grantPut(apiHandler);
 
     const emailBucket = new s3.Bucket(this, "IncomingEmailBucket", {
       autoDeleteObjects: false,
@@ -426,6 +481,10 @@ export class BackendStack extends Stack {
         )
       ),
       zone: hostedZone,
+    });
+
+    new CfnOutput(this, "ImageBaseUrl", {
+      value: `https://${imageDomainName}`,
     });
 
     new CfnOutput(this, "ApiUrl", {

@@ -113,9 +113,9 @@ export interface Veranstaltung {
   kategorie: string;
   kontakt?: string;
   /**
-   * Optional event picture, as a path below `public/` served from the site
-   * root, e.g. "/veranstaltungen/netzwerktreffen.jpg". Kept out of `src/assets`
-   * so the mail ingest can drop an attachment in without touching the build.
+   * Optional event picture. Either the URL of a picture uploaded in the admin
+   * area (on `bildBaseUrl`, stored in S3), or - for older events - a path below
+   * `public/` served from the site root, e.g. "/veranstaltungen/netzwerktreffen.jpg".
    */
   bild?: string;
   /** Alt text for `bild`. Falls back to the event title when not set. */
@@ -380,6 +380,27 @@ export function slugify(value: string, maxLength = 80): string {
     .replace(/-+$/g, "");
 }
 
+/**
+ * Host that serves uploaded event pictures (S3 behind CloudFront, see
+ * infra/backend). Uploads are online immediately - no commit, no deploy.
+ */
+export const bildBaseUrl = "https://bilder.unser-besigheim.de";
+
+/** Object key of an uploaded picture, e.g. "veranstaltungen/tsv-fest-1a2b3c4d.jpg". */
+const uploadedImageKeyPattern = /^veranstaltungen\/[a-z0-9]+(?:-[a-z0-9]+)*\.(?:jpg|png|webp|avif)$/;
+
+/**
+ * Valid value of the `bild` field: either an uploaded picture on `bildBaseUrl`
+ * or a site-root path of a picture committed below `public/` (older events).
+ */
+export function isImagePath(value: unknown): value is string {
+  if (typeof value !== "string") return false;
+  if (value.startsWith(`${bildBaseUrl}/`)) {
+    return uploadedImageKeyPattern.test(value.slice(bildBaseUrl.length + 1));
+  }
+  return imagePathPattern.test(value) && !value.includes("..");
+}
+
 export function isSlug(value: unknown): value is string {
   return typeof value === "string" && slugPattern.test(value);
 }
@@ -497,9 +518,9 @@ function checkValue(field: FieldDef, value: string): string | undefined {
         ? undefined
         : `${field.label} muss mit http:// oder https:// beginnen.`;
     case "image":
-      return imagePathPattern.test(value) && !value.includes("..")
+      return isImagePath(value)
         ? undefined
-        : `${field.label} muss ein Pfad zu einer Bilddatei sein, zum Beispiel /veranstaltungen/bild.jpg.`;
+        : `${field.label} muss ein hochgeladenes Bild oder ein Pfad zu einer Bilddatei sein, zum Beispiel /veranstaltungen/bild.jpg.`;
     case "select":
       return field.options?.includes(value)
         ? undefined

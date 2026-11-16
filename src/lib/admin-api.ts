@@ -198,6 +198,16 @@ export function useDeleteEngagementAngebot() {
   });
 }
 
+/** Upload a prepared picture; resolves to its public URL for the `bild` field. */
+export function useUploadBild() {
+  const request = useAdminRequest();
+  return useCallback(
+    async (bild: { dateiname: string; daten: string }) =>
+      (await request<{ pfad: string }>("POST", "/bilder", bild)).pfad,
+    [request],
+  );
+}
+
 export function useFreigabeListe(enabled: boolean) {
   const request = useAdminRequest();
   return useQuery({
