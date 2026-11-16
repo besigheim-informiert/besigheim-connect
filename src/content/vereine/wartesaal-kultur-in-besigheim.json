@@ -1,0 +1,21 @@
+{
+  "id": "wartesaal-kultur-in-besigheim",
+  "name": "Wartesaal – Kultur in Besigheim e.V.",
+  "kurzbeschreibung": "Kulturverein mit Kleinkunstbühne im Bahnhof Besigheim: Konzerte, Lesungen, Filme und Ausstellungen.",
+  "beschreibung": "Der Wartesaal – Kultur in Besigheim e.V. betreibt im Bahnhof Besigheim ein offenes Kulturzentrum mit Kleinkunstbühne. Der Verein veranstaltet Konzerte von Jazz bis Blues, Lesungen, Vorträge, Film- und Dokumentarfilmabende sowie Kunstausstellungen und fördert junge Künstlerinnen und Künstler. Ein besonderes Anliegen ist es, Kinder und Jugendliche für Kunst und Kultur zu begeistern. Karten können per E-Mail reserviert werden; neue Mitglieder sind jederzeit willkommen.",
+  "kategorie": "Kultur",
+  "zielgruppe": "Kulturinteressierte aller Altersgruppen, Kinder und Jugendliche",
+  "angebote": [
+    "Konzerte",
+    "Kleinkunst",
+    "Lesungen",
+    "Vorträge",
+    "Filmabende",
+    "Kunstausstellungen",
+    "Mitgliedschaft"
+  ],
+  "ansprechpartner": "Lothar Jerschl (1. Vorsitzender)",
+  "email": "info@wartesaal.org",
+  "website": "https://wartesaal.org/",
+  "adresse": "Bahnhof Besigheim, Weinstraße 11, 74354 Besigheim"
+}
