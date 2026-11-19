@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { handleAdminRequest, type AdminDeps } from "./admin";
+import { contactNotificationConfigFromEnv, sendContactNotification } from "./contact-notification";
 import { githubConfigFromEnv } from "./github";
 import { json, parseJsonBody } from "./http";
 import { s3ImageStoreFromEnv } from "./images";
@@ -144,6 +145,7 @@ async function createContactSubmission(
 
   const now = new Date();
   const id = randomUUID();
+  const createdAt = now.toISOString();
   const expiresAt = Math.floor(now.getTime() / 1000) + retentionDays * 24 * 60 * 60;
 
   try {
@@ -151,7 +153,7 @@ async function createContactSubmission(
       new PutCommand({
         ConditionExpression: "attribute_not_exists(id)",
         Item: {
-          createdAt: now.toISOString(),
+          createdAt,
           email,
           expiresAt,
           id,
@@ -167,6 +169,18 @@ async function createContactSubmission(
   } catch (error) {
     console.error("Failed to store contact submission", error);
     return json(500, { message: "Could not save the contact request." });
+  }
+
+  // The submission is already stored, so a failed notification must not fail the request.
+  const notification = contactNotificationConfigFromEnv();
+  if (notification) {
+    try {
+      await sendContactNotification({ createdAt, email, id, message, name, organization }, notification);
+    } catch (error) {
+      console.error("Failed to send contact notification", { error, id });
+    }
+  } else {
+    console.warn("Contact notification is not configured; submission only stored", { id });
   }
 
   return json(201, { id });

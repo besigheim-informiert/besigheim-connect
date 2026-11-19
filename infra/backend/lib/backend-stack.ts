@@ -85,6 +85,8 @@ export type BackendStackProps = StackProps & {
    */
   githubTokenParameterName: string;
   githubPagesDnsTarget: string;
+  /** Addresses that get an email for every contact form submission. */
+  contactNotificationRecipients: string[];
   mailRecipients: string[];
   /** Clerk organisation whose admins review AI-extracted mail submissions. */
   siteAdminOrgSlug: string;
@@ -147,6 +149,12 @@ export class BackendStack extends Stack {
         zone: hostedZone,
       });
     }
+
+    // Sending domain for contact notifications. DKIM records go into the hosted zone automatically.
+    const mailDomainIdentity = new ses.EmailIdentity(this, "MailDomainIdentity", {
+      identity: ses.Identity.publicHostedZone(hostedZone),
+    });
+    const contactNotificationFrom = `kontakt@${props.baseDomain}`;
 
     const submissionsTable = new dynamodb.Table(
       this,
@@ -276,6 +284,8 @@ export class BackendStack extends Stack {
       environment: {
         ALLOWED_ORIGINS: props.allowedOrigins.join(","),
         CLERK_PUBLISHABLE_KEY: props.clerkPublishableKey,
+        CONTACT_NOTIFICATION_FROM: contactNotificationFrom,
+        CONTACT_NOTIFICATION_RECIPIENTS: props.contactNotificationRecipients.join(","),
         GITHUB_BRANCH: props.githubContentBranch,
         GITHUB_REPO: props.githubContentRepo,
         GITHUB_TOKEN_PARAMETER_NAME: props.githubTokenParameterName,
@@ -296,6 +306,18 @@ export class BackendStack extends Stack {
 
     submissionsTable.grantWriteData(apiHandler);
     contactRateLimitTable.grantReadWriteData(apiHandler);
+    apiHandler.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["ses:SendEmail"],
+        resources: [
+          `arn:${this.partition}:ses:${this.region}:${this.account}:identity/${mailDomainIdentity.emailIdentityName}`,
+          // While SES is in sandbox mode, every recipient is a verified identity too.
+          ...props.contactNotificationRecipients.map(
+            (recipient) => `arn:${this.partition}:ses:${this.region}:${this.account}:identity/${recipient}`
+          ),
+        ],
+      })
+    );
     ingestedDocumentsTable.grantReadWriteData(apiHandler);
     githubTokenParameter.grantRead(apiHandler);
     imageBucket.grantPut(apiHandler);
