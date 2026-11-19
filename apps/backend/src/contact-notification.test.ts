@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { buildContactNotification, contactNotificationConfigFromEnv } from "./contact-notification";
+import { buildContactNotification, cleanMessage, contactNotificationConfigFromEnv } from "./contact-notification";
 
 const config = { from: "kontakt@unser-besigheim.de", recipients: ["team@example.de"] };
 const submission = {
@@ -60,5 +60,22 @@ describe("contactNotificationConfigFromEnv", () => {
     vi.stubEnv("CONTACT_NOTIFICATION_RECIPIENTS", "");
 
     expect(contactNotificationConfigFromEnv()).toBeUndefined();
+  });
+});
+
+describe("cleanMessage", () => {
+  it("keeps line breaks and paragraphs", () => {
+    expect(cleanMessage("Hallo,\r\n\r\nwir sind   ein Verein.\nViele Grüße\n  Anna  ", 5000)).toBe(
+      "Hallo,\n\nwir sind ein Verein.\nViele Grüße\nAnna",
+    );
+  });
+
+  it("collapses more than one blank line", () => {
+    expect(cleanMessage("Eins\n\n\n\n \nZwei", 5000)).toBe("Eins\n\nZwei");
+  });
+
+  it("cuts to the maximum length and ignores non-strings", () => {
+    expect(cleanMessage("abc\ndef", 5)).toBe("abc\nd");
+    expect(cleanMessage(42, 5000)).toBe("");
   });
 });

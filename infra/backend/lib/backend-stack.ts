@@ -150,10 +150,13 @@ export class BackendStack extends Stack {
       });
     }
 
-    // Sending domain for contact notifications. DKIM records go into the hosted zone automatically.
-    const mailDomainIdentity = new ses.EmailIdentity(this, "MailDomainIdentity", {
-      identity: ses.Identity.publicHostedZone(hostedZone),
-    });
+    // Sending domain for contact notifications. The identity already exists in SES (created
+    // outside this stack), so it is only referenced; creating it here fails the deploy.
+    const mailDomainIdentity = ses.EmailIdentity.fromEmailIdentityName(
+      this,
+      "MailDomainIdentity",
+      props.baseDomain
+    );
     const contactNotificationFrom = `kontakt@${props.baseDomain}`;
 
     const submissionsTable = new dynamodb.Table(
