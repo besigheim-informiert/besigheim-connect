@@ -4,7 +4,7 @@ import ContentForm, { toFormValues, type FormValues } from "@/components/admin/C
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { kategorien } from "@/data/vereine";
-import { ApiError, useMe, useSaveVerein, useVerein } from "@/lib/admin-api";
+import { ApiError, useMe, useSaveVerein, useUploadBild, useVerein } from "@/lib/admin-api";
 import { contentFields, validateRecord } from "@/shared/content-schema";
 
 const fields = contentFields.verein;
@@ -21,6 +21,7 @@ function Formular() {
   const me = useMe();
   const verein = useVerein();
   const speichern = useSaveVerein();
+  const uploadLogo = useUploadBild("logo");
   const [values, setValues] = useState<FormValues>(() => toFormValues(undefined, fields));
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -71,6 +72,7 @@ function Formular() {
         errors={errors}
         disabled={readOnly || speichern.isPending}
         suggestions={{ kategorie: kategorien }}
+        uploadImage={uploadLogo}
         onChange={(name, value) => setValues((current) => ({ ...current, [name]: value }))}
       />
       {!readOnly && (

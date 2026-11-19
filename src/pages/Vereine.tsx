@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
+import VereinsLogo from "@/components/VereinsLogo";
 import { vereine, kategorien } from "@/data/vereine";
 
 export default function Vereine() {
@@ -67,7 +68,10 @@ export default function Vereine() {
               <Link key={v.id} to={`/vereine/${v.id}`}>
                 <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
                   <CardContent className="p-6">
-                    <Badge variant="secondary" className="mb-3">{v.kategorie}</Badge>
+                    <div className="mb-3 flex items-start justify-between gap-3">
+                      <Badge variant="secondary">{v.kategorie}</Badge>
+                      <VereinsLogo verein={v} className="h-14 w-14" />
+                    </div>
                     <h2 className="font-semibold text-lg text-foreground mb-2">{v.name}</h2>
                     <p className="text-sm text-muted-foreground">{v.kurzbeschreibung}</p>
                     <p className="text-xs text-primary mt-3 font-medium">Mehr erfahren →</p>

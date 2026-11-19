@@ -92,6 +92,8 @@ export interface Verein {
   telefon?: string;
   website?: string;
   adresse?: string;
+  /** Club logo: an uploaded picture on `bildBaseUrl` (below `vereine/`). */
+  logo?: string;
 }
 
 export interface Veranstaltung {
@@ -209,6 +211,7 @@ export const contentFields: Record<ContentType, readonly FieldDef[]> = {
     { name: "email", label: "E-Mail", kind: "email", required: false },
     { name: "telefon", label: "Telefon", kind: "tel", required: false },
     { name: "website", label: "Website", kind: "url", required: false },
+    { name: "logo", label: "Logo", kind: "image", required: false },
   ],
   veranstaltung: [
     { name: "titel", label: "Titel", kind: "text", required: true },
@@ -386,8 +389,8 @@ export function slugify(value: string, maxLength = 80): string {
  */
 export const bildBaseUrl = "https://bilder.unser-besigheim.de";
 
-/** Object key of an uploaded picture, e.g. "veranstaltungen/tsv-fest-1a2b3c4d.jpg". */
-const uploadedImageKeyPattern = /^veranstaltungen\/[a-z0-9]+(?:-[a-z0-9]+)*\.(?:jpg|png|webp|avif)$/;
+/** Object key of an uploaded picture, e.g. "veranstaltungen/tsv-fest-1a2b3c4d.jpg" or "vereine/tsv-logo-1a2b3c4d.png". */
+const uploadedImageKeyPattern = /^(?:veranstaltungen|vereine)\/[a-z0-9]+(?:-[a-z0-9]+)*\.(?:jpg|png|webp|avif)$/;
 
 /**
  * Valid value of the `bild` field: either an uploaded picture on `bildBaseUrl`

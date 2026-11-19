@@ -198,13 +198,16 @@ export function useDeleteEngagementAngebot() {
   });
 }
 
-/** Upload a prepared picture; resolves to its public URL for the `bild` field. */
-export function useUploadBild() {
+/**
+ * Upload a prepared picture; resolves to its public URL for the `bild` field,
+ * or with `zweck: "logo"` for the club `logo` field.
+ */
+export function useUploadBild(zweck?: "logo") {
   const request = useAdminRequest();
   return useCallback(
     async (bild: { dateiname: string; daten: string }) =>
-      (await request<{ pfad: string }>("POST", "/bilder", bild)).pfad,
-    [request],
+      (await request<{ pfad: string }>("POST", "/bilder", zweck ? { ...bild, zweck } : bild)).pfad,
+    [request, zweck],
   );
 }
 
