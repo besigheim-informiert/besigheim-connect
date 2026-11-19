@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { handleAdminRequest, type AdminDeps } from "./admin";
-import { contactNotificationConfigFromEnv, sendContactNotification } from "./contact-notification";
+import { cleanMessage, contactNotificationConfigFromEnv, sendContactNotification } from "./contact-notification";
 import { githubConfigFromEnv } from "./github";
 import { json, parseJsonBody } from "./http";
 import { s3ImageStoreFromEnv } from "./images";
@@ -133,7 +133,7 @@ async function createContactSubmission(
   const name = cleanText(payload.name, 120);
   const email = cleanText(payload.email, 254);
   const organization = cleanText(payload.organization, 160);
-  const message = cleanText(payload.message, 5000);
+  const message = cleanMessage(payload.message, 5000);
 
   if (!name || !email || !message) {
     return json(400, { message: "Name, email and message are required." });

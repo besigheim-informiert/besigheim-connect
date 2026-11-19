@@ -15,6 +15,26 @@ export type ContactNotificationConfig = {
   recipients: string[];
 };
 
+/**
+ * Normalises a multi-line form message: keeps line breaks and blank lines between
+ * paragraphs, but collapses runs of spaces/tabs and more than one blank line.
+ */
+export function cleanMessage(value: unknown, maxLength: number): string {
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  return value
+    .replace(/\r\n?/g, "\n")
+    .split("\n")
+    .map((line) => line.replace(/[^\S\n]+/g, " ").trim())
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim()
+    .slice(0, maxLength)
+    .trimEnd();
+}
+
 export function contactNotificationConfigFromEnv(): ContactNotificationConfig | undefined {
   const from = process.env.CONTACT_NOTIFICATION_FROM?.trim();
   const recipients = (process.env.CONTACT_NOTIFICATION_RECIPIENTS ?? "")
