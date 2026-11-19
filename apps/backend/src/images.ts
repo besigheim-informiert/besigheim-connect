@@ -37,14 +37,22 @@ export function detectImageType(data: Buffer): ImageType | undefined {
   return undefined;
 }
 
+/** Folder in the image bucket: event pictures or club logos. */
+export type ImageFolder = "veranstaltungen" | "vereine";
+
 /**
  * Object key for a new picture: club id, a slug of the original file name and
  * a random suffix, so an upload never replaces an existing picture.
  */
-export function imageKey(vereinId: string, dateiname: string, type: ImageType): string {
+export function imageKey(
+  vereinId: string,
+  dateiname: string,
+  type: ImageType,
+  folder: ImageFolder = "veranstaltungen",
+): string {
   const stem = slugify(dateiname.replace(/\.[^.]*$/, ""), 40) || "bild";
   const suffix = randomBytes(4).toString("hex");
-  return `veranstaltungen/${vereinId}-${stem}-${suffix}.${type.extension}`;
+  return `${folder}/${vereinId}-${stem}-${suffix}.${type.extension}`;
 }
 
 /** Public URL of an uploaded picture, as stored in the `bild` field. */

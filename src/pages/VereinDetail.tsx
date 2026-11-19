@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
+import VereinsLogo from "@/components/VereinsLogo";
 import { vereine } from "@/data/vereine";
 import { veranstaltungen } from "@/data/veranstaltungen";
 import { monatKurz, tagLabel } from "@/lib/veranstaltung";
@@ -31,8 +32,13 @@ export default function VereinDetail() {
           <ArrowLeft className="h-4 w-4" /> Zurück zur Übersicht
         </Link>
 
-        <Badge className="mb-4">{verein.kategorie}</Badge>
-        <h1 className="text-3xl font-bold text-foreground mb-2">{verein.name}</h1>
+        <div className="mb-2 flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
+          <VereinsLogo verein={verein} loading="eager" className="h-20 w-20 sm:h-24 sm:w-24" />
+          <div className="min-w-0">
+            <Badge className="mb-4">{verein.kategorie}</Badge>
+            <h1 className="text-3xl font-bold text-foreground break-words">{verein.name}</h1>
+          </div>
+        </div>
         <p className="text-muted-foreground mb-8">{verein.beschreibung}</p>
 
         <div className="grid gap-6 md:grid-cols-2 mb-8">

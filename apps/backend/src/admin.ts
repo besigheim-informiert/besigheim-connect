@@ -346,8 +346,8 @@ async function ownedRecord(
 
 /**
  * Store an uploaded picture in S3 and return its public URL for the `bild`
- * field. Body: `{ dateiname, daten }` with `daten` as base64 (a data-URL prefix
- * is accepted). The picture is online immediately; nothing is committed.
+ * (or, with `zweck: "logo"`, the club `logo`) field. Body: `{ dateiname, daten, zweck? }`
+ * with `daten` as base64 (a data-URL prefix is accepted). The picture is online immediately; nothing is committed.
  */
 async function uploadBild(
   event: APIGatewayProxyEventV2,
@@ -373,7 +373,8 @@ async function uploadBild(
   }
 
   const dateiname = typeof body?.dateiname === "string" ? body.dateiname : "bild";
-  const key = imageKey(vereinId, dateiname, type);
+  // `zweck: "logo"` stores a club logo below `vereine/`; everything else is an event picture.
+  const key = imageKey(vereinId, dateiname, type, body?.zweck === "logo" ? "vereine" : "veranstaltungen");
   await deps.images.put({
     body: daten,
     contentType: type.mimeType,
@@ -674,7 +675,7 @@ const keyOrder: Record<ContentType, readonly string[]> = {
   barrierefreiheit: ["id", "name", "kategorie", "facharzt", "strasse", "telefon", "zugang", "sehbehinderung", "wc", "parkplatz"],
   engagement: ["id", "titel", "beschreibung", "vereinId", "vereinName", "art", "kontakt"],
   veranstaltung: ["id", "titel", "beschreibung", "datum", "enddatum", "uhrzeit", "wiederholung", "ort", "vereinId", "vereinName", "kategorie", "kontakt", "bild", "bildAlt"],
-  verein: ["id", "name", "kurzbeschreibung", "beschreibung", "kategorie", "zielgruppe", "angebote", "ansprechpartner", "email", "telefon", "website", "adresse"],
+  verein: ["id", "name", "kurzbeschreibung", "beschreibung", "kategorie", "zielgruppe", "angebote", "ansprechpartner", "email", "telefon", "website", "adresse", "logo"],
 };
 
 /** Stable key order so the committed JSON matches the hand-written files and diffs stay small. */

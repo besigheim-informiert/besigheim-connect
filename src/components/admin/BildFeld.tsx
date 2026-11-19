@@ -15,6 +15,10 @@ type Props = {
   disabled?: boolean;
   /** Shown under the preview when a picture is set but has no description yet. */
   fehlenderAltText?: boolean;
+  /** Alt text of the preview picture. */
+  vorschauAlt?: string;
+  /** Where the picture shows up once saved, completing "Es erscheint …, sobald Sie speichern". */
+  erscheintBei?: string;
 };
 
 /**
@@ -22,7 +26,18 @@ type Props = {
  * the browser, uploaded, and the returned URL is written into the form.
  * The picture is online right away; it shows on the event once the form is saved.
  */
-export default function BildFeld({ id, label, value, onChange, upload, error, disabled, fehlenderAltText }: Props) {
+export default function BildFeld({
+  id,
+  label,
+  value,
+  onChange,
+  upload,
+  error,
+  disabled,
+  fehlenderAltText,
+  vorschauAlt = "Vorschau des Veranstaltungsbildes",
+  erscheintBei = "bei der Veranstaltung",
+}: Props) {
   const eingabe = useRef<HTMLInputElement>(null);
   const [hochgeladen, setHochgeladen] = useState(false);
   const [laedt, setLaedt] = useState(false);
@@ -76,7 +91,7 @@ export default function BildFeld({ id, label, value, onChange, upload, error, di
         <div className="flex flex-wrap items-start gap-3">
           <img
             src={vorschau}
-            alt="Vorschau des Veranstaltungsbildes"
+            alt={vorschauAlt}
             className="h-32 w-auto max-w-full rounded-md border border-foreground/10 object-cover"
           />
           {!disabled && (
@@ -121,7 +136,7 @@ export default function BildFeld({ id, label, value, onChange, upload, error, di
 
       {hochgeladen && vorschau && !disabled && (
         <p className="text-xs text-muted-foreground">
-          Das Bild ist hochgeladen. Es erscheint bei der Veranstaltung, sobald Sie speichern.
+          Das Bild ist hochgeladen. Es erscheint {erscheintBei}, sobald Sie speichern.
         </p>
       )}
       {vorschau && fehlenderAltText && !disabled && (

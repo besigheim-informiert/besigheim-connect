@@ -73,6 +73,13 @@ describe("image helpers", () => {
     expect(imageKey("tsv-besigheim", "../../.env", type)).toMatch(/^veranstaltungen\/tsv-besigheim-[a-z0-9-]+\.jpg$/);
   });
 
+  it("puts club logos in their own folder", () => {
+    const key = imageKey("tsv-besigheim", "Logo.png", { extension: "png", mimeType: "image/png" }, "vereine");
+
+    expect(key).toMatch(/^vereine\/tsv-besigheim-logo-[0-9a-f]{8}\.png$/);
+    expect(isImagePath(imageUrl(key))).toBe(true);
+  });
+
   it("decodes base64 strictly", () => {
     expect(decodeBase64(jpeg.toString("base64"))?.equals(jpeg)).toBe(true);
     expect(decodeBase64(`data:image/jpeg;base64,${jpeg.toString("base64")}`)?.equals(jpeg)).toBe(true);
@@ -91,6 +98,21 @@ describe("bild field validation", () => {
     expect(isImagePath(`${bildBaseUrl}/veranstaltungen/fest.svg`)).toBe(false);
     expect(isImagePath(`${bildBaseUrl}/anderer-ordner/fest.jpg`)).toBe(false);
     expect(isImagePath(`${bildBaseUrl}.evil.test/veranstaltungen/fest.jpg`)).toBe(false);
+  });
+
+  it("lets a club be saved with an uploaded logo", () => {
+    const result = validateRecord("verein", {
+      angebote: ["Fußball"],
+      beschreibung: "Sportverein",
+      kategorie: "Sport",
+      kurzbeschreibung: "Sport für alle",
+      logo: `${bildBaseUrl}/vereine/tsv-besigheim-logo-1a2b3c4d.png`,
+      name: "TSV Besigheim",
+      zielgruppe: "Alle",
+    });
+
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.record.logo).toBe(`${bildBaseUrl}/vereine/tsv-besigheim-logo-1a2b3c4d.png`);
   });
 
   it("lets an event be saved with an uploaded picture", () => {
@@ -127,6 +149,13 @@ describe("admin API: image upload", () => {
     expect(stored.contentType).toBe("image/jpeg");
     expect(stored.metadata).toEqual({ "uploaded-by": "user_1", verein: "tsv-besigheim" });
     expect(writeRecord).not.toHaveBeenCalled();
+  });
+
+  it("stores a logo below vereine/ when the upload is marked as logo", async () => {
+    const result = await upload({ daten: png.toString("base64"), dateiname: "logo.png", zweck: "logo" });
+
+    expect(result.status).toBe(201);
+    expect(result.body.pfad).toMatch(/^https:\/\/bilder\.unser-besigheim\.de\/vereine\/tsv-besigheim-logo-[0-9a-f]{8}\.png$/);
   });
 
   it("uses the detected format, not the file name", async () => {

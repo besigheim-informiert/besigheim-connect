@@ -96,6 +96,10 @@ export default function ContentForm({ fields, values, errors, onChange, hidden =
                 error={error}
                 disabled={disabled}
                 fehlenderAltText={field.name === "bild" && "bildAlt" in values && !values.bildAlt?.trim()}
+                {...(field.name === "logo" && {
+                  erscheintBei: "auf der Vereinsseite",
+                  vorschauAlt: "Vorschau des Vereinslogos",
+                })}
               />
             );
           }
