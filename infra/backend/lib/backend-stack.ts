@@ -314,6 +314,9 @@ export class BackendStack extends Stack {
         actions: ["ses:SendEmail"],
         resources: [
           `arn:${this.partition}:ses:${this.region}:${this.account}:identity/${mailDomainIdentity.emailIdentityName}`,
+          // The domain identity has a default configuration set (created in the SES console);
+          // SendEmail is authorised against it as well, so allow the account's configuration sets.
+          `arn:${this.partition}:ses:${this.region}:${this.account}:configuration-set/*`,
           // While SES is in sandbox mode, every recipient is a verified identity too.
           ...props.contactNotificationRecipients.map(
             (recipient) => `arn:${this.partition}:ses:${this.region}:${this.account}:identity/${recipient}`
