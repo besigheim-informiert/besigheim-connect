@@ -22,6 +22,8 @@ const config = {
   // Create once: aws ssm put-parameter --name /besigheim-connect/github-token --type SecureString --value '<fine-grained PAT, contents:write>'
   githubTokenParameterName: "/besigheim-connect/github-token",
   githubPagesDnsTarget: "besigheim-informiert.github.io",
+  // Receive an email per contact form submission (sender: kontakt@unser-besigheim.de).
+  contactNotificationRecipients: ["tanja.bayer@cubesoft.org"],
   mailRecipients: ["tanja.bayer@cubesoft.org"],
   // Platform organisation: its admins review mail submissions. It is not a club and has no club page.
   siteAdminOrgSlug: "unser-besigheim",
@@ -33,6 +35,7 @@ new BackendStack(app, `BesigheimConnectBackend`, {
   allowedOrigins: config.allowedOrigins,
   baseDomain: config.baseDomain,
   clerkPublishableKey: config.clerkPublishableKey,
+  contactNotificationRecipients: config.contactNotificationRecipients,
   env: {
     account: config.account,
     region: config.region,
