@@ -1,0 +1,15 @@
+{
+  "id": "buchladen-im-dreigiebelhaus",
+  "name": "Buchladen im Dreigiebelhaus",
+  "kurzbeschreibung": "Buchladen in Besigheim mit Kulturveranstaltungen im Dreigiebelhauskeller.",
+  "beschreibung": "Der Buchladen im Dreigiebelhaus in Besigheim veranstaltet Theater- und Kulturveranstaltungen im Dreigiebelhauskeller und übernimmt dafür auch den Kartenvorverkauf.",
+  "kategorie": "Kultur",
+  "zielgruppe": "Kultur- und Literaturinteressierte",
+  "angebote": [
+    "Buchhandlung",
+    "Kartenvorverkauf",
+    "Kulturveranstaltungen"
+  ],
+  "email": "buchladen@dreigiebelhaus.net",
+  "telefon": "07143 34888"
+}

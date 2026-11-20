@@ -1,0 +1,14 @@
+{
+  "id": "open-doors-the-choir",
+  "name": "Open Doors – The Choir",
+  "kurzbeschreibung": "Chor für VocalArt, Rock und Pop.",
+  "beschreibung": "Open Doors – The Choir ist ein Chor, der Rock und Pop als VocalArt auf die Bühne bringt. Zu den Auftritten gehört unter anderem ein Adventskonzert in der Ev. Peterskirche Löchgau.",
+  "kategorie": "Musik",
+  "zielgruppe": "Alle, die Rock, Pop und Chormusik mögen",
+  "angebote": [
+    "Konzerte",
+    "Adventskonzert"
+  ],
+  "email": "info@opendoors-thechoir.com",
+  "website": "https://www.opendoors-thechoir.com"
+}

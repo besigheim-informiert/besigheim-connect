@@ -1,0 +1,13 @@
+{
+  "id": "ev-kirchengemeinde-besigheim",
+  "name": "Evangelische Kirchengemeinde Besigheim",
+  "kurzbeschreibung": "Evangelische Kirchengemeinde mit Gottesdiensten, Konzerten in der Stadtkirche und Angeboten wie der Männervesper.",
+  "beschreibung": "Die Evangelische Kirchengemeinde Besigheim lädt neben Gottesdiensten zu Veranstaltungen ein, etwa zur Besigheimer-Ottmarsheimer Männervesper. In der Stadtkirche Besigheim finden zudem Konzerte statt, zum Beispiel im Rahmen des Internationalen Orgelzyklus.",
+  "kategorie": "Soziales",
+  "zielgruppe": "Gemeindemitglieder und alle Interessierten",
+  "angebote": [
+    "Gottesdienste",
+    "Männervesper",
+    "Orgelkonzerte"
+  ]
+}

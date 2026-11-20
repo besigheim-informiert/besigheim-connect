@@ -1,0 +1,13 @@
+{
+  "id": "musikschule-besigheim",
+  "name": "Musikschule Besigheim",
+  "kurzbeschreibung": "Musikschule für Besigheim, Gemmrigheim und Walheim.",
+  "beschreibung": "Die Musikschule Besigheim ist für Besigheim, Gemmrigheim und Walheim zuständig. Ensembles und Schülerinnen und Schüler der Musikschule treten bei Konzerten auf, etwa beim Kirchenkonzert \"Gemeinsam in den Advent\".",
+  "kategorie": "Musik",
+  "zielgruppe": "Kinder, Jugendliche und Erwachsene, die ein Instrument lernen möchten",
+  "angebote": [
+    "Instrumentalunterricht",
+    "Ensembles",
+    "Konzerte"
+  ]
+}
