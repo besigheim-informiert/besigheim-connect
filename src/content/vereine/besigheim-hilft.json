@@ -1,0 +1,23 @@
+{
+  "id": "besigheim-hilft",
+  "name": "Besigheim Hilft",
+  "kurzbeschreibung": "Ehrenamtliche Initiative für unbürokratische Nachbarschaftshilfe: vermittelt zwischen Hilfesuchenden und Freiwilligen in Besigheim.",
+  "beschreibung": "Besigheim Hilft ist eine ehrenamtliche Initiative zur Förderung der Nachbarschaftshilfe in Besigheim, unterstützt von der Familienbildung Besigheim. Menschen aus der Stadt helfen einander im Alltag - unbürokratisch, gegenseitig und im kleinen Rahmen, zum Beispiel bei Einkäufen, Fahrten zu Arztterminen, Erledigungen, kleinen Reparaturen, Kinderbetreuung, Nachhilfe, Büroorganisation oder einfach mit Gesellschaft und gemeinsamen Unternehmungen. Wer Hilfe braucht oder helfen möchte, meldet sich über das Formular auf der Website, per E-Mail oder Telefon; die Initiative bringt dann Hilfesuchende und Freiwillige zusammen. Besigheim Hilft ist kein eingetragener Verein: Alle Hilfe ist freiwillig, unentgeltlich und privat, ohne Haftpflichtversicherung über die Initiative. Sie ergänzt professionelle Dienste wie Diakonie oder Pflegedienste, ersetzt sie aber nicht, und übernimmt keine pflegerischen oder medizinischen Aufgaben. In Notfällen bitte immer 112 oder 110 wählen.",
+  "kategorie": "Soziales",
+  "zielgruppe": "Hilfesuchende Bürgerinnen und Bürger sowie Freiwillige in Besigheim",
+  "angebote": [
+    "Einkäufe",
+    "Fahrten zu Arztterminen",
+    "Erledigungen",
+    "Begleitung bei Spaziergängen",
+    "Kleine Reparaturen und praktische Hilfen",
+    "Kinderbetreuung und Spielzeit",
+    "Nachhilfe",
+    "Büroorganisation",
+    "Gesellschaft und gemeinsame Unternehmungen",
+    "Vermittlung von Freiwilligen"
+  ],
+  "email": "besigheim-hilft@web.de",
+  "telefon": "0156 78590900",
+  "website": "https://besigheim-hilft.de/"
+}
