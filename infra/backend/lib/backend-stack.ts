@@ -141,6 +141,14 @@ export class BackendStack extends Stack {
       zone: hostedZone,
     });
 
+    // Google Search Console domain verification. Route 53 allows only one TXT record set per
+    // name, so further apex TXT values (e.g. SPF) must be added to this record's `values`.
+    new route53.TxtRecord(this, "GoogleSiteVerificationRecord", {
+      values: ["google-site-verification=nPLEVMCc7rzGd0pJ53W2xGanf2I-6ZYF_QtwQL7QNF4"],
+      ttl: Duration.hours(1),
+      zone: hostedZone,
+    });
+
     for (const record of clerkCnameRecords) {
       new route53.CnameRecord(this, record.id, {
         domainName: record.domainName,
