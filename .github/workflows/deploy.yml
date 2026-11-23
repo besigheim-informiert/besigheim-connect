@@ -37,12 +37,9 @@ env:
 
 jobs:
   frontend:
-    name: Deploy frontend to GitHub Pages
+    name: Build frontend for GitHub Pages
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy-pages.outputs.page_url }}
 
     steps:
       - name: Checkout
@@ -85,6 +82,19 @@ jobs:
         with:
           path: dist
 
+  # Deploy runs in its own job, as in GitHub's Pages starter workflow: when
+  # deploy-pages ran right after the upload in the same job, the artifact was
+  # sometimes not yet visible ("No artifacts named github-pages were found").
+  frontend-deploy:
+    name: Deploy frontend to GitHub Pages
+    needs: frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy-pages.outputs.page_url }}
+
+    steps:
       - name: Deploy GitHub Pages
         id: deploy-pages
         uses: actions/deploy-pages@v5
